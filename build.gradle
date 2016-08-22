@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
+    }
+}
+
+project.ext {
+    bintrayUser = project.property('BINTRAY_USER')
+    bintrayKey = project.property('BINTRAY_KEY')
+    reductorVersion = '0.8.0'
+}
+
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
