@@ -2,7 +2,7 @@
 [Redux](http://redux.js.org/) inspired predictable state container library for Java.
 
 Reductor can help you make your state mutations easier to read, write and reason about.
-As Redux it's based on three principles (form [Redux documentation](http://redux.js.org/docs/introduction/ThreePrinciples.html)):
+As Redux it's based on three principles (from [Redux documentation](http://redux.js.org/docs/introduction/ThreePrinciples.html)):
 
 * Single source of truth
 * State is read-only
@@ -89,6 +89,18 @@ public static void main(String[] args) {
     counterStore.dispatch(CounterActionCreator.add(5));      //print 7  
 }
 ```
+
+## API
+
+Main point of interaction with state is `Store` object. `Store` is actually container for your state. 
+
+There are two ways of accessing the state inside the `Store`:
+* Call `store.getState()` to get the state `Store` holds at the moment
+* Call `store.subscribe(state -> doSomething(state))`. Calling subscribe will notify provided listener
+every time state changes 
+
+And only one way how to change the state: 
+* Call `store.dispatch(action)` to deliver and process it by corresponding `Reducer`.
 
 ## Roadmap
 
@@ -180,11 +192,13 @@ public static void main(String[] args) {
 }
 ```
 
-Note that `@CombinedState` annotated state needs to be interface with only accessor methods.
+Note that `@CombinedState` annotated class needs to be interface with only accessor methods.
 
 ### AutoReducer 
 
-Consider following `Reducer` which manages `List<String>`
+Consider following `Reducer` which manages `List<String>`. 
+
+Note: [PCollections](http://pcollections.org/) library is used as implementation of persistent collections.
 ```java
 // 
 class ItemsReducer implements Reducer<List<String>> {
@@ -268,5 +282,3 @@ public static class ActionCreator {
 //Usage
 Action action = ItemsReducerImpl.ActionCreator.add("foobar");
 ```
-
-
