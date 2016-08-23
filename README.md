@@ -27,8 +27,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.yheriatovych:reductor:x.x.x'
-    apt     'com.yheriatovych:reductor-processor:x.x.x'
+    compile 'com.yheriatovych:reductor:0.8.0'
+    apt     'com.yheriatovych:reductor-processor:0.8.0'
 }
 ```
 
