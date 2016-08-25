@@ -3,7 +3,6 @@ package com.yheriatovych.reductor.processor.model;
 import com.squareup.javapoet.TypeName;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.CombinedState;
-import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.lang.model.element.Element;
@@ -21,7 +20,7 @@ public class CombinedStateElement {
         mProperties = getters;
     }
 
-    public static CombinedStateElement parseCombindedElement(TypeElement typeElement, Env env) throws ValidationException {
+    public static CombinedStateElement parseCombindedElement(TypeElement typeElement) throws ValidationException {
 
         StateProperty stateProperty;
         if (!typeElement.getKind().isInterface())
@@ -30,7 +29,7 @@ public class CombinedStateElement {
         List<StateProperty> getters = new ArrayList<>();
 
         for (Element element : typeElement.getEnclosedElements()) {
-            stateProperty = StateProperty.parseStateProperty(env, element);
+            stateProperty = StateProperty.parseStateProperty(element);
             if (stateProperty != null) {
                 getters.add(stateProperty);
             }

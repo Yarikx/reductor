@@ -10,6 +10,7 @@ import com.yheriatovych.reductor.processor.ValidationException;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
 public class StateProperty {
@@ -23,7 +24,7 @@ public class StateProperty {
         mExecutableElement = executableElement;
     }
 
-    static StateProperty parseStateProperty(Env env, Element element) throws ValidationException {
+    static StateProperty parseStateProperty(Element element) throws ValidationException {
         StateProperty stateProperty;
         if (element.getKind() != ElementKind.METHOD) return null;
 
@@ -33,6 +34,10 @@ public class StateProperty {
 
         if (!executableElement.getParameters().isEmpty())
             throw new ValidationException(executableElement, "state property should not have any parameters");
+
+        if (stateType.getKind() == TypeKind.VOID) {
+            throw new ValidationException(executableElement, "void is not allowed as return type for property method %s", executableElement);
+        }
 
         stateProperty = new StateProperty(propertyName, stateType, executableElement);
         return stateProperty;

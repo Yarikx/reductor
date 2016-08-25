@@ -25,13 +25,13 @@ public class CombinedStateProcessor extends BaseProcessor {
             TypeElement combinedStateTypeElement = (TypeElement) element;
 
             try {
-                CombinedStateElement combinedStateElement = CombinedStateElement.parseCombindedElement(combinedStateTypeElement, env);
+                CombinedStateElement combinedStateElement = CombinedStateElement.parseCombindedElement(combinedStateTypeElement);
                 ClassName stateClassName = emmitCombinedStateImplementation(combinedStateElement);
                 emmitCombinedReducer(combinedStateElement, stateClassName);
             } catch (ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {
-                env.printError(element, "Internal processor error:\n %s", e.getMessage());
+                env.printError(element, "Internal processor error:\n"+e.getMessage());
                 e.printStackTrace();
             }
         }
