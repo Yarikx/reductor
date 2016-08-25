@@ -48,8 +48,8 @@ public class ReduxApp extends Application {
 
     }
 
+    Handler handler = new Handler();
     private RuntimeReplFactory createRuntimeRepl() {
-        Handler handler = new Handler();
         return new JsRuntimeReplFactoryBuilder(this)
                 .addFunction("getState", new BaseFunction() {
                     @Override

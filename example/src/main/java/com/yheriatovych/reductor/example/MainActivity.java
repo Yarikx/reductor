@@ -3,13 +3,12 @@ package com.yheriatovych.reductor.example;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.*;
 import android.widget.*;
-import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.Cancelable;
-import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.Note;
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final TodoAdapter adapter = new TodoAdapter();
 
