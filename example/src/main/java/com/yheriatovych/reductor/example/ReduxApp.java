@@ -42,21 +42,15 @@ public class ReduxApp extends Application {
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableWebKitInspector(() -> new Stetho.DefaultInspectorModulesBuilder(ReduxApp.this)
-                        .runtimeRepl(createRuntimeRepl(ReduxApp.this))
+                        .runtimeRepl(createRuntimeRepl())
                         .finish())
                 .build());
 
     }
 
-    private RuntimeReplFactory createRuntimeRepl(ReduxApp reduxApp) {
+    private RuntimeReplFactory createRuntimeRepl() {
         Handler handler = new Handler();
         return new JsRuntimeReplFactoryBuilder(this)
-                .addFunction("lol", new BaseFunction() {
-                    @Override
-                    public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
-                        return "Lol to you sir!";
-                    }
-                })
                 .addFunction("getState", new BaseFunction() {
                     @Override
                     public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
