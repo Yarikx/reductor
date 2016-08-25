@@ -3,6 +3,7 @@ package com.yheriatovych.reductor.processor;
 import com.google.auto.common.MoreTypes;
 import com.yheriatovych.reductor.Reducer;
 
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.type.DeclaredType;
@@ -16,11 +17,13 @@ public class Env {
     private final Types types;
     private final Elements elements;
     private final Messager messager;
+    private final Filer filer;
 
-    public Env(Types types, Elements elements, Messager messager) {
+    public Env(Types types, Elements elements, Messager messager, Filer filer) {
         this.types = types;
         this.elements = elements;
         this.messager = messager;
+        this.filer = filer;
     }
 
     public static DeclaredType getReducerSuperInterface(DeclaredType reducerType) {
@@ -49,6 +52,10 @@ public class Env {
 
     public Types getTypes() {
         return types;
+    }
+
+    public Filer getFiler() {
+        return filer;
     }
 
     public String getPackageName(Element element) {

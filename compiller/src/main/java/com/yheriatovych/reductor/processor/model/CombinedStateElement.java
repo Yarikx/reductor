@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombinedStateElement {
-    public final TypeElement mStateTypeElement;
-    public final List<StateProperty> mProperties;
+    public final TypeElement stateTypeElement;
+    public final List<StateProperty> properties;
 
 
     public CombinedStateElement(TypeElement stateTypeElement, List<StateProperty> getters) {
-        mStateTypeElement = stateTypeElement;
-        mProperties = getters;
+        this.stateTypeElement = stateTypeElement;
+        properties = getters;
     }
 
-    public static CombinedStateElement parseCombindedElement(TypeElement typeElement) throws ValidationException {
+    public static CombinedStateElement parseCombinedElement(TypeElement typeElement) throws ValidationException {
 
         StateProperty stateProperty;
         if (!typeElement.getKind().isInterface())

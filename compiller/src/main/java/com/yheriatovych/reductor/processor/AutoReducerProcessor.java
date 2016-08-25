@@ -35,7 +35,6 @@ public class AutoReducerProcessor extends BaseProcessor {
             } catch (com.yheriatovych.reductor.processor.ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {
-                System.out.println(e.getMessage());
                 e.printStackTrace();
                 env.printError(stringReducer, "Internal processor error:\n %s", e.getMessage());
             }
@@ -134,8 +133,7 @@ public class AutoReducerProcessor extends BaseProcessor {
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpecBuilder.build())
                 .build();
-        javaFile.writeTo(mFiler);
-        System.out.println("writing complete for " + originalTypeElement);
+        javaFile.writeTo(env.getFiler());
     }
 
     private List<MethodSpec> emitConstructorAsSuper(TypeElement typeElement) {

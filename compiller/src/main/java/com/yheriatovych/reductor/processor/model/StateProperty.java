@@ -4,7 +4,6 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.yheriatovych.reductor.Reducer;
-import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.lang.model.element.Element;
@@ -15,13 +14,13 @@ import javax.lang.model.type.TypeMirror;
 
 public class StateProperty {
     public final String name;
-    public final TypeMirror mStateType;
-    public final ExecutableElement mExecutableElement;
+    public final TypeMirror stateType;
+    public final ExecutableElement executableElement;
 
     private StateProperty(String name, TypeMirror stateType, ExecutableElement executableElement) {
         this.name = name;
-        mStateType = stateType;
-        mExecutableElement = executableElement;
+        this.stateType = stateType;
+        this.executableElement = executableElement;
     }
 
     static StateProperty parseStateProperty(Element element) throws ValidationException {
@@ -44,7 +43,7 @@ public class StateProperty {
     }
 
     public TypeName getReducerInterfaceTypeName() {
-        TypeName stateType = TypeName.get(mStateType);
+        TypeName stateType = TypeName.get(this.stateType);
         if (stateType.isPrimitive()) {
             stateType = stateType.box();
         }

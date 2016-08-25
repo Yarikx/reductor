@@ -18,6 +18,8 @@ import java.util.*;
 @AutoService(Processor.class)
 public class CombinedStateProcessor extends BaseProcessor {
 
+    public static final String REDUCER_SUFFIX = "Reducer";
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(CombinedState.class);
@@ -25,13 +27,13 @@ public class CombinedStateProcessor extends BaseProcessor {
             TypeElement combinedStateTypeElement = (TypeElement) element;
 
             try {
-                CombinedStateElement combinedStateElement = CombinedStateElement.parseCombindedElement(combinedStateTypeElement);
+                CombinedStateElement combinedStateElement = CombinedStateElement.parseCombinedElement(combinedStateTypeElement);
                 ClassName stateClassName = emmitCombinedStateImplementation(combinedStateElement);
                 emmitCombinedReducer(combinedStateElement, stateClassName);
             } catch (ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {
-                env.printError(element, "Internal processor error:\n"+e.getMessage());
+                env.printError(element, "Internal processor error:\n" + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -43,8 +45,8 @@ public class CombinedStateProcessor extends BaseProcessor {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
-        for (StateProperty property : combinedStateElement.mProperties) {
-            TypeName returnTypeName = TypeName.get(property.mStateType);
+        for (StateProperty property : combinedStateElement.properties) {
+            TypeName returnTypeName = TypeName.get(property.stateType);
             FieldSpec fieldSpec = FieldSpec.builder(returnTypeName, property.name, Modifier.PRIVATE, Modifier.FINAL)
                     .build();
             MethodSpec spec = MethodSpec
@@ -63,17 +65,17 @@ public class CombinedStateProcessor extends BaseProcessor {
         }
 
 
-        TypeSpec typeSpec = TypeSpec.classBuilder(combinedStateElement.mStateTypeElement.getSimpleName().toString() + "Impl")
-                .addSuperinterface(TypeName.get(combinedStateElement.mStateTypeElement.asType()))
+        TypeSpec typeSpec = TypeSpec.classBuilder(combinedStateElement.stateTypeElement.getSimpleName().toString() + "Impl")
+                .addSuperinterface(TypeName.get(combinedStateElement.stateTypeElement.asType()))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addMethod(constructorBuilder.build())
                 .addMethods(methodSpecs)
                 .addFields(fieldSpecs)
                 .build();
 
-        JavaFile javaFile = JavaFile.builder(env.getPackageName(combinedStateElement.mStateTypeElement), typeSpec)
+        JavaFile javaFile = JavaFile.builder(env.getPackageName(combinedStateElement.stateTypeElement), typeSpec)
                 .build();
-        javaFile.writeTo(mFiler);
+        javaFile.writeTo(env.getFiler());
         return ClassName.get(javaFile.packageName, typeSpec.name);
     }
 
@@ -84,11 +86,11 @@ public class CombinedStateProcessor extends BaseProcessor {
 
         TypeName reducerActionType = combinedStateElement.getCombinedReducerActionType();
 
-        String packageName = env.getPackageName(combinedStateElement.mStateTypeElement);
-        String combinedStateClassName = combinedStateElement.mStateTypeElement.getSimpleName().toString();
-        ClassName combinedReducerClassName = ClassName.get(packageName, combinedStateClassName + "Reducer");
+        String packageName = env.getPackageName(combinedStateElement.stateTypeElement);
+        String combinedStateClassName = combinedStateElement.stateTypeElement.getSimpleName().toString();
+        ClassName combinedReducerClassName = ClassName.get(packageName, combinedStateClassName + REDUCER_SUFFIX);
 
-        TypeName combinedReducerReturnTypeName = TypeName.get(combinedStateElement.mStateTypeElement.asType());
+        TypeName combinedReducerReturnTypeName = TypeName.get(combinedStateElement.stateTypeElement.asType());
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(combinedReducerClassName)
                 .addSuperinterface(ParameterizedTypeName.get(
                         ClassName.get(Reducer.class),
@@ -101,32 +103,38 @@ public class CombinedStateProcessor extends BaseProcessor {
 
         CodeBlock.Builder destructuringBlockBuilder = CodeBlock.builder();
         CodeBlock.Builder dispatchingBlockBuilder = CodeBlock.builder();
-        StringBuilder foobar = new StringBuilder();
+        CodeBlock.Builder stateConstructionBlockBuilder = CodeBlock.builder()
+                .add("return $N ? $N : new $T(", isTheSame, stateParam, stateClassName);
 
-        for (StateProperty property : combinedStateElement.mProperties) {
-            String reducerFieldName = property.name + "Reducer";
+        List<StateProperty> properties = combinedStateElement.properties;
+        for (int i = 0; i < properties.size(); i++) {
+            StateProperty property = properties.get(i);
+            boolean isFirst = i == 0;
+            String reducerFieldName = property.name + REDUCER_SUFFIX;
             TypeName supReducerType = property.getReducerInterfaceTypeName();
             FieldSpec subReducerField = FieldSpec.builder(supReducerType, reducerFieldName, Modifier.PRIVATE, Modifier.FINAL)
                     .build();
-            if (foobar.length() != 0)
-                foobar.append(", ");
-            foobar.append(property.name);
+            if (!isFirst)
+                stateConstructionBlockBuilder.add(", ");
+            stateConstructionBlockBuilder.add(property.name);
             reducerFields.add(subReducerField);
 
             constructorBuilder.addParameter(supReducerType, reducerFieldName)
                     .addStatement("this.$N = $N", reducerFieldName, reducerFieldName);
 
             destructuringBlockBuilder
-                    .addStatement("$T $N = $N.$N()", property.mStateType, property.name, stateParam, property.name);
+                    .addStatement("$T $N = $N.$N()", property.stateType, property.name, stateParam, property.name);
 
             dispatchingBlockBuilder
                     .add("\n")
-                    .addStatement("$T $NNext = $N.reduce($N, action)", property.mStateType, property.name, reducerFieldName, property.name)
+                    .addStatement("$T $NNext = $N.reduce($N, action)", property.stateType, property.name, reducerFieldName, property.name)
                     .addStatement(isTheSame + " &= $N == $NNext", property.name, property.name)
                     .addStatement("$N = $NNext", property.name, property.name);
         }
 
-        MethodSpec reduceMethdoSpec = MethodSpec.methodBuilder("reduce")
+        stateConstructionBlockBuilder.add(");\n");
+
+        MethodSpec reduceMethodSpec = MethodSpec.methodBuilder("reduce")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .returns(combinedReducerReturnTypeName)
@@ -135,7 +143,7 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .addStatement("boolean " + isTheSame + " = true")
                 .addCode(destructuringBlockBuilder.build())
                 .addCode(dispatchingBlockBuilder.build())
-                .addStatement("return $N ? $N : new $T($N)", isTheSame, stateParam, stateClassName, foobar.toString())
+                .addCode(stateConstructionBlockBuilder.build())
                 .build();
 
         ClassName builderClassName = ClassName.get(combinedReducerClassName.packageName(), combinedReducerClassName.simpleName(), "Builder");
@@ -151,7 +159,7 @@ public class CombinedStateProcessor extends BaseProcessor {
         typeSpecBuilder
                 .addMethod(constructorBuilder.build())
                 .addFields(reducerFields)
-                .addMethod(reduceMethdoSpec)
+                .addMethod(reduceMethodSpec)
                 .addMethod(builderFactoryMethod)
                 .addType(reducerBuilderTypeSpec);
 
@@ -159,7 +167,7 @@ public class CombinedStateProcessor extends BaseProcessor {
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
                 .build();
-        javaFile.writeTo(mFiler);
+        javaFile.writeTo(env.getFiler());
     }
 
     private TypeSpec createReducerBuilder(CombinedStateElement combinedStateElement, ClassName combinedReducerClassName, ClassName builderClassName) {
@@ -169,8 +177,8 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .addModifiers(Modifier.PRIVATE)
                 .build());
 
-        for (StateProperty property : combinedStateElement.mProperties) {
-            String name = property.name + "Reducer";
+        for (StateProperty property : combinedStateElement.properties) {
+            String name = property.name + REDUCER_SUFFIX;
             FieldSpec field = FieldSpec.builder(property.getReducerInterfaceTypeName(), name, Modifier.PRIVATE)
                     .build();
 
@@ -192,8 +200,8 @@ public class CombinedStateProcessor extends BaseProcessor {
 
         ClassName exception = ClassName.get(IllegalStateException.class);
         StringBuilder constructorArgs = new StringBuilder();
-        for (StateProperty property : combinedStateElement.mProperties) {
-            String name = property.name + "Reducer";
+        for (StateProperty property : combinedStateElement.properties) {
+            String name = property.name + REDUCER_SUFFIX;
             buildMethodBuilder.beginControlFlow("if ($N == null)", name);
             buildMethodBuilder.addStatement("throw new $T($S)", exception, name + " should not be null");
             buildMethodBuilder.endControlFlow();
