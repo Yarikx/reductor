@@ -2,11 +2,12 @@ package com.yheriatovych.reductor.example;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.*;
 import com.yheriatovych.reductor.Cancelable;
 import com.yheriatovych.reductor.Store;
@@ -17,11 +18,9 @@ import com.yheriatovych.reductor.example.reducers.NotesFilterReducerImpl;
 import com.yheriatovych.reductor.example.reducers.NotesListReducerImpl;
 import com.yheriatovych.reductor.example.reducers.utils.UndoableReducer;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
-
 
     Store<AppState> store;
     private AtomicInteger idGenerator = new AtomicInteger();
@@ -34,35 +33,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        setupSpinner(spinner);
-
+        setupSpinner(spinner, store);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final TodoAdapter adapter = new TodoAdapter();
+        final TodoAdapter adapter = new TodoAdapter(store.getState().notes(),
+                note -> store.dispatch(NotesListReducerImpl.ActionCreator.toggle(note.id)));
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
+        new ItemTouchHelper(new NoteTouchCallback(position -> {
+            Note note = store.getState().notes().get(position);
+            store.dispatch(NotesListReducerImpl.ActionCreator.remove(note.id));
+        })).attachToRecyclerView(recyclerView);
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                Note note = store.getState().notes().get(position);
-                store.dispatch(NotesListReducerImpl.ActionCreator.remove(note.id));
-            }
-
-            @Override
-            public boolean isItemViewSwipeEnabled() {
-                return true;
-            }
-        }).attachToRecyclerView(recyclerView);
 
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
+
         mCancelable = store.subscribe(state -> {
             adapter.setNotes(Utils.getFilteredNotes(state));
             spinner.setSelection(state.filter().ordinal());
@@ -77,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupSpinner(Spinner spinner) {
+    private void setupSpinner(Spinner spinner, Store<AppState> store) {
         SpinnerAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, NotesFilter.values());
         spinner.setAdapter(adapter);
         spinner.setSelection(0);
@@ -96,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add("Undo")
+        menu.add(R.string.undo)
                 .setIcon(R.drawable.ic_undo_24dp)
                 .setOnMenuItemClickListener(menuItem -> {
                     store.dispatch(UndoableReducer.pop());
@@ -112,72 +99,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    class TodoAdapter extends RecyclerView.Adapter<NoteViewHolder> {
-        private List<Note> mNotes = store.getState().notes();
-
-        @Override
-        public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new NoteViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.layout_item, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(NoteViewHolder holder, int position) {
-            final Note note = mNotes.get(position);
-            holder.content.setText(note.note);
-            holder.content.setChecked(note.checked);
-            holder.itemView.setOnClickListener(view -> store.dispatch(NotesListReducerImpl.ActionCreator.toggle(note.id)));
-
-            holder.itemView.setOnLongClickListener(v -> {
-                store.dispatch(NotesListReducerImpl.ActionCreator.remove(note.id));
-                return true;
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mNotes.size();
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return mNotes.get(position).id;
-        }
-
-        public void setNotes(List<Note> notes) {
-            List<Note> oldNotes = mNotes;
-            mNotes = notes;
-            DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                @Override
-                public int getOldListSize() {
-                    return oldNotes.size();
-                }
-
-                @Override
-                public int getNewListSize() {
-                    return notes.size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return oldNotes.get(oldItemPosition).id == notes.get(newItemPosition).id;
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    return oldNotes.get(oldItemPosition).equals(notes.get(newItemPosition));
-                }
-            }, false).dispatchUpdatesTo(this);
-        }
-    }
-
-    static class NoteViewHolder extends RecyclerView.ViewHolder {
-
-        public CheckBox content;
-
-        public NoteViewHolder(View itemView) {
-            super(itemView);
-            content = (CheckBox) itemView;
-        }
-    }
 }
