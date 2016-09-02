@@ -21,7 +21,7 @@ public class CombinedStateImplTest {
                 "    String bar();\n" +
                 "}");
 
-        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
+        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarImpl", "package test;\n" +
                 "\n" +
                 "import java.lang.Override;\n" +
                 "import java.lang.String;\n" +

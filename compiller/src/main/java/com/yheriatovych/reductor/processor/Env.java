@@ -35,15 +35,11 @@ public class Env {
                 return MoreTypes.asDeclared(supertype);
             }
         }
-        throw new IllegalStateException("type " + reducerType + " is not subclass of " + Reducer.class);
+        return null;
     }
 
     public void printError(Element element, String message, Object... args) {
         printMessage(Diagnostic.Kind.ERROR, element, message, args);
-    }
-
-    public void printWarning(Element element, String message, Object... args) {
-        printMessage(Diagnostic.Kind.WARNING, element, message, args);
     }
 
     private void printMessage(Diagnostic.Kind level, Element element, String message, Object args) {

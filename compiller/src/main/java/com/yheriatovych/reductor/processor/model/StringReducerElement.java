@@ -1,6 +1,7 @@
 package com.yheriatovych.reductor.processor.model;
 
 import com.google.auto.common.MoreTypes;
+import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
@@ -44,6 +45,9 @@ public class StringReducerElement {
 
         DeclaredType declaredType = (DeclaredType) typeElement.asType();
         DeclaredType reducerSuperInterface = Env.getReducerSuperInterface(declaredType);
+        if (reducerSuperInterface == null) {
+            throw new ValidationException(typeElement, "%s should implement %s interface", typeElement, Reducer.class.getSimpleName());
+        }
 
         TypeMirror stateType = reducerSuperInterface.getTypeArguments().get(0);
 

@@ -109,7 +109,7 @@ public class CombinedStateReducerTest {
                 "    boolean bar();\n" +
                 "}");
 
-        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
+        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducer", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
                 "import com.yheriatovych.reductor.Reducer;\n" +

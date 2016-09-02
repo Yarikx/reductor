@@ -104,7 +104,6 @@ And only one way how to change the state:
 
 ## Roadmap
 
-* Cover annotation processor with tests
 * Support [AutoValue](#https://github.com/google/auto/tree/master/value) to be used with `@CombinedState`
 * Better documentation
 * Add more example:

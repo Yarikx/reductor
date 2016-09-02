@@ -47,7 +47,7 @@ public class ReduceAction {
         }
         VariableElement firstParam = parameters.get(0);
         if (!env.getTypes().isSameType(stateType, firstParam.asType())) {
-            throw new ValidationException(firstParam, "Param %s should have the same type as state (%s)", firstParam, stateType);
+            throw new ValidationException(firstParam, "First parameter %s of method %s should have the same type as state (%s)", firstParam, executableElement, stateType);
         }
 
         return new ReduceAction(actionNameConstant, args, executableElement);
