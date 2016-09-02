@@ -32,7 +32,7 @@ public class StateProperty {
         TypeMirror stateType = executableElement.getReturnType();
 
         if (!executableElement.getParameters().isEmpty())
-            throw new ValidationException(executableElement, "state property should not have any parameters");
+            throw new ValidationException(executableElement, "state property accessor %s should not have any parameters", executableElement);
 
         if (stateType.getKind() == TypeKind.VOID) {
             throw new ValidationException(executableElement, "void is not allowed as return type for property method %s", executableElement);
