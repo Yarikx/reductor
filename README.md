@@ -1,5 +1,5 @@
 # Reductor
-[Redux](http://redux.js.org/) inspired predictable state container library for Java.
+[Redux](http://redux.js.org/) inspired predictable state container library for Java/Android.
 
 Reductor can help you make your state mutations easier to read, write and reason about.
 As Redux it's based on three principles (from [Redux documentation](http://redux.js.org/docs/introduction/ThreePrinciples.html)):
