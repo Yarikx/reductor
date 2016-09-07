@@ -1,17 +1,20 @@
 package com.yheriatovych.reductor.processor;
 
-import com.google.auto.common.MoreElements;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.model.ActionHandlerArg;
+import com.yheriatovych.reductor.processor.model.AutoReducerConstructor;
 import com.yheriatovych.reductor.processor.model.ReduceAction;
 import com.yheriatovych.reductor.processor.model.StringReducerElement;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import java.io.IOException;
 import java.util.*;
 
@@ -122,7 +125,7 @@ public class AutoReducerProcessor extends BaseProcessor {
         }
 
         typeSpecBuilder
-                .addMethods(emitConstructorAsSuper(originalTypeElement))
+                .addMethods(emitConstructorAsSuper(reducerElement.constructors))
                 .addMethod(reduceMethodBuilder
                         .addCode(reduceBodyBuilder
                                 .addStatement("default: return state")
@@ -136,36 +139,26 @@ public class AutoReducerProcessor extends BaseProcessor {
         javaFile.writeTo(env.getFiler());
     }
 
-    private List<MethodSpec> emitConstructorAsSuper(TypeElement typeElement) {
-        List<MethodSpec> constructors = new ArrayList<>();
-        boolean hasNonDefaultConstructors = false;
-        for (Element element : typeElement.getEnclosedElements()) {
-            if (element.getKind() == ElementKind.CONSTRUCTOR) {
-                ExecutableElement executableElement = MoreElements.asExecutable(element);
+    private List<MethodSpec> emitConstructorAsSuper(List<AutoReducerConstructor> constructors) {
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        for (AutoReducerConstructor constructor : constructors) {
 
-                MethodSpec.Builder builder = MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PUBLIC);
-                StringBuilder argsBuilder = new StringBuilder();
-                List<? extends VariableElement> parameters = executableElement.getParameters();
+            MethodSpec.Builder builder = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC);
+            StringBuilder argsBuilder = new StringBuilder();
+            List<? extends VariableElement> parameters = constructor.args;
 
-                hasNonDefaultConstructors |= parameters.size() != 0;
-                for (VariableElement variableElement : parameters) {
-                    String name = variableElement.getSimpleName().toString();
-                    builder.addParameter(TypeName.get(variableElement.asType()), name);
-                    if (argsBuilder.length() != 0) argsBuilder.append(", ");
-                    argsBuilder.append(name);
-                }
-
-                builder.addStatement("super(" + argsBuilder.toString() + ")");
-                constructors.add(builder.build());
+            for (VariableElement variableElement : parameters) {
+                String name = variableElement.getSimpleName().toString();
+                builder.addParameter(TypeName.get(variableElement.asType()), name);
+                if (argsBuilder.length() != 0) argsBuilder.append(", ");
+                argsBuilder.append(name);
             }
+
+            builder.addStatement("super(" + argsBuilder.toString() + ")");
+            methodSpecs.add(builder.build());
         }
 
-        //if we only have one default constructor, it can be omitted
-        if (!hasNonDefaultConstructors && constructors.size() == 1) return Collections.emptyList();
-
-        return constructors;
+        return methodSpecs;
     }
-
-
 }

@@ -153,4 +153,27 @@ public class AutoReducerValidationTest {
                 .withErrorContaining("First parameter action of method handleAction(int) should have the same type as state (java.lang.String)")
                 .in(source).onLine(9);
     }
+
+    @Test
+    public void testGeneratedReducerWithMatchingConstructor() {
+        JavaFileObject source = JavaFileObjects.forSourceString("test.FoobarReducer", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.Reducer;\n" +
+                "import com.yheriatovych.reductor.annotations.AutoReducer;\n" +
+                "\n" +
+                "@AutoReducer\n" +
+                "public abstract class FoobarReducer implements Reducer<String>{\n" +
+                "    private FoobarReducer(int foo, String bar) {\n" +
+                "        \n" +
+                "    }\n" +
+                "}");
+
+        assertAbout(javaSource()).that(source)
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new AutoReducerProcessor())
+                .failsToCompile()
+                .withErrorContaining("No accessible constructors available for class test.FoobarReducer")
+                .in(source)
+                .onLine(7);
+    }
 }

@@ -1,18 +1,18 @@
 package com.yheriatovych.reductor.processor.model;
 
+import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class StringReducerElement {
@@ -21,14 +21,16 @@ public class StringReducerElement {
     public final String packageName;
     public final String simpleName;
     public final TypeElement originalElement;
+    public final List<AutoReducerConstructor> constructors;
 
 
-    public StringReducerElement(DeclaredType stateType, List<ReduceAction> actions, String packageName, TypeElement originalElement) {
+    public StringReducerElement(DeclaredType stateType, List<ReduceAction> actions, String packageName, TypeElement originalElement, List<AutoReducerConstructor> constructors) {
         this.stateType = stateType;
         this.actions = actions;
         this.packageName = packageName;
         this.originalElement = originalElement;
         this.simpleName = originalElement.getSimpleName().toString();
+        this.constructors = constructors;
     }
 
 
@@ -59,8 +61,36 @@ public class StringReducerElement {
             }
         }
 
+        List<AutoReducerConstructor> constructors = parseConstructors(typeElement);
+
         final DeclaredType stateDeclaredType = (DeclaredType) stateType;
-        return new StringReducerElement(stateDeclaredType, actions, env.getPackageName(element), typeElement);
+        return new StringReducerElement(stateDeclaredType, actions, env.getPackageName(element), typeElement, constructors);
+    }
+
+    private static List<AutoReducerConstructor> parseConstructors(TypeElement typeElement) throws ValidationException {
+        List<AutoReducerConstructor> constructors = new ArrayList<>();
+        boolean hasNonDefaultConstructors = false;
+        for (Element element : typeElement.getEnclosedElements()) {
+            if (element.getKind() == ElementKind.CONSTRUCTOR) {
+                ExecutableElement executableElement = MoreElements.asExecutable(element);
+
+                if (executableElement.getModifiers().contains(Modifier.PRIVATE)) continue;
+
+                List<? extends VariableElement> parameters = executableElement.getParameters();
+
+                hasNonDefaultConstructors |= parameters.size() != 0;
+                constructors.add(new AutoReducerConstructor(executableElement));
+            }
+        }
+
+        //if we only have one default constructor, it can be omitted
+        if (!hasNonDefaultConstructors && constructors.size() == 1) return Collections.emptyList();
+
+        //this is the case when all constructors are private
+        if (constructors.size() == 0)
+            throw new ValidationException(typeElement, "No accessible constructors available for class %s", typeElement);
+
+        return constructors;
     }
 
 }
