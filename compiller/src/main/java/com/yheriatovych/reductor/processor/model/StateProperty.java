@@ -9,6 +9,7 @@ import com.yheriatovych.reductor.processor.ValidationException;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
@@ -26,6 +27,13 @@ public class StateProperty {
     static StateProperty parseStateProperty(Element element) throws ValidationException {
         StateProperty stateProperty;
         if (element.getKind() != ElementKind.METHOD) return null;
+
+        //We don't care about static methods, just ignore
+        if (element.getModifiers().contains(Modifier.STATIC)) return null;
+
+        //We also don't care about default methods.
+        //If default method is there, it probably not meant to be override
+        if (element.getModifiers().contains(Modifier.DEFAULT)) return null;
 
         ExecutableElement executableElement = (ExecutableElement) element;
         String propertyName = executableElement.getSimpleName().toString();
