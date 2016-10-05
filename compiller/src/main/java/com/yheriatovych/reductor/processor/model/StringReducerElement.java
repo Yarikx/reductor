@@ -5,6 +5,7 @@ import com.google.auto.common.MoreTypes;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.Utils;
 import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.lang.model.element.*;
@@ -46,7 +47,7 @@ public class StringReducerElement {
         }
 
         DeclaredType declaredType = (DeclaredType) typeElement.asType();
-        DeclaredType reducerSuperInterface = Env.getReducerSuperInterface(declaredType);
+        DeclaredType reducerSuperInterface = Utils.getReducerSuperInterface(declaredType);
         if (reducerSuperInterface == null) {
             throw new ValidationException(typeElement, "%s should implement %s interface", typeElement, Reducer.class.getSimpleName());
         }
