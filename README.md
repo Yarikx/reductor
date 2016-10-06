@@ -1,6 +1,7 @@
 # Reductor
 
-[ ![Download](https://api.bintray.com/packages/yarikx/Reductor/Reductor/images/download.svg) ](https://bintray.com/yarikx/Reductor/Reductor/_latestVersion)
+[![Download](https://api.bintray.com/packages/yarikx/Reductor/Reductor/images/download.svg)](https://bintray.com/yarikx/Reductor/Reductor/_latestVersion)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Reductor-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/4402)
 
 [Redux](http://redux.js.org/) inspired predictable state container library for Java/Android.
 
