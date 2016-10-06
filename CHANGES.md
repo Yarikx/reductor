@@ -7,7 +7,7 @@ Major update aimed to improve and simplify initial state population.
   - Every `Reducer` now is responsible to populate initial state if `null` is received as current state in `reduce` method;
   - `@CombinedState` reducers now initialize state automatically with empty values (`null` for objects, `false` for booleans, `0` for numbers, `\u0000` for char);
   - `@AutoReducer` annotated reducers now can specify how initial state can be created
-  by introducing method with `@AutoReducer.InitialState` annotation (See `@AutoReducer.InitialState` javadoc);
+  by introducing method with `@AutoReducer.InitialState` annotation (See `@AutoReducer.InitialState` javadoc or [example](https://github.com/Yarikx/reductor/blob/master/example/src/main/java/com/yheriatovych/reductor/example/reducers/NotesListReducer.java#L17));
   - Added `Store.create` overload without `inialState` argument;
   - Now before `Store` is created, special internal action is dispatched to populate initial state;
   
