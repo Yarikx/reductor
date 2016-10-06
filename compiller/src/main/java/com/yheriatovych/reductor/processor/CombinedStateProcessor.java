@@ -15,6 +15,10 @@ import javax.lang.model.element.TypeElement;
 import java.io.IOException;
 import java.util.*;
 
+import static com.yheriatovych.reductor.processor.Utils.join;
+import static com.yheriatovych.reductor.processor.Utils.map;
+import static com.yheriatovych.reductor.processor.Utils.reduce;
+
 @AutoService(Processor.class)
 public class CombinedStateProcessor extends BaseProcessor {
 
@@ -82,7 +86,6 @@ public class CombinedStateProcessor extends BaseProcessor {
     private void emmitCombinedReducer(CombinedStateElement combinedStateElement, ClassName stateClassName) throws IOException {
         String stateParam = "state";
         String actionParam = "action";
-        String isTheSame = "areValuesTheSame";
 
         TypeName reducerActionType = combinedStateElement.getCombinedReducerActionType();
 
@@ -91,6 +94,8 @@ public class CombinedStateProcessor extends BaseProcessor {
         ClassName combinedReducerClassName = ClassName.get(packageName, combinedStateClassName + REDUCER_SUFFIX);
 
         TypeName combinedReducerReturnTypeName = TypeName.get(combinedStateElement.stateTypeElement.asType());
+        List<StateProperty> properties = combinedStateElement.properties;
+
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(combinedReducerClassName)
                 .addSuperinterface(ParameterizedTypeName.get(
                         ClassName.get(Reducer.class),
@@ -101,38 +106,22 @@ public class CombinedStateProcessor extends BaseProcessor {
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PRIVATE);
 
-        CodeBlock.Builder destructuringBlockBuilder = CodeBlock.builder();
-        CodeBlock.Builder dispatchingBlockBuilder = CodeBlock.builder();
-        CodeBlock.Builder stateConstructionBlockBuilder = CodeBlock.builder()
-                .add("return $N ? $N : new $T(", isTheSame, stateParam, stateClassName);
-
-        List<StateProperty> properties = combinedStateElement.properties;
         for (int i = 0; i < properties.size(); i++) {
             StateProperty property = properties.get(i);
-            boolean isFirst = i == 0;
             String reducerFieldName = property.name + REDUCER_SUFFIX;
-            TypeName supReducerType = property.getReducerInterfaceTypeName();
-            FieldSpec subReducerField = FieldSpec.builder(supReducerType, reducerFieldName, Modifier.PRIVATE, Modifier.FINAL)
+            TypeName subReducerType = property.getReducerInterfaceTypeName();
+            FieldSpec subReducerField = FieldSpec.builder(subReducerType, reducerFieldName, Modifier.PRIVATE, Modifier.FINAL)
                     .build();
-            if (!isFirst)
-                stateConstructionBlockBuilder.add(", ");
-            stateConstructionBlockBuilder.add(property.name);
             reducerFields.add(subReducerField);
 
-            constructorBuilder.addParameter(supReducerType, reducerFieldName)
+            constructorBuilder.addParameter(subReducerType, reducerFieldName)
                     .addStatement("this.$N = $N", reducerFieldName, reducerFieldName);
-
-            destructuringBlockBuilder
-                    .addStatement("$T $N = $N.$N()", property.stateType, property.name, stateParam, property.name);
-
-            dispatchingBlockBuilder
-                    .add("\n")
-                    .addStatement("$T $NNext = $N.reduce($N, action)", property.stateType, property.name, reducerFieldName, property.name)
-                    .addStatement(isTheSame + " &= $N == $NNext", property.name, property.name)
-                    .addStatement("$N = $NNext", property.name, property.name);
         }
 
-        stateConstructionBlockBuilder.add(");\n");
+        CodeBlock dispatchingBlockBuilder = reduce(properties, CodeBlock.builder(), (builder, property) -> {
+            String reducerFieldName = property.name + REDUCER_SUFFIX;
+            return builder.addStatement("$T $N = $N.reduce(state.$N(), action)", property.stateType, property.name, reducerFieldName, property.name);
+        }).build();
 
         MethodSpec reduceMethodSpec = MethodSpec.methodBuilder("reduce")
                 .addModifiers(Modifier.PUBLIC)
@@ -140,10 +129,9 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .returns(combinedReducerReturnTypeName)
                 .addParameter(combinedReducerReturnTypeName, stateParam)
                 .addParameter(reducerActionType, actionParam)
-                .addStatement("boolean " + isTheSame + " = true")
-                .addCode(destructuringBlockBuilder.build())
-                .addCode(dispatchingBlockBuilder.build())
-                .addCode(stateConstructionBlockBuilder.build())
+                .addCode(emitInitialValueBlock(stateClassName, properties)).addCode("\n")
+                .addCode(dispatchingBlockBuilder).addCode("\n")
+                .addCode(emitReturnBlock(stateClassName, properties))
                 .build();
 
         ClassName builderClassName = ClassName.get(combinedReducerClassName.packageName(), combinedReducerClassName.simpleName(), "Builder");
@@ -168,6 +156,30 @@ public class CombinedStateProcessor extends BaseProcessor {
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
                 .build();
         javaFile.writeTo(env.getFiler());
+    }
+
+    private CodeBlock emitInitialValueBlock(ClassName stateClassName, List<StateProperty> properties) {
+        String defaultArgs = join(", ", map(properties, stateProperty -> Utils.getDefaultValue(stateProperty.stateType.getKind())));
+        return CodeBlock.builder()
+                .beginControlFlow("if (state == null)")
+                .addStatement("state = new $T($N)", stateClassName, defaultArgs)
+                .endControlFlow()
+                .build();
+    }
+
+    private CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
+        String equalsCondition = join("\n && ",
+                map(properties, property ->
+                        String.format("%s == state.%s()", property.name, property.name)));
+        String args = join(", ", map(properties, property -> property.name));
+        return CodeBlock.builder()
+                .add("//If all values are the same there is no need to create an object\n")
+                .beginControlFlow("if (" + equalsCondition + ")")
+                .addStatement("return state")
+                .nextControlFlow("else")
+                .addStatement("return new $T("+args + ")", stateClassName)
+                .endControlFlow()
+                .build();
     }
 
     private TypeSpec createReducerBuilder(CombinedStateElement combinedStateElement, ClassName combinedReducerClassName, ClassName builderClassName) {
