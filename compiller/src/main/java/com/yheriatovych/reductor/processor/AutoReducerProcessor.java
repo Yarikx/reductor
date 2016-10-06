@@ -60,6 +60,13 @@ public class AutoReducerProcessor extends BaseProcessor {
                 .addParameter(stateTypeName, "state")
                 .addParameter(Action.class, "action");
 
+        if(reducerElement.initMethod != null) {
+            reduceMethodBuilder.beginControlFlow("if (state == null)")
+                    .addStatement("state = $N()", reducerElement.initMethod.getName())
+                    .endControlFlow()
+                    .addCode("\n");
+        }
+
         CodeBlock.Builder reduceBodyBuilder = CodeBlock.builder()
                 .beginControlFlow("switch (action.type)");
 

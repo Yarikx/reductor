@@ -56,4 +56,8 @@ public @interface AutoReducer {
          */
         String value();
     }
+
+    //TODO write docs
+    @Target(ElementType.METHOD)
+    @interface Init {}
 }

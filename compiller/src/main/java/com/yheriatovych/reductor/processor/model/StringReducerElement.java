@@ -19,12 +19,14 @@ import java.util.List;
 public class StringReducerElement {
     public final DeclaredType stateType;
     public final List<ReduceAction> actions;
+    public final AutoReducerInit initMethod;
     public final TypeElement originalElement;
     public final List<AutoReducerConstructor> constructors;
 
-    public StringReducerElement(DeclaredType stateType, List<ReduceAction> actions, TypeElement originalElement, List<AutoReducerConstructor> constructors) {
+    public StringReducerElement(DeclaredType stateType, List<ReduceAction> actions, AutoReducerInit initMethod, TypeElement originalElement, List<AutoReducerConstructor> constructors) {
         this.stateType = stateType;
         this.actions = actions;
+        this.initMethod = initMethod;
         this.originalElement = originalElement;
         this.constructors = constructors;
     }
@@ -57,17 +59,25 @@ public class StringReducerElement {
         TypeMirror stateType = reducerSuperInterface.getTypeArguments().get(0);
 
         List<ReduceAction> actions = new ArrayList<>();
+        AutoReducerInit initMethod = null;
         for (Element enclosedElement : typeElement.getEnclosedElements()) {
-            ReduceAction reduceAction = ReduceAction.parseReduceAction(env, stateType, enclosedElement);
-            if (reduceAction != null) {
-                actions.add(reduceAction);
+            if(enclosedElement.getKind() != ElementKind.METHOD) continue;
+            ExecutableElement executableElement = MoreElements.asExecutable(enclosedElement);
+
+            if (enclosedElement.getAnnotation(AutoReducer.Init.class) != null) {
+                initMethod = AutoReducerInit.parse(executableElement);
+            } else {
+                ReduceAction reduceAction = ReduceAction.parseReduceAction(env, stateType, executableElement);
+                if (reduceAction != null) {
+                    actions.add(reduceAction);
+                }
             }
         }
 
         List<AutoReducerConstructor> constructors = parseConstructors(typeElement);
 
         final DeclaredType stateDeclaredType = (DeclaredType) stateType;
-        return new StringReducerElement(stateDeclaredType, actions, typeElement, constructors);
+        return new StringReducerElement(stateDeclaredType, actions, initMethod, typeElement, constructors);
     }
 
     private static List<AutoReducerConstructor> parseConstructors(TypeElement typeElement) throws ValidationException {

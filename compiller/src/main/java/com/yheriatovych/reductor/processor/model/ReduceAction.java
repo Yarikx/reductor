@@ -24,18 +24,17 @@ public class ReduceAction {
         this.action = action;
     }
 
-    public static ReduceAction parseReduceAction(Env env, TypeMirror stateType, Element element) throws ValidationException {
+    public static ReduceAction parseReduceAction(Env env, TypeMirror stateType, ExecutableElement element) throws ValidationException {
         AutoReducer.Action action = element.getAnnotation(AutoReducer.Action.class);
-        if (element.getKind() != ElementKind.METHOD || action == null) return null;
-        ExecutableElement executableElement = (ExecutableElement) element;
+        if (action == null) return null;
 
         String actionNameConstant = action.value();
 
-        if (!env.getTypes().isSameType(stateType, executableElement.getReturnType())) {
+        if (!env.getTypes().isSameType(stateType, element.getReturnType())) {
             throw new ValidationException(element, "Method %s should return the same type as state (%s)", element, stateType);
         }
 
-        List<? extends VariableElement> parameters = executableElement.getParameters();
+        List<? extends VariableElement> parameters = element.getParameters();
         if (parameters.size() == 0) {
             throw new ValidationException(element, "method %s should have at least 1 arguments: state of type %s", element, stateType);
         }
@@ -47,10 +46,10 @@ public class ReduceAction {
         }
         VariableElement firstParam = parameters.get(0);
         if (!env.getTypes().isSameType(stateType, firstParam.asType())) {
-            throw new ValidationException(firstParam, "First parameter %s of method %s should have the same type as state (%s)", firstParam, executableElement, stateType);
+            throw new ValidationException(firstParam, "First parameter %s of method %s should have the same type as state (%s)", firstParam, element, stateType);
         }
 
-        return new ReduceAction(actionNameConstant, args, executableElement);
+        return new ReduceAction(actionNameConstant, args, element);
     }
 
     public String getMethodName() {
