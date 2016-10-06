@@ -24,6 +24,7 @@ public class AutoReducerInit {
             throw new ValidationException(executableElement, "Method %s should be may be annotated" +
                     " with either @AutoReducer.InitialState or @AutoReducer.Action but not both", executableElement);
         }
+
         ValidationUtils.validateReturnsState(env, stateType, executableElement);
         ValidationUtils.validateIsNotPrivate(executableElement);
 

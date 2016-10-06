@@ -42,18 +42,20 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "  @Override\n" +
                 "  public Foobar reduce(Foobar state, Action action) {\n" +
-                "    boolean areValuesTheSame = true;\n" +
-                "    String foo = state.foo();\n" +
-                "    Date bar = state.bar();\n" +
+                "    if (state == null) {\n" +
+                "      state = new FoobarImpl(null, null);\n" +
+                "    }\n" +
                 "\n" +
-                "    String fooNext = fooReducer.reduce(foo, action);\n" +
-                "    areValuesTheSame &= foo == fooNext;\n" +
-                "    foo = fooNext;\n" +
+                "    String foo = fooReducer.reduce(state.foo(), action);\n" +
+                "    Date bar = barReducer.reduce(state.bar(), action);\n" +
                 "\n" +
-                "    Date barNext = barReducer.reduce(bar, action);\n" +
-                "    areValuesTheSame &= bar == barNext;\n" +
-                "    bar = barNext;\n" +
-                "    return areValuesTheSame ? state : new FoobarImpl(foo, bar);\n" +
+                "    //If all values are the same there is no need to create an object\n" +
+                "    if (foo == state.foo()\n" +
+                "     && bar == state.bar()) {\n" +
+                "      return state;\n" +
+                "    } else {\n" +
+                "      return new FoobarImpl(foo, bar);\n" +
+                "    }\n" +
                 "  }\n" +
                 "\n" +
                 "  public static Builder builder() {\n" +
@@ -130,18 +132,20 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "  @Override\n" +
                 "  public Foobar reduce(Foobar state, Action action) {\n" +
-                "    boolean areValuesTheSame = true;\n" +
-                "    int foo = state.foo();\n" +
-                "    boolean bar = state.bar();\n" +
+                "    if (state == null) {\n" +
+                "      state = new FoobarImpl(0, false);\n" +
+                "    }\n" +
                 "\n" +
-                "    int fooNext = fooReducer.reduce(foo, action);\n" +
-                "    areValuesTheSame &= foo == fooNext;\n" +
-                "    foo = fooNext;\n" +
+                "    int foo = fooReducer.reduce(state.foo(), action);\n" +
+                "    boolean bar = barReducer.reduce(state.bar(), action);\n" +
                 "\n" +
-                "    boolean barNext = barReducer.reduce(bar, action);\n" +
-                "    areValuesTheSame &= bar == barNext;\n" +
-                "    bar = barNext;\n" +
-                "    return areValuesTheSame ? state : new FoobarImpl(foo, bar);\n" +
+                "    //If all values are the same there is no need to create an object\n" +
+                "    if (foo == state.foo()\n" +
+                "     && bar == state.bar()) {\n" +
+                "      return state;\n" +
+                "    } else {\n" +
+                "      return new FoobarImpl(foo, bar);\n" +
+                "    }\n" +
                 "  }\n" +
                 "\n" +
                 "  public static Builder builder() {\n" +
@@ -176,7 +180,147 @@ public class CombinedStateReducerTest {
                 "      return new FoobarReducer(fooReducer, barReducer);\n" +
                 "    }\n" +
                 "  }\n" +
-                "}\n");
+                "}");
+
+        assertAbout(javaSource()).that(source)
+                .processedWith(new CombinedStateProcessor())
+                .compilesWithoutWarnings()
+                .and()
+                .generatesSources(generatedPojo);
+    }
+
+    @Test
+    public void testInitialValues() {
+        JavaFileObject source = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.annotations.CombinedState;\n" +
+                "\n" +
+                "@CombinedState\n" +
+                "public interface Foobar {\n" +
+                "    int intValue();\n" +
+                "    double doubleValue();\n" +
+                "    boolean booleanValue();\n" +
+                "    char charValue();\n" +
+                "    Object objectValue();\n" +
+                "}");
+
+        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducer", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.Action;\n" +
+                "import com.yheriatovych.reductor.Reducer;\n" +
+                "import java.lang.Boolean;\n" +
+                "import java.lang.Character;\n" +
+                "import java.lang.Double;\n" +
+                "import java.lang.IllegalStateException;\n" +
+                "import java.lang.Integer;\n" +
+                "import java.lang.Object;\n" +
+                "import java.lang.Override;\n" +
+                "\n" +
+                "public final class FoobarReducer implements Reducer<Foobar> {\n" +
+                "  private final Reducer<Integer> intValueReducer;\n" +
+                "\n" +
+                "  private final Reducer<Double> doubleValueReducer;\n" +
+                "\n" +
+                "  private final Reducer<Boolean> booleanValueReducer;\n" +
+                "\n" +
+                "  private final Reducer<Character> charValueReducer;\n" +
+                "\n" +
+                "  private final Reducer<Object> objectValueReducer;\n" +
+                "\n" +
+                "  private FoobarReducer(Reducer<Integer> intValueReducer, Reducer<Double> doubleValueReducer, Reducer<Boolean> booleanValueReducer, Reducer<Character> charValueReducer, Reducer<Object> objectValueReducer) {\n" +
+                "    this.intValueReducer = intValueReducer;\n" +
+                "    this.doubleValueReducer = doubleValueReducer;\n" +
+                "    this.booleanValueReducer = booleanValueReducer;\n" +
+                "    this.charValueReducer = charValueReducer;\n" +
+                "    this.objectValueReducer = objectValueReducer;\n" +
+                "  }\n" +
+                "\n" +
+                "  @Override\n" +
+                "  public Foobar reduce(Foobar state, Action action) {\n" +
+                "    if (state == null) {\n" +
+                "      state = new FoobarImpl(0, 0, false, '\\u0000', null);\n" +
+                "    }\n" +
+                "\n" +
+                "    int intValue = intValueReducer.reduce(state.intValue(), action);\n" +
+                "    double doubleValue = doubleValueReducer.reduce(state.doubleValue(), action);\n" +
+                "    boolean booleanValue = booleanValueReducer.reduce(state.booleanValue(), action);\n" +
+                "    char charValue = charValueReducer.reduce(state.charValue(), action);\n" +
+                "    Object objectValue = objectValueReducer.reduce(state.objectValue(), action);\n" +
+                "\n" +
+                "    //If all values are the same there is no need to create an object\n" +
+                "    if (intValue == state.intValue()\n" +
+                "     && doubleValue == state.doubleValue()\n" +
+                "     && booleanValue == state.booleanValue()\n" +
+                "     && charValue == state.charValue()\n" +
+                "     && objectValue == state.objectValue()) {\n" +
+                "      return state;\n" +
+                "    } else {\n" +
+                "      return new FoobarImpl(intValue, doubleValue, booleanValue, charValue, objectValue);\n" +
+                "    }\n" +
+                "  }\n" +
+                "\n" +
+                "  public static Builder builder() {\n" +
+                "    return new Builder();\n" +
+                "  }\n" +
+                "\n" +
+                "  public static class Builder {\n" +
+                "    private Reducer<Integer> intValueReducer;\n" +
+                "\n" +
+                "    private Reducer<Double> doubleValueReducer;\n" +
+                "\n" +
+                "    private Reducer<Boolean> booleanValueReducer;\n" +
+                "\n" +
+                "    private Reducer<Character> charValueReducer;\n" +
+                "\n" +
+                "    private Reducer<Object> objectValueReducer;\n" +
+                "\n" +
+                "    private Builder() {\n" +
+                "    }\n" +
+                "\n" +
+                "    public Builder intValueReducer(Reducer<Integer> intValueReducer) {\n" +
+                "      this.intValueReducer = intValueReducer;\n" +
+                "      return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    public Builder doubleValueReducer(Reducer<Double> doubleValueReducer) {\n" +
+                "      this.doubleValueReducer = doubleValueReducer;\n" +
+                "      return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    public Builder booleanValueReducer(Reducer<Boolean> booleanValueReducer) {\n" +
+                "      this.booleanValueReducer = booleanValueReducer;\n" +
+                "      return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    public Builder charValueReducer(Reducer<Character> charValueReducer) {\n" +
+                "      this.charValueReducer = charValueReducer;\n" +
+                "      return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    public Builder objectValueReducer(Reducer<Object> objectValueReducer) {\n" +
+                "      this.objectValueReducer = objectValueReducer;\n" +
+                "      return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    public FoobarReducer build() {\n" +
+                "      if (intValueReducer == null) {\n" +
+                "        throw new IllegalStateException(\"intValueReducer should not be null\");\n" +
+                "      }\n" +
+                "      if (doubleValueReducer == null) {\n" +
+                "        throw new IllegalStateException(\"doubleValueReducer should not be null\");\n" +
+                "      }\n" +
+                "      if (booleanValueReducer == null) {\n" +
+                "        throw new IllegalStateException(\"booleanValueReducer should not be null\");\n" +
+                "      }\n" +
+                "      if (charValueReducer == null) {\n" +
+                "        throw new IllegalStateException(\"charValueReducer should not be null\");\n" +
+                "      }\n" +
+                "      if (objectValueReducer == null) {\n" +
+                "        throw new IllegalStateException(\"objectValueReducer should not be null\");\n" +
+                "      }\n" +
+                "      return new FoobarReducer(intValueReducer, doubleValueReducer, booleanValueReducer, charValueReducer, objectValueReducer);\n" +
+                "    }\n" +
+                "  }");
 
         assertAbout(javaSource()).that(source)
                 .processedWith(new CombinedStateProcessor())

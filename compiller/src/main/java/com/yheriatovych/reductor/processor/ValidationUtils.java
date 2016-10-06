@@ -7,7 +7,7 @@ import javax.lang.model.type.TypeMirror;
 public class ValidationUtils {
     public static void validateReturnsState(Env env, TypeMirror stateType, ExecutableElement element) throws ValidationException {
         if (!env.getTypes().isAssignable(element.getReturnType(), stateType)) {
-            throw new ValidationException(element, "Method %s should return the same type as state (%s)", element, stateType);
+            throw new ValidationException(element, "Method %s should return type assignable to state type %s", element, stateType);
         }
     }
 

@@ -326,4 +326,94 @@ public class AutoReducerGeneratorTest {
                 .and()
                 .generatesSources(generatedPojo);
     }
+
+    @Test
+    public void testGeneratedReducerWithInitialStateCreator() {
+        JavaFileObject source = JavaFileObjects.forSourceString("test.FoobarReducer", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.Reducer;\n" +
+                "import com.yheriatovych.reductor.annotations.AutoReducer;\n" +
+                "\n" +
+                "@AutoReducer\n" +
+                "public abstract class FoobarReducer implements Reducer<String>{\n" +
+                "    @AutoReducer.InitialState\n" +
+                "    String initialState() {\n" +
+                "        return \"initial\";\n" +
+                "    }\n" +
+                "}");
+
+        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.Action;\n" +
+                "import java.lang.Override;\n" +
+                "import java.lang.String;\n" +
+                "\n" +
+                "public class FoobarReducerImpl extends FoobarReducer {\n" +
+                "  @Override\n" +
+                "  public String reduce(String state, Action action) {\n" +
+                "    if (state == null) {\n" +
+                "      state = initialState();\n" +
+                "    }\n" +
+                "\n" +
+                "    switch (action.type) {\n" +
+                "      default: return state;\n" +
+                "    }\n" +
+                "  }\n" +
+                "\n" +
+                "  public static class ActionCreator {\n" +
+                "  }\n" +
+                "}");
+
+        assertAbout(javaSource()).that(source)
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new AutoReducerProcessor())
+                .compilesWithoutWarnings()
+                .and()
+                .generatesSources(generatedPojo);
+    }
+
+    @Test
+    public void testGeneratedReducerWithStaticInitialStateCreator() {
+        JavaFileObject source = JavaFileObjects.forSourceString("test.FoobarReducer", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.Reducer;\n" +
+                "import com.yheriatovych.reductor.annotations.AutoReducer;\n" +
+                "\n" +
+                "@AutoReducer\n" +
+                "public abstract class FoobarReducer implements Reducer<String>{\n" +
+                "    @AutoReducer.InitialState\n" +
+                "    static String initialState() {\n" +
+                "        return \"initial\";\n" +
+                "    }\n" +
+                "}");
+
+        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.Action;\n" +
+                "import java.lang.Override;\n" +
+                "import java.lang.String;\n" +
+                "\n" +
+                "public class FoobarReducerImpl extends FoobarReducer {\n" +
+                "  @Override\n" +
+                "  public String reduce(String state, Action action) {\n" +
+                "    if (state == null) {\n" +
+                "      state = initialState();\n" +
+                "    }\n" +
+                "\n" +
+                "    switch (action.type) {\n" +
+                "      default: return state;\n" +
+                "    }\n" +
+                "  }\n" +
+                "\n" +
+                "  public static class ActionCreator {\n" +
+                "  }\n" +
+                "}");
+
+        assertAbout(javaSource()).that(source)
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new AutoReducerProcessor())
+                .compilesWithoutWarnings()
+                .and()
+                .generatesSources(generatedPojo);
+    }
 }
