@@ -34,7 +34,7 @@ public class AutoReducerProcessor extends BaseProcessor {
         for (Element stringReducer : stringReducers) {
             try {
                 StringReducerElement reducerElement = StringReducerElement.parseStringReducerElement(stringReducer, env);
-                emitGeneratedClass(reducerElement, reducerElement.packageName, reducerElement.originalElement);
+                emitGeneratedClass(reducerElement, reducerElement.getPackageName(env), reducerElement.originalElement);
             } catch (com.yheriatovych.reductor.processor.ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {
@@ -47,7 +47,7 @@ public class AutoReducerProcessor extends BaseProcessor {
     }
 
     private void emitGeneratedClass(StringReducerElement reducerElement, String packageName, TypeElement originalTypeElement) throws IOException {
-        String name = reducerElement.simpleName + "Impl";
+        String name = reducerElement.getSimpleName() + "Impl";
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
                 .addModifiers(Modifier.PUBLIC)
                 .superclass(TypeName.get(originalTypeElement.asType()));

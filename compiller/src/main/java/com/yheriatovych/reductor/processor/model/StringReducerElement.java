@@ -19,21 +19,23 @@ import java.util.List;
 public class StringReducerElement {
     public final DeclaredType stateType;
     public final List<ReduceAction> actions;
-    public final String packageName;
-    public final String simpleName;
     public final TypeElement originalElement;
     public final List<AutoReducerConstructor> constructors;
 
-
-    public StringReducerElement(DeclaredType stateType, List<ReduceAction> actions, String packageName, TypeElement originalElement, List<AutoReducerConstructor> constructors) {
+    public StringReducerElement(DeclaredType stateType, List<ReduceAction> actions, TypeElement originalElement, List<AutoReducerConstructor> constructors) {
         this.stateType = stateType;
         this.actions = actions;
-        this.packageName = packageName;
         this.originalElement = originalElement;
-        this.simpleName = originalElement.getSimpleName().toString();
         this.constructors = constructors;
     }
 
+    public String getSimpleName() {
+        return originalElement.getSimpleName().toString();
+    }
+
+    public String getPackageName(Env env) {
+        return env.getPackageName(originalElement);
+    }
 
     public static StringReducerElement parseStringReducerElement(Element element, Env env) throws ValidationException {
         if (element.getKind() != ElementKind.CLASS) {
@@ -65,7 +67,7 @@ public class StringReducerElement {
         List<AutoReducerConstructor> constructors = parseConstructors(typeElement);
 
         final DeclaredType stateDeclaredType = (DeclaredType) stateType;
-        return new StringReducerElement(stateDeclaredType, actions, env.getPackageName(element), typeElement, constructors);
+        return new StringReducerElement(stateDeclaredType, actions, typeElement, constructors);
     }
 
     private static List<AutoReducerConstructor> parseConstructors(TypeElement typeElement) throws ValidationException {
