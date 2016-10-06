@@ -13,7 +13,7 @@ buildscript {
 project.ext {
     bintrayUser = project.property('BINTRAY_USER')
     bintrayKey = project.property('BINTRAY_KEY')
-    reductorVersion = '0.8.2'
+    reductorVersion = '0.8.3'
 }
 
 

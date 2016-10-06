@@ -14,6 +14,11 @@ public abstract class NotesListReducer implements Reducer<List<Note>> {
     public static final String TOGGLE = "TOGGLE";
     public static final String REMOVE_ITEM = "REMOVE_ITEM";
 
+    @AutoReducer.InitialState
+    List<Note> initialState() {
+        return TreePVector.empty();
+    }
+
     @Action(ADD_ACTION)
     public List<Note> add(List<Note> state, int id, String content) {
         return TreePVector.from(state).plus(new Note(id, content, false));

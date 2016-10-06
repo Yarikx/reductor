@@ -11,7 +11,6 @@ import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.AppStateImpl;
 import com.yheriatovych.reductor.example.model.AppStateReducer;
-import com.yheriatovych.reductor.example.model.NotesFilter;
 import com.yheriatovych.reductor.example.reducers.NotesFilterReducerImpl;
 import com.yheriatovych.reductor.example.reducers.NotesListReducer;
 import com.yheriatovych.reductor.example.reducers.utils.SetStateReducer;
@@ -20,9 +19,8 @@ import org.mozilla.javascript.BaseFunction;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
-import org.pcollections.TreePVector;
 
-public class ReduxApp extends Application {
+public class ReductorApp extends Application {
 
     public Store<AppState> store;
     Gson gson = new Gson();
@@ -37,11 +35,10 @@ public class ReduxApp extends Application {
                 .build();
         store = Store.create(
                 new SetStateReducer<>(
-                        new UndoableReducer<>(vanilaReducer)),
-                new AppStateImpl(TreePVector.empty(), NotesFilter.ALL));
+                        new UndoableReducer<>(vanilaReducer)), null);
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
-                .enableWebKitInspector(() -> new Stetho.DefaultInspectorModulesBuilder(ReduxApp.this)
+                .enableWebKitInspector(() -> new Stetho.DefaultInspectorModulesBuilder(ReductorApp.this)
                         .runtimeRepl(createRuntimeRepl())
                         .finish())
                 .build());
@@ -68,7 +65,7 @@ public class ReduxApp extends Application {
                         String jsonString = (String) stringifyFunction.call(cx, json, scope, new Object[]{args[0]});
 
                         final AppState arg = gson.fromJson(jsonString, AppStateImpl.class);
-                        Log.d("ReduxApp", arg.toString());
+                        Log.d("ReductorApp", arg.toString());
                         handler.post(() -> store.dispatch(SetStateReducer.setStateAction(arg)));
                         return arg;
                     }

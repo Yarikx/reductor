@@ -7,6 +7,11 @@ import com.yheriatovych.reductor.example.model.NotesFilter;
 
 @AutoReducer
 public abstract class NotesFilterReducer implements Reducer<NotesFilter> {
+    @AutoReducer.InitialState
+    NotesFilter initialState() {
+        return NotesFilter.ALL;
+    }
+
     @Action("SET_FILTER")
     public NotesFilter setFilter(NotesFilter state, NotesFilter value) {
         return value;
