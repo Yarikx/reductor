@@ -1,4 +1,4 @@
-# Reductor
+# Reductor: Redux for Android
 
 [![Download](https://api.bintray.com/packages/yarikx/Reductor/Reductor/images/download.svg)](https://bintray.com/yarikx/Reductor/Reductor/_latestVersion)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Reductor-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/4402)
@@ -16,13 +16,17 @@ Key point of this implementation was to keep the original concept of Redux to re
 but provide nice Java API and preserve types as much as possible.  
 
 ### Reductor advantages:
-* Lightweight (109 loc w/o comments)
+* Lightweight (125 loc w/o comments)
 * Do not use reflection
 * Follow implementation of [Redux](http://redux.js.org/)
 * Allow to compose a state with [@CombinedState](#combine-reducers)
 * Allow to define Reducers in typesafe way with [@AutoReducer](#autoreducer)
 
 Note: This version is still under development, API may change till version 1.0
+
+### Blog posts
+* [Part 0: Prologue](https://yarikx.github.io/Reductor-prologue/)
+* [Part 1: Introduction](https://yarikx.github.io/Reductor-introduction/)
 
 ## Installation
 ```groovy
@@ -105,16 +109,6 @@ every time state changes
 
 And only one way how to change the state: 
 * Call `store.dispatch(action)` to deliver and process it by corresponding `Reducer`.
-
-## Roadmap
-
-* Support [AutoValue](#https://github.com/google/auto/tree/master/value) to be used with `@CombinedState`
-* Better documentation
-* Add more example:
-    - Async actions
-    - Time-traveling
-    - Dispatching custom actions with Middleware
-    - Using Rx with store
 
 ## Advanced use
 
@@ -285,3 +279,13 @@ public static class ActionCreator {
 //Usage
 Action action = ItemsReducerImpl.ActionCreator.add("foobar");
 ```
+
+## Roadmap
+
+* Support [AutoValue](#https://github.com/google/auto/tree/master/value) to be used with `@CombinedState`
+* Better documentation
+* Add more example:
+    - Async actions
+    - Time-traveling
+    - Dispatching custom actions with Middleware
+    - Using Rx with store
