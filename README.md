@@ -1,4 +1,7 @@
 # Reductor
+
+[ ![Download](https://api.bintray.com/packages/yarikx/Reductor/Reductor/images/download.svg) ](https://bintray.com/yarikx/Reductor/Reductor/_latestVersion)
+
 [Redux](http://redux.js.org/) inspired predictable state container library for Java/Android.
 
 Reductor can help you make your state mutations easier to read, write and reason about.
@@ -27,8 +30,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.yheriatovych:reductor:0.8.2'
-    apt     'com.yheriatovych:reductor-processor:0.8.2'
+    compile 'com.yheriatovych:reductor:x.x.x'
+    apt     'com.yheriatovych:reductor-processor:x.x.x'
 }
 ```
 
