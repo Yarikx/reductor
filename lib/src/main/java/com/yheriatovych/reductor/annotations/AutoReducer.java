@@ -57,7 +57,29 @@ public @interface AutoReducer {
         String value();
     }
 
-    //TODO write docs
+    /**
+     * Optional annotation to mark method as initial state creator.
+     * <p>
+     * If null is passed as a 'state' to {@link Reducer#reduce(Object, com.yheriatovych.reductor.Action)}
+     * method, annotated method will be called to generate state, before dispatching it to appropriate action handler.
+     * <p>
+     * Example:
+     * <pre><code>
+     * &#64;AutoReducer
+     * abstract class NumberReducer implements Reducer&lt;Integer&gt; {
+     *     &#64;AutoReducer.InitialState
+     *     public Integer init() {
+     *         return 0;
+     *     }
+     *
+     *     &#64;AutoReducer.Action("NUMBER_ADD")
+     *     public Integer add(Integer state, int number) {
+     *         return state + number;
+     *     }
+     * }
+     * </code></pre>
+     */
     @Target(ElementType.METHOD)
-    @interface Init {}
+    @interface InitialState {
+    }
 }

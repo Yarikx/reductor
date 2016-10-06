@@ -64,8 +64,11 @@ public class StringReducerElement {
             if(enclosedElement.getKind() != ElementKind.METHOD) continue;
             ExecutableElement executableElement = MoreElements.asExecutable(enclosedElement);
 
-            if (enclosedElement.getAnnotation(AutoReducer.Init.class) != null) {
-                initMethod = AutoReducerInit.parse(executableElement);
+            if (enclosedElement.getAnnotation(AutoReducer.InitialState.class) != null) {
+                if(initMethod != null) {
+                    throw new ValidationException(enclosedElement, "Methods %s and %s are both annotated with @AutoReducer.InitialState. Only one @AutoReducer.InitialState method is allowed", initMethod.executableElement, executableElement);
+                }
+                initMethod = AutoReducerInit.parse(env, executableElement, stateType);
             } else {
                 ReduceAction reduceAction = ReduceAction.parseReduceAction(env, stateType, executableElement);
                 if (reduceAction != null) {

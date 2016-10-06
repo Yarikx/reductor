@@ -3,9 +3,8 @@ package com.yheriatovych.reductor.processor.model;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
+import com.yheriatovych.reductor.processor.ValidationUtils;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
@@ -30,13 +29,12 @@ public class ReduceAction {
 
         String actionNameConstant = action.value();
 
-        if (!env.getTypes().isSameType(stateType, element.getReturnType())) {
-            throw new ValidationException(element, "Method %s should return the same type as state (%s)", element, stateType);
-        }
+        ValidationUtils.validateReturnsState(env, stateType, element);
+        ValidationUtils.validateIsNotPrivate(element);
 
         List<? extends VariableElement> parameters = element.getParameters();
         if (parameters.size() == 0) {
-            throw new ValidationException(element, "method %s should have at least 1 arguments: state of type %s", element, stateType);
+            throw new ValidationException(element, "Method %s should have at least 1 arguments: state of type %s", element, stateType);
         }
 
         List<? extends VariableElement> argumentVariables = parameters.subList(1, parameters.size());
@@ -45,7 +43,7 @@ public class ReduceAction {
             args.add(ActionHandlerArg.parse(argumentVariable));
         }
         VariableElement firstParam = parameters.get(0);
-        if (!env.getTypes().isSameType(stateType, firstParam.asType())) {
+        if (!env.getTypes().isAssignable(stateType, firstParam.asType())) {
             throw new ValidationException(firstParam, "First parameter %s of method %s should have the same type as state (%s)", firstParam, element, stateType);
         }
 

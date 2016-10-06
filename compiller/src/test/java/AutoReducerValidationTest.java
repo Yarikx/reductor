@@ -127,7 +127,7 @@ public class AutoReducerValidationTest {
                 .withCompilerOptions("-Xlint:-processing")
                 .processedWith(new AutoReducerProcessor())
                 .failsToCompile()
-                .withErrorContaining("method handleAction() should have at least 1 arguments: state of type java.lang.String")
+                .withErrorContaining("Method handleAction() should have at least 1 arguments: state of type java.lang.String")
                 .in(source).onLine(9);
     }
 
