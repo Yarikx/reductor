@@ -35,7 +35,7 @@ public class ReductorApp extends Application {
                 .build();
         store = Store.create(
                 new SetStateReducer<>(
-                        new UndoableReducer<>(vanilaReducer)), null);
+                        new UndoableReducer<>(vanilaReducer)));
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableWebKitInspector(() -> new Stetho.DefaultInspectorModulesBuilder(ReductorApp.this)

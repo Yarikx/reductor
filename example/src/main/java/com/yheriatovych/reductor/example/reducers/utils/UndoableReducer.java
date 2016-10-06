@@ -2,6 +2,7 @@ package com.yheriatovych.reductor.example.reducers.utils;
 
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.Reducer;
+import com.yheriatovych.reductor.Store;
 
 import java.util.LinkedList;
 
@@ -27,8 +28,9 @@ public class UndoableReducer<State> implements Reducer<State> {
             return stack.isEmpty()
                     ? state
                     : stack.pop();
+        } else if (!action.type.equals(Store.INIT_ACTION)) {
+            stack.push(state);
         }
-        stack.push(state);
         return sourceReducer.reduce(state, action);
     }
 }

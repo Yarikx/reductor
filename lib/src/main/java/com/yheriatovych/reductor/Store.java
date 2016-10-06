@@ -11,14 +11,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @param <State> type of state to be stored and manipulated
  */
 public class Store<State> {
+    public static final String INIT_ACTION = "@@reductor/INIT";
+
     private final Reducer<State> reducer;
     private final Middleware.NextDispatcher dispatcher;
     private final List<StateChangeListener<State>> listeners = new CopyOnWriteArrayList<>();
     private volatile State state;
 
-    private Store(Reducer<State> reducer, State state, Middleware<State>[] middlewares) {
+    private Store(Reducer<State> reducer, State initialState, Middleware<State>[] middlewares) {
         this.reducer = reducer;
-        this.state = state;
+        this.state = initialState;
 
         Middleware.NextDispatcher nextDispatcher = this::dispatchAction;
         for (int i = middlewares.length - 1; i >= 0; i--) {
@@ -27,6 +29,7 @@ public class Store<State> {
             nextDispatcher = action -> middleware.dispatch(Store.this, action, finalNextDispatcher);
         }
         this.dispatcher = nextDispatcher;
+        dispatchAction(new Action(INIT_ACTION));
     }
 
     private void dispatchAction(final Object actionObject) {
@@ -44,7 +47,21 @@ public class Store<State> {
     }
 
     /**
-     * Create store with given {@link Reducer}, initalState and possible array of {@link Middleware}
+     * Create store with given {@link Reducer} and optional array of {@link Middleware}
+     *
+     * @param reducer     Reducer of type S which will be used to dispatch actions
+     * @param middlewares array of middlewares to be used to dispatch actions in the same order as provided
+     *                    look {@link Middleware} for more information
+     * @param <S>         type of state to hold and maintain
+     * @return Store initialised with initialState
+     */
+    @SafeVarargs
+    public static <S> Store<S> create(Reducer<S> reducer, Middleware<S>... middlewares) {
+        return create(reducer, null, middlewares);
+    }
+
+    /**
+     * Create store with given {@link Reducer}, initalState and optional array of {@link Middleware}
      *
      * @param reducer      Reducer of type S which will be used to dispatch actions
      * @param initialState state to be initial state of create store

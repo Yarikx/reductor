@@ -7,7 +7,9 @@ package com.yheriatovych.reductor;
  */
 public interface Reducer<State> {
     /**
-     * Produce new state based on current state and action to dispatch
+     * Produce new state based on current state and action to dispatch.
+     * <p>
+     * Reducer is responsible to populate initial state if null is passed as 'state' argument
      * <p>
      * Note:
      * This function should be pure. No side effects, no API calls!

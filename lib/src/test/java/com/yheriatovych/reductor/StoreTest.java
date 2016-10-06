@@ -2,10 +2,7 @@ package com.yheriatovych.reductor;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -27,7 +24,23 @@ public class StoreTest {
     public void setUp() {
         initialState = new TestState();
         MockitoAnnotations.initMocks(this);
+        when(reducer.reduce(any(), eq(new Action(Store.INIT_ACTION)))).thenReturn(initialState);
         store = Store.create(reducer, initialState);
+        reset(reducer);
+    }
+
+    @Test
+    public void testDispatchInitActionToReducer() {
+        store = Store.create(reducer, initialState);
+
+        verify(reducer).reduce(initialState, new Action(Store.INIT_ACTION));
+    }
+
+    @Test
+    public void testDispatchInitActionWithoutInitialStateToReducer() {
+        store = Store.create(reducer);
+
+        verify(reducer).reduce(null, new Action(Store.INIT_ACTION));
     }
 
     @Test
