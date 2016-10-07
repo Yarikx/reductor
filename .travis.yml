@@ -1,5 +1,25 @@
 language: android
+
+jdk:
+  - oraclejdk8
+
 android:
   components:
-    - build-tools-23.0.3
+    - tools
+    - platform-tools
     - android-24
+    - build-tools-23.0.3
+
+sudo: false
+
+# script for build and release via Travis to Bintray
+script: gradle/buildViaTravis.sh
+
+notifications:
+  email: false
+
+# cache between builds
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle
