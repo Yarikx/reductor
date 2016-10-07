@@ -2,6 +2,7 @@ language: android
 
 jdk:
   - oraclejdk8
+  - oraclejdk7
 
 android:
   components:
@@ -9,6 +10,10 @@ android:
     - platform-tools
     - android-24
     - build-tools-23.0.3
+
+before_install:
+  - export JAVA7_HOME=/usr/lib/jvm/java-7-oracle
+  - export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
 
 sudo: false
 
