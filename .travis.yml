@@ -2,7 +2,6 @@ language: android
 
 jdk:
   - oraclejdk8
-  - oraclejdk7
 
 android:
   components:
@@ -17,6 +16,9 @@ before_install:
   - export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
 
 script:
+  - jdk_switcher use openjdk6 && export JAVA6_HOME=$JAVA_HOME
+  - jdk_switcher use oraclejdk7 && export JAVA7_HOME=$JAVA_HOME
+  - jdk_switcher use oraclejdk8 && export JAVA8_HOME=$JAVA_HOME
   - ./gradlew clean test
 
 sudo: false
