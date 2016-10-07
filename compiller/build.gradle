@@ -1,8 +1,18 @@
 apply plugin: 'java'
+apply plugin: 'jacoco'
 apply from: '../gradle/publishing.gradle'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
 
 dependencies {
     compile project(':lib')
