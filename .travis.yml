@@ -1,0 +1,28 @@
+language: android
+
+jdk:
+  - oraclejdk8
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - android-24
+    - build-tools-23.0.3
+    - extra-android-m2repository
+
+script:
+  - jdk_switcher use openjdk6 && export JAVA6_HOME=$JAVA_HOME
+  - jdk_switcher use oraclejdk8 && export JAVA8_HOME=$JAVA_HOME
+  - ./gradlew clean check
+
+sudo: false
+
+notifications:
+  email: false
+
+# cache between builds
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle
