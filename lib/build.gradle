@@ -3,6 +3,15 @@ apply plugin: "jacoco"
 apply plugin: 'me.tatarka.retrolambda'
 apply from: '../gradle/publishing.gradle'
 
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
+
 dependencies {
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
     testCompile 'junit:junit:4.12'
