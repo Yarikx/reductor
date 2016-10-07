@@ -2,6 +2,9 @@
 
 [![Download](https://api.bintray.com/packages/yarikx/Reductor/Reductor/images/download.svg)](https://bintray.com/yarikx/Reductor/Reductor/_latestVersion)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Reductor-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/4402)
+[![Build Status](https://travis-ci.org/Yarikx/reductor.svg?branch=master)](https://travis-ci.org/Yarikx/reductor)
+[![Codecov](https://img.shields.io/codecov/c/github/Yarikx/reductor.svg?maxAge=2592000)](https://codecov.io/gh/Yarikx/reductor)
+
 
 [Redux](http://redux.js.org/) inspired predictable state container library for Java/Android.
 
