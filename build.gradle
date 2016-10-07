@@ -11,8 +11,8 @@ buildscript {
 }
 
 project.ext {
-    bintrayUser = hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : ""
-    bintrayKey = hasProperty('BINTRAY_KEY') ? project.property('BINTRAY_KEY') : ""
+    bintrayUser = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : ""
+    bintrayKey = project.hasProperty('BINTRAY_KEY') ? project.property('BINTRAY_KEY') : ""
     reductorVersion = '0.9.0'
 }
 
