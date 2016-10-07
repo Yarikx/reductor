@@ -11,16 +11,10 @@ android:
     - build-tools-23.0.3
     - extra-android-m2repository
 
-before_install:
-  - export JAVA7_HOME=/usr/lib/jvm/java-7-oracle
-  - export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
-
 script:
   - jdk_switcher use openjdk6 && export JAVA6_HOME=$JAVA_HOME
-  - jdk_switcher use oraclejdk7 && export JAVA7_HOME=$JAVA_HOME
   - jdk_switcher use oraclejdk8 && export JAVA8_HOME=$JAVA_HOME
-  - jdk_switcher use oraclejdk7
-  - ./gradlew clean test
+  - ./gradlew clean check
 
 sudo: false
 

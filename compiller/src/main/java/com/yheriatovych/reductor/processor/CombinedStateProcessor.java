@@ -118,9 +118,12 @@ public class CombinedStateProcessor extends BaseProcessor {
                     .addStatement("this.$N = $N", reducerFieldName, reducerFieldName);
         }
 
-        CodeBlock dispatchingBlockBuilder = reduce(properties, CodeBlock.builder(), (builder, property) -> {
-            String reducerFieldName = property.name + REDUCER_SUFFIX;
-            return builder.addStatement("$T $N = $N.reduce(state.$N(), action)", property.stateType, property.name, reducerFieldName, property.name);
+        CodeBlock dispatchingBlockBuilder = reduce(properties, CodeBlock.builder(), new Utils.Func2<CodeBlock.Builder, StateProperty, CodeBlock.Builder>() {
+            @Override
+            public CodeBlock.Builder call(CodeBlock.Builder builder, StateProperty property) {
+                String reducerFieldName = property.name + REDUCER_SUFFIX;
+                return builder.addStatement("$T $N = $N.reduce(state.$N(), action)", property.stateType, property.name, reducerFieldName, property.name);
+            }
         }).build();
 
         MethodSpec reduceMethodSpec = MethodSpec.methodBuilder("reduce")
@@ -159,7 +162,12 @@ public class CombinedStateProcessor extends BaseProcessor {
     }
 
     private CodeBlock emitInitialValueBlock(ClassName stateClassName, List<StateProperty> properties) {
-        String defaultArgs = join(", ", map(properties, stateProperty -> Utils.getDefaultValue(stateProperty.stateType.getKind())));
+        String defaultArgs = join(", ", map(properties, new Utils.Func1<StateProperty, String>() {
+            @Override
+            public String call(StateProperty stateProperty) {
+                return Utils.getDefaultValue(stateProperty.stateType.getKind());
+            }
+        }));
         return CodeBlock.builder()
                 .beginControlFlow("if (state == null)")
                 .addStatement("state = new $T($N)", stateClassName, defaultArgs)
@@ -169,9 +177,18 @@ public class CombinedStateProcessor extends BaseProcessor {
 
     private CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
         String equalsCondition = join("\n && ",
-                map(properties, property ->
-                        String.format("%s == state.%s()", property.name, property.name)));
-        String args = join(", ", map(properties, property -> property.name));
+                map(properties, new Utils.Func1<StateProperty, String>() {
+                    @Override
+                    public String call(StateProperty property) {
+                        return String.format("%s == state.%s()", property.name, property.name);
+                    }
+                }));
+        String args = join(", ", map(properties, new Utils.Func1<StateProperty, String>() {
+            @Override
+            public String call(StateProperty property) {
+                return property.name;
+            }
+        }));
         return CodeBlock.builder()
                 .add("//If all values are the same there is no need to create an object\n")
                 .beginControlFlow("if (" + equalsCondition + ")")
