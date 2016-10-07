@@ -16,6 +16,9 @@ script:
   - jdk_switcher use oraclejdk8 && export JAVA8_HOME=$JAVA_HOME
   - ./gradlew clean check
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 sudo: false
 
 notifications:

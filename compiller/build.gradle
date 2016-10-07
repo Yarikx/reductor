@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply from: '../gradle/publishing.gradle'
+apply from: '../gradle/jacoco.gradle'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
