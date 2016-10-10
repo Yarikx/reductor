@@ -42,19 +42,24 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "  @Override\n" +
                 "  public Foobar reduce(Foobar state, Action action) {\n" +
-                "    if (state == null) {\n" +
-                "      state = new FoobarImpl(null, null);\n" +
+                "    String foo = null;\n" +
+                "    Date bar = null;\n" +
+                "\n" +
+                "    if (state != null) {\n" +
+                "      foo = state.foo();\n" +
+                "      bar = state.bar();\n" +
                 "    }\n" +
                 "\n" +
-                "    String foo = fooReducer.reduce(state.foo(), action);\n" +
-                "    Date bar = barReducer.reduce(state.bar(), action);\n" +
+                "    String fooNext = fooReducer.reduce(foo, action);\n" +
+                "    Date barNext = barReducer.reduce(bar, action);\n" +
                 "\n" +
                 "    //If all values are the same there is no need to create an object\n" +
-                "    if (foo == state.foo()\n" +
-                "     && bar == state.bar()) {\n" +
+                "    if (state != null\n" +
+                "     && foo == fooNext\n" +
+                "     && bar == barNext) {\n" +
                 "      return state;\n" +
                 "    } else {\n" +
-                "      return new FoobarImpl(foo, bar);\n" +
+                "      return new FoobarImpl(fooNext, barNext);\n" +
                 "    }\n" +
                 "  }\n" +
                 "\n" +
@@ -132,19 +137,24 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "  @Override\n" +
                 "  public Foobar reduce(Foobar state, Action action) {\n" +
-                "    if (state == null) {\n" +
-                "      state = new FoobarImpl(0, false);\n" +
+                "    int foo = 0;\n" +
+                "    boolean bar = false;\n" +
+                "\n" +
+                "    if (state != null) {\n" +
+                "      foo = state.foo();\n" +
+                "      bar = state.bar();\n" +
                 "    }\n" +
                 "\n" +
-                "    int foo = fooReducer.reduce(state.foo(), action);\n" +
-                "    boolean bar = barReducer.reduce(state.bar(), action);\n" +
+                "    int fooNext = fooReducer.reduce(foo, action);\n" +
+                "    boolean barNext = barReducer.reduce(bar, action);\n" +
                 "\n" +
                 "    //If all values are the same there is no need to create an object\n" +
-                "    if (foo == state.foo()\n" +
-                "     && bar == state.bar()) {\n" +
+                "    if (state != null\n" +
+                "     && foo == fooNext\n" +
+                "     && bar == barNext) {\n" +
                 "      return state;\n" +
                 "    } else {\n" +
-                "      return new FoobarImpl(foo, bar);\n" +
+                "      return new FoobarImpl(fooNext, barNext);\n" +
                 "    }\n" +
                 "  }\n" +
                 "\n" +
@@ -237,26 +247,37 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "  @Override\n" +
                 "  public Foobar reduce(Foobar state, Action action) {\n" +
-                "    if (state == null) {\n" +
-                "      state = new FoobarImpl(0, 0, false, '\\u0000', null);\n" +
-                "    }\n" +
+                "      int intValue = 0;\n" +
+                "      double doubleValue = 0;\n" +
+                "      boolean booleanValue = false;\n" +
+                "      char charValue = '\\u0000';\n" +
+                "      Object objectValue = null;\n" +
                 "\n" +
-                "    int intValue = intValueReducer.reduce(state.intValue(), action);\n" +
-                "    double doubleValue = doubleValueReducer.reduce(state.doubleValue(), action);\n" +
-                "    boolean booleanValue = booleanValueReducer.reduce(state.booleanValue(), action);\n" +
-                "    char charValue = charValueReducer.reduce(state.charValue(), action);\n" +
-                "    Object objectValue = objectValueReducer.reduce(state.objectValue(), action);\n" +
+                "      if (state != null) {\n" +
+                "          intValue = state.intValue();\n" +
+                "          doubleValue = state.doubleValue();\n" +
+                "          booleanValue = state.booleanValue();\n" +
+                "          charValue = state.charValue();\n" +
+                "          objectValue = state.objectValue();\n" +
+                "      }\n" +
                 "\n" +
-                "    //If all values are the same there is no need to create an object\n" +
-                "    if (intValue == state.intValue()\n" +
-                "     && doubleValue == state.doubleValue()\n" +
-                "     && booleanValue == state.booleanValue()\n" +
-                "     && charValue == state.charValue()\n" +
-                "     && objectValue == state.objectValue()) {\n" +
-                "      return state;\n" +
-                "    } else {\n" +
-                "      return new FoobarImpl(intValue, doubleValue, booleanValue, charValue, objectValue);\n" +
-                "    }\n" +
+                "      int intValueNext = intValueReducer.reduce(intValue, action);\n" +
+                "      double doubleValueNext = doubleValueReducer.reduce(doubleValue, action);\n" +
+                "      boolean booleanValueNext = booleanValueReducer.reduce(booleanValue, action);\n" +
+                "      char charValueNext = charValueReducer.reduce(charValue, action);\n" +
+                "      Object objectValueNext = objectValueReducer.reduce(objectValue, action);\n" +
+                "\n" +
+                "      //If all values are the same there is no need to create an object\n" +
+                "      if (state != null\n" +
+                "       && intValue == intValueNext\n" +
+                "       && doubleValue == doubleValueNext\n" +
+                "       && booleanValue == booleanValueNext\n" +
+                "       && charValue == charValueNext\n" +
+                "       && objectValue == objectValueNext) {\n" +
+                "          return state;\n" +
+                "      } else {\n" +
+                "          return new FoobarImpl(intValueNext, doubleValueNext, booleanValueNext, charValueNext, objectValueNext);\n" +
+                "      }\n" +
                 "  }\n" +
                 "\n" +
                 "  public static Builder builder() {\n" +
