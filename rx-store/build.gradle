@@ -5,5 +5,5 @@ apply from: '../gradle/publishing.gradle'
 dependencies {
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
     compile project(':lib')
-    compile 'io.reactivex:rxjava:1.1.9'
+    compile 'io.reactivex:rxjava:1.2.1'
 }
