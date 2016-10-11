@@ -1,5 +1,16 @@
 # Reductor Releases #
 
+### Version 0.9.2 - October 11, 2016
+#### New Features
+  - Big update on `@CombinedState`. 
+  Now `@AutoValue` value classes are supported as combined state!
+  Interfaces as combined state are still supported.
+  
+#### Other improvements
+Update code generator for `@CombinedState` reducers. 
+  - Remove unnecessary state object allocation if all sub-states are the same.
+  - Use boxed version of sub-state types in reducer, to remove boxing/unboxing when passing to sub-reducers.
+
 ### Version 0.9.1 - October 10, 2016
   - Rename `reductor-rx` maven artifact to `reductor-rxjava`
   - Updated `rxjava` version to 1.2.1
