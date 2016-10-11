@@ -1,5 +1,9 @@
 # Reductor Releases #
 
+### Version 0.9.1 - October 10, 2016
+  - Rename `reductor-rx` maven artifact to `reductor-rxjava`
+  - Updated `rxjava` version to 1.2.1
+
 ### Version 0.9.0 - October 7, 2016
 Major update aimed to improve and simplify initial state population.
 
