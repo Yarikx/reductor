@@ -32,8 +32,10 @@ public class CombinedStateProcessor extends BaseProcessor {
 
             try {
                 CombinedStateElement combinedStateElement = CombinedStateElement.parseCombinedElement(combinedStateTypeElement);
+                if(combinedStateElement == null) continue;
+
                 ClassName stateClassName = emmitCombinedStateImplementation(combinedStateElement);
-                emmitCombinedReducer(combinedStateElement, stateClassName);
+                emmitCombinedReducer(env, combinedStateElement, stateClassName);
             } catch (ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {
@@ -83,7 +85,7 @@ public class CombinedStateProcessor extends BaseProcessor {
         return ClassName.get(javaFile.packageName, typeSpec.name);
     }
 
-    private void emmitCombinedReducer(CombinedStateElement combinedStateElement, ClassName stateClassName) throws IOException {
+    public static void emmitCombinedReducer(final Env env, CombinedStateElement combinedStateElement, ClassName stateClassName) throws IOException {
         String stateParam = "state";
         String actionParam = "action";
 
@@ -121,7 +123,7 @@ public class CombinedStateProcessor extends BaseProcessor {
             @Override
             public CodeBlock.Builder call(CodeBlock.Builder builder, StateProperty property) {
                 String reducerFieldName = property.name + REDUCER_SUFFIX;
-                return builder.addStatement("$T $NNext = $N.reduce($N, action)", property.stateType, property.name, reducerFieldName, property.name);
+                return builder.addStatement("$T $NNext = $N.reduce($N, action)", property.boxedStateType(env), property.name, reducerFieldName, property.name);
             }
         }).build();
 
@@ -131,13 +133,13 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .returns(combinedReducerReturnTypeName)
                 .addParameter(combinedReducerReturnTypeName, stateParam)
                 .addParameter(reducerActionType, actionParam)
-                .addCode(emitDestructuringBlock(properties)).addCode("\n")
+                .addCode(emitDestructuringBlock(properties, env)).addCode("\n")
                 .addCode(dispatchingBlockBuilder).addCode("\n")
-                .addCode(emitReturnBlock(stateClassName, properties))
+                .addCode(CombinedStateProcessor.emitReturnBlock(stateClassName, properties))
                 .build();
 
         ClassName builderClassName = ClassName.get(combinedReducerClassName.packageName(), combinedReducerClassName.simpleName(), "Builder");
-        TypeSpec reducerBuilderTypeSpec = createReducerBuilder(combinedStateElement, combinedReducerClassName, builderClassName);
+        TypeSpec reducerBuilderTypeSpec = CombinedStateProcessor.createReducerBuilder(combinedStateElement, combinedReducerClassName, builderClassName);
 
 
         MethodSpec builderFactoryMethod = MethodSpec.methodBuilder("builder")
@@ -160,10 +162,10 @@ public class CombinedStateProcessor extends BaseProcessor {
         javaFile.writeTo(env.getFiler());
     }
 
-    private CodeBlock emitDestructuringBlock(List<StateProperty> properties) {
+    private static CodeBlock emitDestructuringBlock(List<StateProperty> properties, Env env) {
         CodeBlock.Builder destructuringBlock = CodeBlock.builder();
         for (StateProperty property : properties) {
-            destructuringBlock.addStatement("$T $N = $L", property.stateType, property.name, Utils.getDefaultValue(property.stateType.getKind()));
+            destructuringBlock.addStatement("$T $N = null", property.boxedStateType(env), property.name);
         }
 
         destructuringBlock.add("\n");
@@ -176,7 +178,7 @@ public class CombinedStateProcessor extends BaseProcessor {
         return destructuringBlock.build();
     }
 
-    private CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
+    private static CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
         String equalsCondition = join("\n && ",
                 map(properties, new Utils.Func1<StateProperty, String>() {
                     @Override
@@ -200,7 +202,7 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .build();
     }
 
-    private TypeSpec createReducerBuilder(CombinedStateElement combinedStateElement, ClassName combinedReducerClassName, ClassName builderClassName) {
+    private static TypeSpec createReducerBuilder(CombinedStateElement combinedStateElement, ClassName combinedReducerClassName, ClassName builderClassName) {
         TypeSpec.Builder builder = TypeSpec.classBuilder(builderClassName).addModifiers(Modifier.STATIC, Modifier.PUBLIC);
 
         builder.addMethod(MethodSpec.constructorBuilder()

@@ -1,15 +1,18 @@
 package com.yheriatovych.reductor.processor.model;
 
+import com.google.auto.common.MoreTypes;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.yheriatovych.reductor.Reducer;
+import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
@@ -22,6 +25,13 @@ public class StateProperty {
         this.name = name;
         this.stateType = stateType;
         this.executableElement = executableElement;
+    }
+
+    public TypeMirror boxedStateType(Env env) {
+        if(stateType.getKind().isPrimitive()) {
+            return env.getTypes().boxedClass(MoreTypes.asPrimitiveType(stateType)).asType();
+        }
+        return stateType;
     }
 
     static StateProperty parseStateProperty(Element element) throws ValidationException {
