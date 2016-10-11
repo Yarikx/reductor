@@ -87,7 +87,7 @@ public class CombinedStateValidationTest {
         assertAbout(javaSource()).that(source)
                 .processedWith(new CombinedStateProcessor())
                 .failsToCompile()
-                .withErrorContaining("only interfaces supported as ")
+                .withErrorContaining("Only interfaces and @AutoValue classes are supported as @CombinedState")
                 .in(source)
                 .onLine(6);
     }

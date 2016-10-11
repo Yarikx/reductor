@@ -57,22 +57,4 @@ public class Utils {
         return result;
     }
 
-    static String getDefaultValue(TypeKind kind) {
-        switch (kind) {
-            case BOOLEAN:
-                return "false";
-            case BYTE:
-            case SHORT:
-            case INT:
-            case LONG:
-            case FLOAT:
-            case DOUBLE:
-                return "0";
-            case CHAR:
-                return "'\\u0000'";
-            default:
-                return "null";
-        }
-    }
-
 }

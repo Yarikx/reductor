@@ -32,8 +32,10 @@ public class CombinedStateProcessor extends BaseProcessor {
 
             try {
                 CombinedStateElement combinedStateElement = CombinedStateElement.parseCombinedElement(combinedStateTypeElement);
+                if(combinedStateElement == null) continue;
+
                 ClassName stateClassName = emmitCombinedStateImplementation(combinedStateElement);
-                emmitCombinedReducer(combinedStateElement, stateClassName);
+                emmitCombinedReducer(env, combinedStateElement, stateClassName);
             } catch (ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {
@@ -83,7 +85,7 @@ public class CombinedStateProcessor extends BaseProcessor {
         return ClassName.get(javaFile.packageName, typeSpec.name);
     }
 
-    private void emmitCombinedReducer(CombinedStateElement combinedStateElement, ClassName stateClassName) throws IOException {
+    public static void emmitCombinedReducer(final Env env, CombinedStateElement combinedStateElement, ClassName stateClassName) throws IOException {
         String stateParam = "state";
         String actionParam = "action";
 
@@ -106,8 +108,7 @@ public class CombinedStateProcessor extends BaseProcessor {
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PRIVATE);
 
-        for (int i = 0; i < properties.size(); i++) {
-            StateProperty property = properties.get(i);
+        for (StateProperty property : properties) {
             String reducerFieldName = property.name + REDUCER_SUFFIX;
             TypeName subReducerType = property.getReducerInterfaceTypeName();
             FieldSpec subReducerField = FieldSpec.builder(subReducerType, reducerFieldName, Modifier.PRIVATE, Modifier.FINAL)
@@ -122,7 +123,7 @@ public class CombinedStateProcessor extends BaseProcessor {
             @Override
             public CodeBlock.Builder call(CodeBlock.Builder builder, StateProperty property) {
                 String reducerFieldName = property.name + REDUCER_SUFFIX;
-                return builder.addStatement("$T $N = $N.reduce(state.$N(), action)", property.stateType, property.name, reducerFieldName, property.name);
+                return builder.addStatement("$T $NNext = $N.reduce($N, action)", property.boxedStateType(env), property.name, reducerFieldName, property.name);
             }
         }).build();
 
@@ -132,13 +133,13 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .returns(combinedReducerReturnTypeName)
                 .addParameter(combinedReducerReturnTypeName, stateParam)
                 .addParameter(reducerActionType, actionParam)
-                .addCode(emitInitialValueBlock(stateClassName, properties)).addCode("\n")
+                .addCode(emitDestructuringBlock(properties, env)).addCode("\n")
                 .addCode(dispatchingBlockBuilder).addCode("\n")
-                .addCode(emitReturnBlock(stateClassName, properties))
+                .addCode(CombinedStateProcessor.emitReturnBlock(stateClassName, properties))
                 .build();
 
         ClassName builderClassName = ClassName.get(combinedReducerClassName.packageName(), combinedReducerClassName.simpleName(), "Builder");
-        TypeSpec reducerBuilderTypeSpec = createReducerBuilder(combinedStateElement, combinedReducerClassName, builderClassName);
+        TypeSpec reducerBuilderTypeSpec = CombinedStateProcessor.createReducerBuilder(combinedStateElement, combinedReducerClassName, builderClassName);
 
 
         MethodSpec builderFactoryMethod = MethodSpec.methodBuilder("builder")
@@ -161,37 +162,39 @@ public class CombinedStateProcessor extends BaseProcessor {
         javaFile.writeTo(env.getFiler());
     }
 
-    private CodeBlock emitInitialValueBlock(ClassName stateClassName, List<StateProperty> properties) {
-        String defaultArgs = join(", ", map(properties, new Utils.Func1<StateProperty, String>() {
-            @Override
-            public String call(StateProperty stateProperty) {
-                return Utils.getDefaultValue(stateProperty.stateType.getKind());
-            }
-        }));
-        return CodeBlock.builder()
-                .beginControlFlow("if (state == null)")
-                .addStatement("state = new $T($N)", stateClassName, defaultArgs)
-                .endControlFlow()
-                .build();
+    private static CodeBlock emitDestructuringBlock(List<StateProperty> properties, Env env) {
+        CodeBlock.Builder destructuringBlock = CodeBlock.builder();
+        for (StateProperty property : properties) {
+            destructuringBlock.addStatement("$T $N = null", property.boxedStateType(env), property.name);
+        }
+
+        destructuringBlock.add("\n");
+
+        destructuringBlock.beginControlFlow("if (state != null)");
+        for (StateProperty property : properties) {
+            destructuringBlock.addStatement("$N = state.$N()", property.name, property.name);
+        }
+        destructuringBlock.endControlFlow();
+        return destructuringBlock.build();
     }
 
-    private CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
+    private static CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
         String equalsCondition = join("\n && ",
                 map(properties, new Utils.Func1<StateProperty, String>() {
                     @Override
                     public String call(StateProperty property) {
-                        return String.format("%s == state.%s()", property.name, property.name);
+                        return String.format("%s == %sNext", property.name, property.name);
                     }
                 }));
         String args = join(", ", map(properties, new Utils.Func1<StateProperty, String>() {
             @Override
             public String call(StateProperty property) {
-                return property.name;
+                return property.name + "Next";
             }
         }));
         return CodeBlock.builder()
                 .add("//If all values are the same there is no need to create an object\n")
-                .beginControlFlow("if (" + equalsCondition + ")")
+                .beginControlFlow("if (state != null\n && " + equalsCondition + ")")
                 .addStatement("return state")
                 .nextControlFlow("else")
                 .addStatement("return new $T("+args + ")", stateClassName)
@@ -199,7 +202,7 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .build();
     }
 
-    private TypeSpec createReducerBuilder(CombinedStateElement combinedStateElement, ClassName combinedReducerClassName, ClassName builderClassName) {
+    private static TypeSpec createReducerBuilder(CombinedStateElement combinedStateElement, ClassName combinedReducerClassName, ClassName builderClassName) {
         TypeSpec.Builder builder = TypeSpec.classBuilder(builderClassName).addModifiers(Modifier.STATIC, Modifier.PUBLIC);
 
         builder.addMethod(MethodSpec.constructorBuilder()
