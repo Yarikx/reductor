@@ -285,7 +285,7 @@ Action action = ItemsReducerImpl.ActionCreator.add("foobar");
 
 ## Roadmap
 
-* Support [AutoValue](#https://github.com/google/auto/tree/master/value) to be used with `@CombinedState`
+* Support Kotlin data classes to use with `@CombinedState`
 * Better documentation
 * Add more example:
     - Async actions
