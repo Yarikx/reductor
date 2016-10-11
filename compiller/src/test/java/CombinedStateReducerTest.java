@@ -10,6 +10,62 @@ import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 
 public class CombinedStateReducerTest {
     @Test
+    public void testEmptyReducerGeneration() {
+        JavaFileObject source = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.annotations.CombinedState;\n" +
+                "\n" +
+                "@CombinedState\n" +
+                "public interface Foobar {\n" +
+                "}");
+
+        JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
+                "\n" +
+                "import com.yheriatovych.reductor.Action;\n" +
+                "import com.yheriatovych.reductor.Reducer;\n" +
+                "import java.lang.Override;\n" +
+                "\n" +
+                "public final class FoobarReducer implements Reducer<Foobar> {\n" +
+                "  private FoobarReducer() {\n" +
+                "  }\n" +
+                "\n" +
+                "  @Override\n" +
+                "  public Foobar reduce(Foobar state, Action action) {\n" +
+                "\n" +
+                "    if (state != null) {\n" +
+                "    }\n" +
+                "\n" +
+                "\n" +
+                "    //If all values are the same there is no need to create an object\n" +
+                "    if (state != null) {\n" +
+                "      return state;\n" +
+                "    } else {\n" +
+                "      return new FoobarImpl();\n" +
+                "    }\n" +
+                "  }\n" +
+                "\n" +
+                "  public static Builder builder() {\n" +
+                "    return new Builder();\n" +
+                "  }\n" +
+                "\n" +
+                "  public static class Builder {\n" +
+                "    private Builder() {\n" +
+                "    }\n" +
+                "\n" +
+                "    public FoobarReducer build() {\n" +
+                "      return new FoobarReducer();\n" +
+                "    }\n" +
+                "  }\n" +
+                "}");
+
+        assertAbout(javaSource()).that(source)
+                .processedWith(new CombinedStateProcessor())
+                .compilesWithoutWarnings()
+                .and()
+                .generatesSources(generatedPojo);
+    }
+
+    @Test
     public void testSimpleReducerGeneration() {
         JavaFileObject source = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
                 "\n" +

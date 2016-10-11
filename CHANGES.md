@@ -1,5 +1,8 @@
 # Reductor Releases #
 
+### Version 0.9.3 - October 11, 2016
+  - Fix reducer code generation for `@CombinedState` class with no properties 
+
 ### Version 0.9.2 - October 11, 2016
 #### New Features
   - Big update on `@CombinedState`. 

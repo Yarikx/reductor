@@ -179,13 +179,10 @@ public class CombinedStateProcessor extends BaseProcessor {
     }
 
     private static CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
-        String equalsCondition = join("\n && ",
-                map(properties, new Utils.Func1<StateProperty, String>() {
-                    @Override
-                    public String call(StateProperty property) {
-                        return String.format("%s == %sNext", property.name, property.name);
-                    }
-                }));
+        StringBuilder equalsCondition = new StringBuilder();
+        for (StateProperty property : properties) {
+            equalsCondition.append(String.format("\n && %s == %sNext", property.name, property.name));
+        }
         String args = join(", ", map(properties, new Utils.Func1<StateProperty, String>() {
             @Override
             public String call(StateProperty property) {
@@ -194,7 +191,7 @@ public class CombinedStateProcessor extends BaseProcessor {
         }));
         return CodeBlock.builder()
                 .add("//If all values are the same there is no need to create an object\n")
-                .beginControlFlow("if (state != null\n && " + equalsCondition + ")")
+                .beginControlFlow("if (state != null" + equalsCondition + ")")
                 .addStatement("return state")
                 .nextControlFlow("else")
                 .addStatement("return new $T("+args + ")", stateClassName)
