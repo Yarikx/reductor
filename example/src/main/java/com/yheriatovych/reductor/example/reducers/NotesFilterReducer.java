@@ -16,4 +16,8 @@ public abstract class NotesFilterReducer implements Reducer<NotesFilter> {
     public NotesFilter setFilter(NotesFilter state, NotesFilter value) {
         return value;
     }
+
+    public static NotesFilterReducer create() {
+        return new NotesFilterReducerImpl();
+    }
 }

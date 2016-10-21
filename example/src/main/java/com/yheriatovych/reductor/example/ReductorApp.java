@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.AppStateReducer;
+import com.yheriatovych.reductor.example.reducers.NotesFilterReducer;
 import com.yheriatovych.reductor.example.reducers.NotesFilterReducerImpl;
 import com.yheriatovych.reductor.example.reducers.NotesListReducer;
 import com.yheriatovych.reductor.example.reducers.utils.SetStateReducer;
@@ -32,13 +33,13 @@ public class ReductorApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final AppStateReducer vanilaReducer = AppStateReducer.builder()
+        final AppStateReducer vanillaReducer = AppStateReducer.builder()
                 .notesReducer(NotesListReducer.create())
-                .filterReducer(new NotesFilterReducerImpl())
+                .filterReducer(NotesFilterReducer.create())
                 .build();
         store = Store.create(
                 new SetStateReducer<>(
-                        new UndoableReducer<>(vanilaReducer)));
+                        new UndoableReducer<>(vanillaReducer)));
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableWebKitInspector(() -> new Stetho.DefaultInspectorModulesBuilder(ReductorApp.this)

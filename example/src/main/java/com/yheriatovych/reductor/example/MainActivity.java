@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
 
-        mCancelable = store.subscribe(state -> {
-            adapter.setNotes(Utils.getFilteredNotes(state));
+        mCancelable = store.forEach(state -> {
+            adapter.setNotes(state.getFilteredNotes());
             spinner.setSelection(state.filter().ordinal());
         });
 
