@@ -19,7 +19,7 @@ Key point of this implementation was to keep the original concept of Redux to re
 but provide nice Java API and preserve types as much as possible.  
 
 ### Reductor advantages:
-* Lightweight (125 loc w/o comments)
+* Lightweight
 * Do not use reflection
 * Follow implementation of [Redux](http://redux.js.org/)
 * Allow to compose a state with [@CombinedState](#combine-reducers)
@@ -287,6 +287,7 @@ Action action = ItemsReducerImpl.ActionCreator.add("foobar");
 
 * Support Kotlin data classes to use with `@CombinedState`
 * Better documentation
+* Minimize usage of generated code from a source code
 * Add more example:
     - Async actions
     - Time-traveling
