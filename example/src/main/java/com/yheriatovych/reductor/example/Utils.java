@@ -26,12 +26,4 @@ public interface Utils {
         }
     }
 
-    static List<Note> getFilteredNotes(AppState appState) {
-        List<Note> notes = appState.notes();
-        NotesFilter filter = appState.filter();
-        return filter(ConsPStack.from(notes), note ->
-                filter == NotesFilter.ALL
-                        || filter == NotesFilter.CHECKED && note.checked
-                        || filter == NotesFilter.UNCHECKED && !note.checked);
-    }
 }

@@ -10,7 +10,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class StoreTest {
-
     private static class TestState {
 
     }
@@ -82,6 +81,30 @@ public class StoreTest {
         inOrder.verify(listener).onStateChanged(newState2);
         inOrder.verifyNoMoreInteractions();
     }
+
+
+    @Test
+    public void testForEachPropagateInitialValue() throws Exception {
+        Action action = new Action("TEST");
+        TestState newState1 = new TestState();
+        TestState newState2 = new TestState();
+        when(reducer.reduce(any(), eq(action)))
+                .thenReturn(newState1)
+                .thenReturn(newState2);
+
+        Store.StateChangeListener<TestState> listener = Mockito.mock(Store.StateChangeListener.class);
+        store.forEach(listener);
+
+        store.dispatch(action);
+        store.dispatch(action);
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).onStateChanged(initialState);
+        inOrder.verify(listener).onStateChanged(newState1);
+        inOrder.verify(listener).onStateChanged(newState2);
+        inOrder.verifyNoMoreInteractions();
+    }
+
 
     @Test
     public void testDoNotPropagateResultToListenerAfterCancel() {

@@ -95,7 +95,7 @@ public class Store<State> {
     /**
      * Subscribe for state changes
      * <p>
-     * Note: current state which Store holds will not be dispatched immediately after subscribe
+     * Note: current state will not be dispatched immediately after subscribe
      *
      * @param listener callback which will be notified each time state changes
      * @return instance of {@link Cancelable} to be used to cancel subscription (remove listener)
@@ -103,6 +103,18 @@ public class Store<State> {
     public Cancelable subscribe(final StateChangeListener<State> listener) {
         listeners.add(listener);
         return () -> listeners.remove(listener);
+    }
+
+    /**
+     * Notify listener for every state in Store.
+     *
+     * Note: equivalent to {@link #subscribe(StateChangeListener)} but current state will be propagated too
+     * @param listener callback which will be notified
+     * @return instance of {@link Cancelable} to be used to cancel subscription (remove listener)
+     */
+    public Cancelable forEach(final StateChangeListener<State> listener) {
+        listener.onStateChanged(getState());
+        return subscribe(listener);
     }
 
     /**
