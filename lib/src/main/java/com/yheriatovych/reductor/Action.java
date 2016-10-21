@@ -1,5 +1,7 @@
 package com.yheriatovych.reductor;
 
+import java.util.Arrays;
+
 /**
  * Minimal representation of change to be performed on state
  */
@@ -48,9 +50,13 @@ public class Action {
 
     @Override
     public String toString() {
+        Object valueStr = (this.value instanceof Object[])
+                ? Arrays.toString((Object[]) this.value)
+                : this.value;
+
         return "Action{" +
                 "type='" + type + '\'' +
-                ", value=" + value +
+                ", value=" + valueStr +
                 '}';
     }
 }
