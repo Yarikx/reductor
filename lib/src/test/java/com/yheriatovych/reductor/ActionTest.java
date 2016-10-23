@@ -8,20 +8,20 @@ public class ActionTest {
 
     @Test
     public void testActionToStringObject() {
-        Action action = new Action("TEST", 5);
-        assertEquals("Action{type='TEST', value=5}", action.toString());
+        Action action = Action.create("TEST", 5);
+        assertEquals("Action{type='TEST', values=[5]}", action.toString());
     }
 
     @Test
     public void testActionToStringObjectArray() {
-        Action action = new Action("TEST", new String[]{"foo", "bar"});
-        assertEquals("Action{type='TEST', value=[foo, bar]}", action.toString());
+        Action action = Action.create("TEST", "foo", "bar");
+        assertEquals("Action{type='TEST', values=[foo, bar]}", action.toString());
     }
 
     @Test
     public void testActionToStringObjectNull() {
-        Action action = new Action("TEST", null);
-        assertEquals("Action{type='TEST', value=null}", action.toString());
+        Action action = Action.create("TEST");
+        assertEquals("Action{type='TEST', values=[]}", action.toString());
     }
 
 }

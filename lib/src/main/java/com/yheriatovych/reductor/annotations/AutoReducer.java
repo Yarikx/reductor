@@ -46,7 +46,7 @@ public @interface AutoReducer {
      * <li> Return 'next' state
      * <li> Take 'current' state as first argument
      * <li> can have additional arguments as action values
-     * (they will be bundled an passed in {@link com.yheriatovych.reductor.Action#value} automatically)
+     * (they will be bundled an passed in {@link com.yheriatovych.reductor.Action#values} automatically)
      * </ul>
      */
     @Target(ElementType.METHOD)
