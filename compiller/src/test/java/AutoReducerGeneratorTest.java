@@ -35,13 +35,14 @@ public class AutoReducerGeneratorTest {
                 "    switch (action.type) {\n" +
                 "      case \"ACTION_1\":\n" +
                 "        return uppercase(state);\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
                 "  }\n" +
                 "\n" +
                 "  public static class ActionCreator {\n" +
                 "    public static Action uppercase() {\n" +
-                "      return new Action(\"ACTION_1\", null);\n" +
+                "      return Action.create(\"ACTION_1\");\n" +
                 "    }\n" +
                 "  }\n" +
                 "}");
@@ -80,14 +81,15 @@ public class AutoReducerGeneratorTest {
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
                 "      case \"ACTION_1\":\n" +
-                "        return append(state, (int) action.value);\n" +
-                "      default: return state;\n" +
+                "        return append(state, (int) action.getValue(0));\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
                 "  }\n" +
                 "\n" +
                 "  public static class ActionCreator {\n" +
                 "    public static Action append(int number) {\n" +
-                "      return new Action(\"ACTION_1\", number);\n" +
+                "      return Action.create(\"ACTION_1\", number);\n" +
                 "    }\n" +
                 "  }\n" +
                 "}");
@@ -125,18 +127,16 @@ public class AutoReducerGeneratorTest {
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      case \"ACTION_1\": {\n" +
-                "        Object[] args = (Object[]) action.value;\n" +
-                "        return append(state, (int) args[0], (String) args[1]);\n" +
-                "      }\n" +
-                "      default: return state;\n" +
+                "      case \"ACTION_1\":\n" +
+                "        return append(state, (int) action.getValue(0), (String) action.getValue(1));\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
                 "  }\n" +
                 "\n" +
                 "  public static class ActionCreator {\n" +
                 "    public static Action append(int number, String suffix) {\n" +
-                "      Object[] args = new Object[]{number, suffix};\n" +
-                "      return new Action(\"ACTION_1\", args);\n" +
+                "      return Action.create(\"ACTION_1\", number, suffix);\n" +
                 "    }\n" +
                 "  }\n" +
                 "}");

@@ -29,7 +29,7 @@ public class Store<State> {
             nextDispatcher = action -> middleware.dispatch(Store.this, action, finalNextDispatcher);
         }
         this.dispatcher = nextDispatcher;
-        dispatchAction(new Action(INIT_ACTION));
+        dispatchAction(Action.create(INIT_ACTION));
     }
 
     private void dispatchAction(final Object actionObject) {

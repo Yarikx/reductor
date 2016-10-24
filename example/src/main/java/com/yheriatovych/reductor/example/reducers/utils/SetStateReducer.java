@@ -17,13 +17,13 @@ public class SetStateReducer<T> implements Reducer<T> {
     }
 
     public static <T> Action setStateAction(T value) {
-        return new Action(SET_GLOBAL_STATE, value);
+        return Action.create(SET_GLOBAL_STATE, value);
     }
 
     @Override
     public T reduce(T state, Action action) {
         if (action.type.equals(SET_GLOBAL_STATE)) {
-            return (T) action.value;
+            return (T) action.values;
         }
         return source.reduce(state, action);
     }

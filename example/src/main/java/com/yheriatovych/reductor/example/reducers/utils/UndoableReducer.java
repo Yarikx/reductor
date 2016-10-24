@@ -13,7 +13,7 @@ public class UndoableReducer<State> implements Reducer<State> {
     private final Reducer<State> sourceReducer;
 
     public static Action pop() {
-        return new Action("POP", null);
+        return Action.create("POP");
     }
 
     private LinkedList<State> stack = new LinkedList<>();
