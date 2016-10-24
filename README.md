@@ -30,6 +30,7 @@ Note: This version is still under development, API may change till version 1.0
 ### Blog posts
 * [Part 0: Prologue](https://yarikx.github.io/Reductor-prologue/)
 * [Part 1: Introduction](https://yarikx.github.io/Reductor-introduction/)
+* [Part 2: Composing reducers](https://yarikx.github.io/Reductor-composition/)
 
 ## Installation
 ```groovy
