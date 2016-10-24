@@ -60,7 +60,7 @@ public class AutoReducerProcessor extends BaseProcessor {
                 .addParameter(stateTypeName, "state")
                 .addParameter(Action.class, "action");
 
-        if(reducerElement.initMethod != null) {
+        if (reducerElement.initMethod != null) {
             reduceMethodBuilder.beginControlFlow("if (state == null)")
                     .addStatement("state = $N()", reducerElement.initMethod.getName())
                     .endControlFlow()
@@ -77,29 +77,24 @@ public class AutoReducerProcessor extends BaseProcessor {
         for (ReduceAction action : reducerElement.actions) {
             final List<ActionHandlerArg> args = action.args;
             reduceBodyBuilder
-                    .add("case $S:", action.action);
-            if (args.size() < 2) {
-                reduceBodyBuilder.indent();
-                reduceBodyBuilder.add("\n");
+                    .add("case $S:", action.action)
+                    .indent()
+                    .add("\n");
+            if (args.size() == 0) {
                 if (args.size() == 0) {
                     reduceBodyBuilder.addStatement("return $N(state)", action.getMethodName());
-                } else if (args.size() == 1) {
-                    reduceBodyBuilder.addStatement("return $N(state, ($T) action.value)", action.getMethodName(), args.get(0).argType);
                 }
-                reduceBodyBuilder.unindent();
             } else {
-                reduceBodyBuilder.beginControlFlow("");
                 reduceBodyBuilder
-                        .addStatement("Object[] args = (Object[]) action.value")
                         .add("return $N(state", action.getMethodName());
 
                 for (int i = 0; i < args.size(); i++) {
                     final ActionHandlerArg arg = args.get(i);
-                    reduceBodyBuilder.add(", ($T) args[$L]", arg.argType, i);
+                    reduceBodyBuilder.add(", ($T) action.getValue($L)", arg.argType, i);
                 }
                 reduceBodyBuilder.add(");\n");
-                reduceBodyBuilder.endControlFlow();
             }
+            reduceBodyBuilder.unindent();
 
             MethodSpec.Builder actionCreatorMethodBuilder = MethodSpec.methodBuilder(action.getMethodName())
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -107,25 +102,16 @@ public class AutoReducerProcessor extends BaseProcessor {
 
             if (args.size() == 0) {
                 actionCreatorMethodBuilder
-                        .addStatement("return new $T($S, null)", Action.class, action.action);
-            } else if (args.size() == 1) {
-                ActionHandlerArg arg = args.get(0);
-                actionCreatorMethodBuilder
-                        .addParameter(TypeName.get(arg.argType), arg.argName)
-                        .addStatement("return new $T($S, $N)", Action.class, action.action, arg.argName);
+                        .addStatement("return $T.create($S)", Action.class, action.action);
             } else {
-                actionCreatorMethodBuilder.addCode("Object[] args = new Object[]{");
+                actionCreatorMethodBuilder
+                        .addCode("return $T.create($S", Action.class, action.action);
                 for (int i = 0; i < args.size(); i++) {
                     ActionHandlerArg arg = args.get(i);
                     actionCreatorMethodBuilder.addParameter(TypeName.get(arg.argType), arg.argName);
-                    if (i != 0) {
-                        actionCreatorMethodBuilder.addCode(", ");
-                    }
-                    actionCreatorMethodBuilder.addCode("$N", arg.argName);
+                    actionCreatorMethodBuilder.addCode(", $N", arg.argName);
                 }
-                actionCreatorMethodBuilder.addCode("};\n");
-                actionCreatorMethodBuilder
-                        .addStatement("return new $T($S, args)", Action.class, action.action);
+                actionCreatorMethodBuilder.addCode(");\n");
             }
 
             actionCreatorBuilder.addMethod(actionCreatorMethodBuilder.build());
@@ -135,7 +121,10 @@ public class AutoReducerProcessor extends BaseProcessor {
                 .addMethods(emitConstructorAsSuper(reducerElement.constructors))
                 .addMethod(reduceMethodBuilder
                         .addCode(reduceBodyBuilder
-                                .addStatement("default: return state")
+                                .add("default:\n")
+                                .indent()
+                                .addStatement("return state")
+                                .unindent()
                                 .endControlFlow()
                                 .build())
                         .build())
