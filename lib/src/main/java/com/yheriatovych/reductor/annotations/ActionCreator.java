@@ -9,7 +9,7 @@ public @interface ActionCreator {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
-    public @interface Action {
+    @interface Action {
         String value();
     }
 }

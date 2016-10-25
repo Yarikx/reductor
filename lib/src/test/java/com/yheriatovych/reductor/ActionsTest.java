@@ -30,7 +30,7 @@ public class ActionsTest {
         Creator creator = Actions.creator(Creator.class);
         Action action = creator.test1();
 
-        assertEquals(new Action("TEST1", null), action);
+        assertEquals(Action.create("TEST1"), action);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class ActionsTest {
         Creator creator = Actions.creator(Creator.class);
         Action action = creator.test2(5);
 
-        assertEquals(new Action("TEST2", 5), action);
+        assertEquals(Action.create("TEST2", 5), action);
     }
 
     @Test
@@ -46,6 +46,6 @@ public class ActionsTest {
         Creator creator = Actions.creator(Creator.class);
         Action action = creator.test3(42, "foobar");
 
-        assertEquals(new Action("TEST3", new Object[]{42, "foobar"}), action);
+        assertEquals(Action.create("TEST3", 42, "foobar"), action);
     }
 }

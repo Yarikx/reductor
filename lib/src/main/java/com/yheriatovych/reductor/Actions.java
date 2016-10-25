@@ -52,13 +52,10 @@ public class Actions {
         return Proxy.newProxyInstance(actionCreator.getClassLoader(), new Class<?>[]{actionCreator},
                 (instance, method, args) -> {
                     String action = actionsMap.get(method);
-                    Object value = args;
-                    if (args == null || args.length == 0) {
-                        value = null;
-                    } else if (args.length == 1) {
-                        value = args[0];
+                    if(args == null){
+                        args = new Object[0];
                     }
-                    return new Action(action, value);
+                    return new Action(action, args);
                 });
     }
 
