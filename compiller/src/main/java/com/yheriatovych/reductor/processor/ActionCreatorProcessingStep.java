@@ -1,38 +1,33 @@
 package com.yheriatovych.reductor.processor;
 
+import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.auto.common.MoreElements;
-import com.google.auto.common.MoreTypes;
-import com.google.auto.service.AutoService;
-import com.squareup.javapoet.*;
+import com.google.common.collect.SetMultimap;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.ActionCreator;
-import com.yheriatovych.reductor.annotations.AutoReducer;
-import com.yheriatovych.reductor.processor.model.ActionHandlerArg;
-import com.yheriatovych.reductor.processor.model.AutoReducerConstructor;
-import com.yheriatovych.reductor.processor.model.ReduceAction;
-import com.yheriatovych.reductor.processor.model.StringReducerElement;
 
-import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
-import java.util.*;
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Set;
 
-@AutoService(Processor.class)
-public class ActionCreatorProcessor extends BaseProcessor {
+public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
 
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<>(Collections.singletonList(
-                ActionCreator.class.getCanonicalName()
-        ));
+    private final Env env;
+
+    ActionCreatorProcessingStep(Env env) {
+        this.env = env;
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Set<? extends Element> creatorElements = roundEnv.getElementsAnnotatedWith(ActionCreator.class);
-        for (Element element : creatorElements) {
+    public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+        for (Element element : elementsByAnnotation.values()) {
             try {
                 foobar(element, env);
             } catch (ValidationException ve) {
@@ -42,8 +37,7 @@ public class ActionCreatorProcessor extends BaseProcessor {
                 env.printError(element, "Internal processor error:\n %s", e.getMessage());
             }
         }
-
-        return true;
+        return Collections.emptySet();
     }
 
     private void foobar(Element element, Env env) throws ValidationException {
@@ -85,5 +79,10 @@ public class ActionCreatorProcessor extends BaseProcessor {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public Set<? extends Class<? extends Annotation>> annotations() {
+        return Collections.singleton(ActionCreator.class);
     }
 }
