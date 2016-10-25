@@ -70,10 +70,6 @@ public class AutoReducerProcessor extends BaseProcessor {
         CodeBlock.Builder reduceBodyBuilder = CodeBlock.builder()
                 .beginControlFlow("switch (action.type)");
 
-
-        TypeSpec.Builder actionCreatorBuilder = TypeSpec.classBuilder("ActionCreator")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-
         for (ReduceAction action : reducerElement.actions) {
             final List<ActionHandlerArg> args = action.args;
             reduceBodyBuilder
@@ -113,8 +109,6 @@ public class AutoReducerProcessor extends BaseProcessor {
                 }
                 actionCreatorMethodBuilder.addCode(");\n");
             }
-
-            actionCreatorBuilder.addMethod(actionCreatorMethodBuilder.build());
         }
 
         typeSpecBuilder
@@ -127,8 +121,12 @@ public class AutoReducerProcessor extends BaseProcessor {
                                 .unindent()
                                 .endControlFlow()
                                 .build())
-                        .build())
-                .addType(actionCreatorBuilder.build());
+                        .build());
+
+        TypeSpec actionCreator = emitActionCreator(reducerElement);
+        if (actionCreator != null) {
+            typeSpecBuilder.addType(actionCreator);
+        }
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpecBuilder.build())
                 .build();
@@ -156,5 +154,40 @@ public class AutoReducerProcessor extends BaseProcessor {
         }
 
         return methodSpecs;
+    }
+
+    private TypeSpec emitActionCreator(StringReducerElement reducerElement) {
+        TypeSpec.Builder actionCreatorBuilder = TypeSpec.classBuilder("ActionCreator")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+
+        boolean hasActions = false;
+        for (ReduceAction action : reducerElement.actions) {
+            if (!action.generateActionCreator) continue;
+            hasActions = true;
+            final List<ActionHandlerArg> args = action.args;
+
+            MethodSpec.Builder actionCreatorMethodBuilder = MethodSpec.methodBuilder(action.getMethodName())
+                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                    .returns(Action.class);
+
+            if (args.size() == 0) {
+                actionCreatorMethodBuilder
+                        .addStatement("return $T.create($S)", Action.class, action.action);
+            } else {
+                actionCreatorMethodBuilder
+                        .addCode("return $T.create($S", Action.class, action.action);
+                for (int i = 0; i < args.size(); i++) {
+                    ActionHandlerArg arg = args.get(i);
+                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.argType), arg.argName);
+                    actionCreatorMethodBuilder.addCode(", $N", arg.argName);
+                }
+                actionCreatorMethodBuilder.addCode(");\n");
+            }
+            actionCreatorBuilder.addMethod(actionCreatorMethodBuilder.build());
+
+        }
+        return hasActions
+                ? actionCreatorBuilder.build()
+                : null;
     }
 }

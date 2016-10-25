@@ -16,11 +16,13 @@ public class ReduceAction {
     public final String action;
     public final List<ActionHandlerArg> args;
     public final ExecutableElement executableElement;
+    public final boolean generateActionCreator;
 
-    private ReduceAction(String action, List<ActionHandlerArg> args, ExecutableElement executableElement) {
+    private ReduceAction(String action, List<ActionHandlerArg> args, ExecutableElement executableElement, boolean generateActionCreator) {
         this.executableElement = executableElement;
         this.args = args;
         this.action = action;
+        this.generateActionCreator = generateActionCreator;
     }
 
     public static ReduceAction parseReduceAction(Env env, TypeMirror stateType, ExecutableElement element) throws ValidationException {
@@ -28,6 +30,7 @@ public class ReduceAction {
         if (action == null) return null;
 
         String actionNameConstant = action.value();
+        boolean generateActionCreator = action.generateActionCreator();
 
         ValidationUtils.validateReturnsState(env, stateType, element);
         ValidationUtils.validateIsNotPrivate(element);
@@ -47,7 +50,7 @@ public class ReduceAction {
             throw new ValidationException(firstParam, "First parameter %s of method %s should have the same type as state (%s)", firstParam, element, stateType);
         }
 
-        return new ReduceAction(actionNameConstant, args, element);
+        return new ReduceAction(actionNameConstant, args, element, generateActionCreator);
     }
 
     public String getMethodName() {

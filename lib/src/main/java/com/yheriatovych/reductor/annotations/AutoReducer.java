@@ -55,6 +55,10 @@ public @interface AutoReducer {
          * @return String type which will be {@link com.yheriatovych.reductor.Action#type}
          */
         String value();
+
+        boolean generateActionCreator() default true;
+
+        Class<?> from() default Void.class;
     }
 
     /**
