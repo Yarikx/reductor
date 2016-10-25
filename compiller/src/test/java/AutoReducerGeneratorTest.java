@@ -177,11 +177,9 @@ public class AutoReducerGeneratorTest {
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
@@ -217,11 +215,9 @@ public class AutoReducerGeneratorTest {
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
@@ -258,19 +254,18 @@ public class AutoReducerGeneratorTest {
                 "import java.lang.String;\n" +
                 "\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
-                "  public FoobarReducer(int a) {\n" +
-                "      super(a);\n" +
+                "  public FoobarReducerImpl(int a) {\n" +
+                "    super(a);\n" +
                 "  }\n" +
                 "\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
                 "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
-                " ");
+                "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
@@ -305,19 +300,18 @@ public class AutoReducerGeneratorTest {
                 "import java.lang.String;\n" +
                 "\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
-                "  public FoobarReducer(int a) {\n" +
-                "      super(a);\n" +
+                "  public FoobarReducerImpl(int a) {\n" +
+                "    super(a);\n" +
                 "  }\n" +
                 "\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
                 "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
-                " ");
+                "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
@@ -356,11 +350,9 @@ public class AutoReducerGeneratorTest {
                 "    }\n" +
                 "\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
@@ -401,11 +393,9 @@ public class AutoReducerGeneratorTest {
                 "    }\n" +
                 "\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
