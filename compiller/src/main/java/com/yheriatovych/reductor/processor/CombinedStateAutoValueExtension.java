@@ -30,7 +30,7 @@ public class CombinedStateAutoValueExtension extends AutoValueExtension {
             Env env = new Env(processingEnvironment.getTypeUtils(), processingEnvironment.getElementUtils(), processingEnvironment.getMessager(), processingEnvironment.getFiler());
             try {
                 CombinedStateElement combinedStateElement = CombinedStateElement.parseAutoValueCombinedElement(typeElement, context.properties());
-                CombinedStateProcessor.emmitCombinedReducer(env, combinedStateElement, ClassName.get(context.packageName(), "AutoValue_" + context.autoValueClass().getSimpleName()));
+                CombinedStateProcessingStep.emmitCombinedReducer(env, combinedStateElement, ClassName.get(context.packageName(), "AutoValue_" + context.autoValueClass().getSimpleName()));
             } catch (ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {

@@ -17,7 +17,7 @@ import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Set;
 
-public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
+class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
 
     private final Env env;
 

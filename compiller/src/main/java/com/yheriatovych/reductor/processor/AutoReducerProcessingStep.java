@@ -1,6 +1,7 @@
 package com.yheriatovych.reductor.processor;
 
-import com.google.auto.service.AutoService;
+import com.google.auto.common.BasicAnnotationProcessor;
+import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.AutoReducer;
@@ -9,29 +10,33 @@ import com.yheriatovych.reductor.processor.model.AutoReducerConstructor;
 import com.yheriatovych.reductor.processor.model.ReduceAction;
 import com.yheriatovych.reductor.processor.model.StringReducerElement;
 
-import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import java.io.IOException;
-import java.util.*;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
-@AutoService(Processor.class)
-public class AutoReducerProcessor extends BaseProcessor {
+class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
 
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<>(Collections.singletonList(
-                AutoReducer.class.getCanonicalName()
-        ));
+    private final Env env;
+
+    AutoReducerProcessingStep(Env env) {
+        this.env = env;
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Set<? extends Element> stringReducers = roundEnv.getElementsAnnotatedWith(AutoReducer.class);
-        for (Element stringReducer : stringReducers) {
+    public Set<? extends Class<? extends Annotation>> annotations() {
+        return Collections.singleton(AutoReducer.class);
+    }
+
+    @Override
+    public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+        for (Element stringReducer : elementsByAnnotation.values()) {
             try {
                 StringReducerElement reducerElement = StringReducerElement.parseStringReducerElement(stringReducer, env);
                 emitGeneratedClass(reducerElement, reducerElement.getPackageName(env), reducerElement.originalElement);
@@ -42,8 +47,7 @@ public class AutoReducerProcessor extends BaseProcessor {
                 env.printError(stringReducer, "Internal processor error:\n %s", e.getMessage());
             }
         }
-
-        return true;
+        return Collections.emptySet();
     }
 
     private void emitGeneratedClass(StringReducerElement reducerElement, String packageName, TypeElement originalTypeElement) throws IOException {
@@ -102,8 +106,7 @@ public class AutoReducerProcessor extends BaseProcessor {
             } else {
                 actionCreatorMethodBuilder
                         .addCode("return $T.create($S", Action.class, action.action);
-                for (int i = 0; i < args.size(); i++) {
-                    ActionHandlerArg arg = args.get(i);
+                for (ActionHandlerArg arg : args) {
                     actionCreatorMethodBuilder.addParameter(TypeName.get(arg.argType), arg.argName);
                     actionCreatorMethodBuilder.addCode(", $N", arg.argName);
                 }
@@ -176,8 +179,7 @@ public class AutoReducerProcessor extends BaseProcessor {
             } else {
                 actionCreatorMethodBuilder
                         .addCode("return $T.create($S", Action.class, action.action);
-                for (int i = 0; i < args.size(); i++) {
-                    ActionHandlerArg arg = args.get(i);
+                for (ActionHandlerArg arg : args) {
                     actionCreatorMethodBuilder.addParameter(TypeName.get(arg.argType), arg.argName);
                     actionCreatorMethodBuilder.addCode(", $N", arg.argName);
                 }

@@ -16,7 +16,9 @@ public class ReductorAnnotationProcessor extends BasicAnnotationProcessor {
                 processingEnv.getMessager(),
                 processingEnv.getFiler());
         return Arrays.asList(
-                new ActionCreatorProcessingStep(env)
+                new ActionCreatorProcessingStep(env),
+                new AutoReducerProcessingStep(env),
+                new CombinedStateProcessingStep(env)
         );
     }
 

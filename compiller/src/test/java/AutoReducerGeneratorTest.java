@@ -1,5 +1,6 @@
 import com.google.testing.compile.JavaFileObjects;
-import com.yheriatovych.reductor.processor.AutoReducerProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -49,7 +50,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -96,7 +97,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -143,7 +144,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -185,7 +186,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -223,7 +224,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -269,7 +270,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -315,7 +316,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -358,7 +359,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -401,7 +402,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
