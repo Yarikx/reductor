@@ -25,7 +25,7 @@ public class Env {
         printMessage(Diagnostic.Kind.ERROR, element, message, args);
     }
 
-    private void printMessage(Diagnostic.Kind level, Element element, String message, Object args) {
+    private void printMessage(Diagnostic.Kind level, Element element, String message, Object... args) {
         messager.printMessage(level, String.format(message, args), element);
     }
 
@@ -46,4 +46,7 @@ public class Env {
                 .asType();
     }
 
+    public Elements getElements() {
+        return elements;
+    }
 }

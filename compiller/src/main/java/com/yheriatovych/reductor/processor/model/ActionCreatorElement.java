@@ -38,8 +38,8 @@ public class ActionCreatorElement {
         return env.getPackageName(typeElement);
     }
 
-    public String getName() {
-        return typeElement.getSimpleName().toString();
+    public String getName(Env env) {
+        return env.getElements().getBinaryName(typeElement).toString();
     }
 
     public TypeMirror getType() {
