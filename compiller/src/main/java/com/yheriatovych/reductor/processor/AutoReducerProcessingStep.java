@@ -5,7 +5,6 @@ import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.AutoReducer;
-import com.yheriatovych.reductor.processor.model.ActionHandlerArg;
 import com.yheriatovych.reductor.processor.model.AutoReducerConstructor;
 import com.yheriatovych.reductor.processor.model.ReduceAction;
 import com.yheriatovych.reductor.processor.model.StringReducerElement;
@@ -75,7 +74,7 @@ class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingSt
                 .beginControlFlow("switch (action.type)");
 
         for (ReduceAction action : reducerElement.actions) {
-            final List<ActionHandlerArg> args = action.args;
+            final List<VariableElement> args = action.args;
             reduceBodyBuilder
                     .add("case $S:", action.action)
                     .indent()
@@ -89,8 +88,8 @@ class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingSt
                         .add("return $N(state", action.getMethodName());
 
                 for (int i = 0; i < args.size(); i++) {
-                    final ActionHandlerArg arg = args.get(i);
-                    reduceBodyBuilder.add(", ($T) action.getValue($L)", arg.argType, i);
+                    final VariableElement arg = args.get(i);
+                    reduceBodyBuilder.add(", ($T) action.getValue($L)", arg.asType(), i);
                 }
                 reduceBodyBuilder.add(");\n");
             }
@@ -106,9 +105,9 @@ class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingSt
             } else {
                 actionCreatorMethodBuilder
                         .addCode("return $T.create($S", Action.class, action.action);
-                for (ActionHandlerArg arg : args) {
-                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.argType), arg.argName);
-                    actionCreatorMethodBuilder.addCode(", $N", arg.argName);
+                for (VariableElement arg : args) {
+                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.asType()), arg.getSimpleName().toString());
+                    actionCreatorMethodBuilder.addCode(", $N", arg.getSimpleName().toString());
                 }
                 actionCreatorMethodBuilder.addCode(");\n");
             }
@@ -167,7 +166,7 @@ class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingSt
         for (ReduceAction action : reducerElement.actions) {
             if (!action.generateActionCreator) continue;
             hasActions = true;
-            final List<ActionHandlerArg> args = action.args;
+            final List<VariableElement> args = action.args;
 
             MethodSpec.Builder actionCreatorMethodBuilder = MethodSpec.methodBuilder(action.getMethodName())
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -179,9 +178,9 @@ class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingSt
             } else {
                 actionCreatorMethodBuilder
                         .addCode("return $T.create($S", Action.class, action.action);
-                for (ActionHandlerArg arg : args) {
-                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.argType), arg.argName);
-                    actionCreatorMethodBuilder.addCode(", $N", arg.argName);
+                for (VariableElement arg : args) {
+                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.asType()), arg.getSimpleName().toString());
+                    actionCreatorMethodBuilder.addCode(", $N", arg.getSimpleName());
                 }
                 actionCreatorMethodBuilder.addCode(");\n");
             }

@@ -14,11 +14,11 @@ import java.util.List;
 public class ReduceAction {
 
     public final String action;
-    public final List<ActionHandlerArg> args;
+    public final List<VariableElement> args;
     public final ExecutableElement executableElement;
     public final boolean generateActionCreator;
 
-    private ReduceAction(String action, List<ActionHandlerArg> args, ExecutableElement executableElement, boolean generateActionCreator) {
+    private ReduceAction(String action, List<VariableElement> args, ExecutableElement executableElement, boolean generateActionCreator) {
         this.executableElement = executableElement;
         this.args = args;
         this.action = action;
@@ -41,9 +41,9 @@ public class ReduceAction {
         }
 
         List<? extends VariableElement> argumentVariables = parameters.subList(1, parameters.size());
-        ArrayList<ActionHandlerArg> args = new ArrayList<>();
+        ArrayList<VariableElement> args = new ArrayList<>();
         for (VariableElement argumentVariable : argumentVariables) {
-            args.add(ActionHandlerArg.parse(argumentVariable));
+            args.add(argumentVariable);
         }
         VariableElement firstParam = parameters.get(0);
         if (!env.getTypes().isAssignable(stateType, firstParam.asType())) {
