@@ -1,7 +1,6 @@
 package com.yheriatovych.reductor.processor;
 
 import com.google.auto.common.BasicAnnotationProcessor;
-import com.google.auto.common.MoreElements;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -9,15 +8,16 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.ActionCreator;
+import com.yheriatovych.reductor.processor.model.ActionCreatorAction;
+import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
 
 import javax.lang.model.element.*;
-import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Set;
 
-class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
+class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
     private final Env env;
 
@@ -29,56 +29,44 @@ class ActionCreatorProcessingStep implements BasicAnnotationProcessor.Processing
     public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
         for (Element element : elementsByAnnotation.values()) {
             try {
-                foobar(element, env);
+                ActionCreatorElement creatorElement = ActionCreatorElement.parse(element, env);
+                emitActionCreator(creatorElement, env);
             } catch (ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                env.printError(element, "Internal processor error:\n %s", e.getMessage());
+                env.printError(element, "Internal processor error:\n " + e.getMessage());
             }
         }
         return Collections.emptySet();
     }
 
-    private void foobar(Element element, Env env) throws ValidationException {
-        TypeElement typeElement = MoreElements.asType(element);
-        TypeMirror typeMirror = typeElement.asType();
-        TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(typeElement.getSimpleName() + "_AutoImpl")
+    private void emitActionCreator(ActionCreatorElement creatorElement, Env env) throws IOException {
+        TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(creatorElement.getName() + "_AutoImpl")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addSuperinterface(TypeName.get(typeMirror));
+                .addSuperinterface(TypeName.get(creatorElement.getType()));
 
-        for (Element method : element.getEnclosedElements()) {
-            ActionCreator.Action annotation = method.getAnnotation(ActionCreator.Action.class);
-            if (annotation != null) {
-                String actionType = annotation.value();
+        for (ActionCreatorAction action : creatorElement.actions) {
+            MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(action.methodName)
+                    .returns(Action.class)
+                    .addAnnotation(Override.class)
+                    .addModifiers(Modifier.PUBLIC);
 
-                ExecutableElement executableElement = MoreElements.asExecutable(method);
-                MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(executableElement.getSimpleName().toString())
-                        .returns(Action.class)
-                        .addAnnotation(Override.class)
-                        .addModifiers(Modifier.PUBLIC);
-
-                StringBuilder args = new StringBuilder();
-                for (VariableElement variableElement : executableElement.getParameters()) {
-                    String name = variableElement.getSimpleName().toString();
-                    methodBuilder.addParameter(TypeName.get(variableElement.asType()), name);
-                    args.append(", ").append(name);
-                }
-
-                typeBuilder.addMethod(methodBuilder
-                        .addStatement("return $T.create(\"$L\"$N)", Action.class, actionType, args.toString())
-                        .build());
+            StringBuilder args = new StringBuilder();
+            for (VariableElement variableElement : action.arguments) {
+                String name = variableElement.getSimpleName().toString();
+                methodBuilder.addParameter(TypeName.get(variableElement.asType()), name);
+                args.append(", ").append(name);
             }
+
+            typeBuilder.addMethod(methodBuilder
+                    .addStatement("return $T.create(\"$L\"$N)", Action.class, action.actionType, args.toString())
+                    .build());
         }
 
-        try {
-            JavaFile.builder(env.getPackageName(element), typeBuilder.build())
-                    .build()
-                    .writeTo(env.getFiler());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        JavaFile.builder(creatorElement.getPackageName(env), typeBuilder.build())
+                .build()
+                .writeTo(env.getFiler());
     }
 
     @Override

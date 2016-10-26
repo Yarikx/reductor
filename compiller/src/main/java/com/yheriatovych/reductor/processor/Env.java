@@ -3,6 +3,7 @@ package com.yheriatovych.reductor.processor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -38,6 +39,11 @@ public class Env {
 
     public String getPackageName(Element element) {
         return elements.getPackageOf(element).getQualifiedName().toString();
+    }
+
+    public TypeMirror asType(Class<?> clazz) {
+        return elements.getTypeElement(clazz.getCanonicalName())
+                .asType();
     }
 
 }
