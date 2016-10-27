@@ -2,10 +2,14 @@ package com.yheriatovych.reductor.processor;
 
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.auto.service.AutoService;
+import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
 
 import javax.annotation.processing.Processor;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @AutoService(Processor.class)
 public class ReductorAnnotationProcessor extends BasicAnnotationProcessor {
@@ -15,10 +19,13 @@ public class ReductorAnnotationProcessor extends BasicAnnotationProcessor {
                 processingEnv.getElementUtils(),
                 processingEnv.getMessager(),
                 processingEnv.getFiler());
+
+        Map<String, ActionCreatorElement> knownActionCreators = new HashMap<>();
+
         return Arrays.asList(
                 new CombinedStateProcessingStep(env),
-                new AutoReducerProcessingStep(env),
-                new ActionCreatorProcessingStep(env)
+                new AutoReducerProcessingStep(env, knownActionCreators),
+                new ActionCreatorProcessingStep(env, knownActionCreators)
         );
     }
 

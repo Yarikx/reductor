@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
         spinner.setSelection(0);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                store.dispatch(NotesFilterReducerImpl.ActionCreator.setFilter(NotesFilter.values()[i]));
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                NotesFilter filter = NotesFilter.values()[position];
+                store.dispatch(NotesFilterReducerImpl.ActionCreator.setFilter(filter));
             }
 
             @Override

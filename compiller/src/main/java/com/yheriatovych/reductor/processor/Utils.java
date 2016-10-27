@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Utils {
 
-    interface Func1<T, R> {
+    public interface Func1<T, R> {
         R call(T value);
     }
 

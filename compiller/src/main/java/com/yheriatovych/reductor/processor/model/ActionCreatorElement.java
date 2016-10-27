@@ -1,6 +1,7 @@
 package com.yheriatovych.reductor.processor.model;
 
 import com.google.auto.common.MoreElements;
+import com.google.auto.common.MoreTypes;
 import com.yheriatovych.reductor.annotations.ActionCreator;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
@@ -29,9 +30,18 @@ public class ActionCreatorElement {
         }
     }
 
-    public boolean hasAction(String actionType, List<? extends VariableElement> args) {
-        //TODO check args
-        return actionMap.containsKey(actionType);
+    public boolean hasAction(String actionType, List<? extends VariableElement> reducerArgs, Env env) {
+        ActionCreatorAction actionCreator = actionMap.get(actionType);
+        if(actionCreator == null || reducerArgs.size() != actionCreator.arguments.size()) return false;
+        List<? extends VariableElement> arguments = actionCreator.arguments;
+        for (int i = 0; i < arguments.size(); i++) {
+            VariableElement creatorArg = arguments.get(i);
+            VariableElement reducerArg = reducerArgs.get(i);
+            if (!env.getTypes().isAssignable(creatorArg.asType(), reducerArg.asType())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getPackageName(Env env) {

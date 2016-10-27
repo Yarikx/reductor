@@ -5,6 +5,7 @@ import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.AutoReducer;
+import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
 import com.yheriatovych.reductor.processor.model.AutoReducerConstructor;
 import com.yheriatovych.reductor.processor.model.ReduceAction;
 import com.yheriatovych.reductor.processor.model.StringReducerElement;
@@ -15,17 +16,16 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
 
     private final Env env;
+    private final Map<String, ActionCreatorElement> knownActionCreators;
 
-    AutoReducerProcessingStep(Env env) {
+    AutoReducerProcessingStep(Env env, Map<String, ActionCreatorElement> knownActionCreators) {
         this.env = env;
+        this.knownActionCreators = knownActionCreators;
     }
 
     @Override
@@ -35,18 +35,21 @@ class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingSt
 
     @Override
     public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+        Set<Element> delayed = new HashSet<>();
         for (Element stringReducer : elementsByAnnotation.values()) {
             try {
-                StringReducerElement reducerElement = StringReducerElement.parseStringReducerElement(stringReducer, env);
+                StringReducerElement reducerElement = StringReducerElement.parseStringReducerElement(stringReducer, knownActionCreators, env);
                 emitGeneratedClass(reducerElement, reducerElement.getPackageName(env), reducerElement.originalElement);
             } catch (com.yheriatovych.reductor.processor.ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
+            } catch (ElementNotReadyException e){
+                delayed.add(stringReducer);
             } catch (Exception e) {
                 e.printStackTrace();
                 env.printError(stringReducer, "Internal processor error:\n %s", e.getMessage());
             }
         }
-        return Collections.emptySet();
+        return delayed;
     }
 
     private void emitGeneratedClass(StringReducerElement reducerElement, String packageName, TypeElement originalTypeElement) throws IOException {
