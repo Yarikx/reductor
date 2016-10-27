@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 
 public class ActionsTest {
 
+    @ActionCreator
     interface Creator {
         @ActionCreator.Action("TEST1")
         Action test1();
@@ -18,11 +19,6 @@ public class ActionsTest {
 
         @ActionCreator.Action("TEST3")
         Action test3(int foo, String bar);
-    }
-
-    @Before
-    public void setUp() throws Exception {
-
     }
 
     @Test
@@ -47,5 +43,44 @@ public class ActionsTest {
         Action action = creator.test3(42, "foobar");
 
         assertEquals(Action.create("TEST3", 42, "foobar"), action);
+    }
+
+    interface Creator2 {
+        @ActionCreator.Action("TEST1")
+        Action test1();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testFailsWhenDoNotHaveAnnotation() {
+        Creator2 creator = Actions.creator(Creator2.class);
+    }
+
+    @ActionCreator
+    interface Creator3 {
+        Action test1();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testFailsWhenDoNotHaveMethodAnnotation() {
+        Creator3 creator = Actions.creator(Creator3.class);
+    }
+
+    @ActionCreator
+    interface Creator4 {
+        @ActionCreator.Action("TEST")
+        Action foobar();
+    }
+
+    static class Creator4_AutoImpl implements Creator4 {
+        @Override
+        public Action foobar() {
+            return new Action("TEST");
+        }
+    }
+
+    @Test
+    public void testInstatntiateAutoClass() {
+        Creator4 creator = Actions.creator(Creator4.class);
+        assertEquals(Creator4_AutoImpl.class, creator.getClass());
     }
 }

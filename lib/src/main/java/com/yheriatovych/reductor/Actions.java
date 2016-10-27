@@ -40,7 +40,7 @@ public class Actions {
     private static Object createDynamicProxy(Class<?> actionCreator) {
         if(actionCreator.getAnnotation(ActionCreator.class) == null) {
             throw new IllegalStateException(String.format(
-                    "%s should be interface annotated with %s", actionCreator, ActionCreator.class));
+                    "%s should be interface annotated with @%s", actionCreator, ActionCreator.class.getSimpleName()));
         }
 
         Method[] methods = actionCreator.getMethods();
