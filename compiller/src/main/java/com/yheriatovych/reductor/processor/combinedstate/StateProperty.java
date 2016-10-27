@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.combinedstate;
 
 import com.google.auto.common.MoreTypes;
 import com.squareup.javapoet.ClassName;
@@ -12,7 +12,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 

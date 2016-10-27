@@ -1,12 +1,13 @@
-package com.yheriatovych.reductor.processor;
+package com.yheriatovych.reductor.processor.combinedstate;
 
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.CombinedState;
-import com.yheriatovych.reductor.processor.model.CombinedStateElement;
-import com.yheriatovych.reductor.processor.model.StateProperty;
+import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.Utils;
+import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
@@ -20,12 +21,12 @@ import java.util.Set;
 
 import static com.yheriatovych.reductor.processor.Utils.*;
 
-class CombinedStateProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
+public class CombinedStateProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
     private static final String REDUCER_SUFFIX = "Reducer";
     private final Env env;
 
-    CombinedStateProcessingStep(Env env) {
+    public CombinedStateProcessingStep(Env env) {
         this.env = env;
     }
 

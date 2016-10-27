@@ -2,11 +2,11 @@ package com.yheriatovych.reductor.processor;
 
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.auto.service.AutoService;
+import com.yheriatovych.reductor.processor.combinedstate.CombinedStateProcessingStep;
 import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
 
 import javax.annotation.processing.Processor;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

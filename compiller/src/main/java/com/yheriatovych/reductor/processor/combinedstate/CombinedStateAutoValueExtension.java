@@ -1,10 +1,11 @@
-package com.yheriatovych.reductor.processor;
+package com.yheriatovych.reductor.processor.combinedstate;
 
 import com.google.auto.service.AutoService;
 import com.google.auto.value.extension.AutoValueExtension;
 import com.squareup.javapoet.ClassName;
 import com.yheriatovych.reductor.annotations.CombinedState;
-import com.yheriatovych.reductor.processor.model.CombinedStateElement;
+import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
