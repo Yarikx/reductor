@@ -96,7 +96,7 @@ public class ReduceAction {
         if(creatorElement == null) {
             throw new ElementNotReadyException();
         }
-        if(!creatorElement.hasAction(actionName, args, env)){
+        if(!creatorElement.hasAction(actionName, args)){
             throw new ValidationException(element, "cannot find action creator for action \"%s\" and args %s in interface %s", actionName, toString(args), creatorElement.getName(env));
         }
     }

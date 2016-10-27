@@ -26,8 +26,8 @@ public class ReductorAnnotationProcessor extends BasicAnnotationProcessor {
 
         return Arrays.asList(
                 new CombinedStateProcessingStep(env),
-                new AutoReducerProcessingStep(env, knownActionCreators),
-                new ActionCreatorProcessingStep(env, knownActionCreators)
+                new ActionCreatorProcessingStep(env, knownActionCreators),
+                new AutoReducerProcessingStep(env, knownActionCreators)
         );
     }
 

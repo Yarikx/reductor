@@ -1,6 +1,7 @@
 package com.yheriatovych.reductor.processor.actioncreator;
 
 import com.google.auto.common.MoreElements;
+import com.squareup.javapoet.TypeName;
 import com.yheriatovych.reductor.annotations.ActionCreator;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
@@ -29,14 +30,17 @@ public class ActionCreatorElement {
         }
     }
 
-    public boolean hasAction(String actionType, List<? extends VariableElement> reducerArgs, Env env) {
+    public boolean hasAction(String actionType, List<? extends VariableElement> reducerArgs) {
         ActionCreatorAction actionCreator = actionMap.get(actionType);
         if(actionCreator == null || reducerArgs.size() != actionCreator.arguments.size()) return false;
         List<? extends VariableElement> arguments = actionCreator.arguments;
         for (int i = 0; i < arguments.size(); i++) {
-            VariableElement creatorArg = arguments.get(i);
-            VariableElement reducerArg = reducerArgs.get(i);
-            if (!env.getTypes().isAssignable(creatorArg.asType(), reducerArg.asType())) {
+            //we are doing black magic with checking if TypeName are equals
+            //instead of checking if two TypeMirrors are equals because TypeMirrors can be different for the same type
+            //happens when code is processed with several number of processing steps
+            TypeName creatorArgType = actionCreator.argumentTypes.get(i);
+            TypeName reducerArgType = TypeName.get(reducerArgs.get(i).asType());
+            if (!creatorArgType.equals(reducerArgType)) {
                 return false;
             }
         }
