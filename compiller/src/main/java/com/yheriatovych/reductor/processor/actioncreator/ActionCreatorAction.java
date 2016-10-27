@@ -23,7 +23,7 @@ public class ActionCreatorAction {
     public static ActionCreatorAction parse(ExecutableElement element, Env env) throws ValidationException {
         ActionCreator.Action annotation = element.getAnnotation(ActionCreator.Action.class);
         if (annotation == null) {
-            throw new ValidationException(element, "Action creator %s should be annotated with %s", element, ActionCreator.Action.class);
+            throw new ValidationException(element, "Action creator %s should be annotated with @%s", element, ActionCreator.Action.class.getCanonicalName());
         }
 
         if (!env.getTypes().isAssignable(element.getReturnType(), env.asType(Action.class))) {

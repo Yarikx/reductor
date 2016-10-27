@@ -57,7 +57,7 @@ public class ActionCreatorElement {
 
     public static ActionCreatorElement parse(Element element, Env env) throws ValidationException {
         if (element.getKind() != ElementKind.INTERFACE) {
-            throw new ValidationException(element, "%s annotated with %s should be interface", element, ActionCreator.class);
+            throw new ValidationException(element, "%s annotated with @%s should be interface", element, ActionCreator.class.getSimpleName());
         }
         TypeElement typeElement = MoreElements.asType(element);
 
