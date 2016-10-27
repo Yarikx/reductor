@@ -359,6 +359,27 @@ public class CombinedStateReducerTest {
     }
 
     @Test
+    public void testAutoValueNoReducerGeneration() {
+        JavaFileObject source = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
+                "\n" +
+                "import com.google.auto.value.AutoValue;\n" +
+                "import com.yheriatovych.reductor.annotations.CombinedState;\n" +
+                "import java.util.Date;\n" +
+                "\n" +
+                "@CombinedState\n" +
+                "@AutoValue\n" +
+                "public abstract class Foobar {\n" +
+                "    abstract String foo();\n" +
+                "    abstract Date bar();\n" +
+                "}");
+
+        assertAbout(javaSource()).that(source)
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
+                .compilesWithoutWarnings();
+    }
+
+    @Test
     public void testInitialValues() {
         JavaFileObject source = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
                 "\n" +

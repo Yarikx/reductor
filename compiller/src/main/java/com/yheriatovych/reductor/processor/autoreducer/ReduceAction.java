@@ -89,7 +89,7 @@ public class ReduceAction {
                                               Env env) throws ValidationException {
         Element actionCreatorElement = MoreTypes.asElement(actionCreator);
         if (!MoreElements.isAnnotationPresent(actionCreatorElement, ActionCreator.class)) {
-            throw new ValidationException(element, "Action creator %s should be annotated with %s", actionCreator, ActionCreator.class);
+            throw new ValidationException(element, "Action creator %s should be annotated with @%s", actionCreator, ActionCreator.class.getSimpleName());
         }
 
         ActionCreatorElement creatorElement = knownActionCreators.get(env.getElements().getBinaryName((TypeElement) actionCreatorElement).toString());
@@ -97,7 +97,7 @@ public class ReduceAction {
             throw new ElementNotReadyException();
         }
         if(!creatorElement.hasAction(actionName, args)){
-            throw new ValidationException(element, "cannot find action creator for action \"%s\" and args %s in interface %s", actionName, toString(args), creatorElement.getName(env));
+            throw new ValidationException(element, "Cannot find action creator for action \"%s\" and args %s in interface %s", actionName, toString(args), creatorElement.getName(env));
         }
     }
 
