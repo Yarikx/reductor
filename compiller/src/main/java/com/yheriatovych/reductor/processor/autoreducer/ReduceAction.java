@@ -1,10 +1,11 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.autoreducer;
 
 import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
 import com.yheriatovych.reductor.annotations.ActionCreator;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.*;
+import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;

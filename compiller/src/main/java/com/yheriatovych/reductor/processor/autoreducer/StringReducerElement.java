@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.autoreducer;
 
 import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
@@ -7,6 +7,7 @@ import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.Utils;
 import com.yheriatovych.reductor.processor.ValidationException;
+import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;

@@ -2,6 +2,7 @@ package com.yheriatovych.reductor.processor;
 
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.auto.service.AutoService;
+import com.yheriatovych.reductor.processor.autoreducer.AutoReducerProcessingStep;
 import com.yheriatovych.reductor.processor.combinedstate.CombinedStateProcessingStep;
 import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
 

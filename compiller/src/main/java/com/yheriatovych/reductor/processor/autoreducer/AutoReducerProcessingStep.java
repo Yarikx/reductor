@@ -1,14 +1,13 @@
-package com.yheriatovych.reductor.processor;
+package com.yheriatovych.reductor.processor.autoreducer;
 
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.AutoReducer;
+import com.yheriatovych.reductor.processor.ElementNotReadyException;
+import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
-import com.yheriatovych.reductor.processor.model.AutoReducerConstructor;
-import com.yheriatovych.reductor.processor.model.ReduceAction;
-import com.yheriatovych.reductor.processor.model.StringReducerElement;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
@@ -18,12 +17,12 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
+public class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
 
     private final Env env;
     private final Map<String, ActionCreatorElement> knownActionCreators;
 
-    AutoReducerProcessingStep(Env env, Map<String, ActionCreatorElement> knownActionCreators) {
+    public AutoReducerProcessingStep(Env env, Map<String, ActionCreatorElement> knownActionCreators) {
         this.env = env;
         this.knownActionCreators = knownActionCreators;
     }
