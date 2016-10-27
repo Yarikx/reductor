@@ -7,7 +7,7 @@ import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.ElementNotReadyException;
 import com.yheriatovych.reductor.processor.Env;
-import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
+import com.yheriatovych.reductor.processor.actioncreator.ActionCreatorElement;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;

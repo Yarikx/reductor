@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.actioncreator;
 
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.ActionCreator;

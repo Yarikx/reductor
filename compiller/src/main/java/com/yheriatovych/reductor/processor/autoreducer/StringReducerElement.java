@@ -7,7 +7,7 @@ import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.Utils;
 import com.yheriatovych.reductor.processor.ValidationException;
-import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
+import com.yheriatovych.reductor.processor.actioncreator.ActionCreatorElement;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;

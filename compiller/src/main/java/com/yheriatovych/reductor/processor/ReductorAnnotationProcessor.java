@@ -2,9 +2,10 @@ package com.yheriatovych.reductor.processor;
 
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.auto.service.AutoService;
+import com.yheriatovych.reductor.processor.actioncreator.ActionCreatorProcessingStep;
 import com.yheriatovych.reductor.processor.autoreducer.AutoReducerProcessingStep;
 import com.yheriatovych.reductor.processor.combinedstate.CombinedStateProcessingStep;
-import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
+import com.yheriatovych.reductor.processor.actioncreator.ActionCreatorElement;
 
 import javax.annotation.processing.Processor;
 import javax.lang.model.SourceVersion;

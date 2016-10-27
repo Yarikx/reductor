@@ -1,28 +1,26 @@
-package com.yheriatovych.reductor.processor;
+package com.yheriatovych.reductor.processor.actioncreator;
 
 import com.google.auto.common.BasicAnnotationProcessor;
-import com.google.auto.common.MoreElements;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.ActionCreator;
-import com.yheriatovych.reductor.processor.model.ActionCreatorAction;
-import com.yheriatovych.reductor.processor.model.ActionCreatorElement;
+import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.lang.model.element.*;
-import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
+public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
     private final Env env;
     private final Map<String, ActionCreatorElement> knownActionCreators;
 
-    ActionCreatorProcessingStep(Env env, Map<String, ActionCreatorElement> knownActionCreators) {
+    public ActionCreatorProcessingStep(Env env, Map<String, ActionCreatorElement> knownActionCreators) {
         this.env = env;
         this.knownActionCreators = knownActionCreators;
     }
