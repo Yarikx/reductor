@@ -32,7 +32,7 @@ public class ActionCreatorElement {
 
     public boolean hasAction(String actionType, List<? extends VariableElement> reducerArgs) {
         ActionCreatorAction actionCreator = actionMap.get(actionType);
-        if(actionCreator == null || reducerArgs.size() != actionCreator.arguments.size()) return false;
+        if (actionCreator == null || reducerArgs.size() != actionCreator.arguments.size()) return false;
         List<? extends VariableElement> arguments = actionCreator.arguments;
         for (int i = 0; i < arguments.size(); i++) {
             //we are doing black magic with checking if TypeName are equals
@@ -56,7 +56,7 @@ public class ActionCreatorElement {
     }
 
     public TypeMirror getType() {
-        return  typeElement.asType();
+        return typeElement.asType();
     }
 
     public static ActionCreatorElement parse(Element element, Env env) throws ValidationException {
@@ -67,6 +67,7 @@ public class ActionCreatorElement {
 
         List<ActionCreatorAction> actions = new ArrayList<>();
         for (Element methodElement : typeElement.getEnclosedElements()) {
+            if (methodElement.getKind() != ElementKind.METHOD) continue;
             actions.add(ActionCreatorAction.parse(MoreElements.asExecutable(methodElement), env));
         }
 
