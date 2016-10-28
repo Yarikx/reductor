@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.example.reducers;
+package com.yheriatovych.reductor.example.reductor.filter;
 
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
