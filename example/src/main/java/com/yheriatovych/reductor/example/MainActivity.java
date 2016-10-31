@@ -15,7 +15,7 @@ import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.Note;
 import com.yheriatovych.reductor.example.model.NotesFilter;
-import com.yheriatovych.reductor.example.reductor.filter.NotesFilterReducerImpl;
+import com.yheriatovych.reductor.example.reductor.filter.FilterActions;
 import com.yheriatovych.reductor.example.reductor.notelist.NotesActions;
 import com.yheriatovych.reductor.example.reductor.utils.UndoableReducer;
 
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
 
-    Store<AppState> store;
+    private Store<AppState> store;
     private AtomicInteger idGenerator = new AtomicInteger();
     private Cancelable mCancelable;
     private NotesActions notesActions;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 NotesFilter filter = NotesFilter.values()[position];
-                store.dispatch(NotesFilterReducerImpl.ActionCreator.setFilter(filter));
+                store.dispatch(Actions.creator(FilterActions.class).setFilter(filter));
             }
 
             @Override
