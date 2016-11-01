@@ -1,2 +1,2 @@
-include ':example', ':compiller', ':lib', 'rx-store'
+include ':example', ':compiller', ':lib', 'reductor-rxjava', 'reductor-rxjava2'
 
