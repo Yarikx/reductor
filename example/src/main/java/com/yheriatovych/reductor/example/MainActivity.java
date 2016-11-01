@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        notesActions = Actions.creator(NotesActions.class);
+        notesActions = Actions.from(NotesActions.class);
         store = ((ReductorApp) getApplicationContext()).store;
         setContentView(R.layout.activity_main);
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 NotesFilter filter = NotesFilter.values()[position];
-                store.dispatch(Actions.creator(FilterActions.class).setFilter(filter));
+                store.dispatch(Actions.from(FilterActions.class).setFilter(filter));
             }
 
             @Override

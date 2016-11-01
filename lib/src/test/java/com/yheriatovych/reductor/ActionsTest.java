@@ -1,8 +1,6 @@
 package com.yheriatovych.reductor;
 
 import com.yheriatovych.reductor.annotations.ActionCreator;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -23,7 +21,7 @@ public class ActionsTest {
 
     @Test
     public void testCreateDynamicProxy() {
-        Creator creator = Actions.creator(Creator.class);
+        Creator creator = Actions.from(Creator.class);
         Action action = creator.test1();
 
         assertEquals(Action.create("TEST1"), action);
@@ -31,7 +29,7 @@ public class ActionsTest {
 
     @Test
     public void testCreateDynamicProxy2() {
-        Creator creator = Actions.creator(Creator.class);
+        Creator creator = Actions.from(Creator.class);
         Action action = creator.test2(5);
 
         assertEquals(Action.create("TEST2", 5), action);
@@ -39,7 +37,7 @@ public class ActionsTest {
 
     @Test
     public void testCreateDynamicProxy3() {
-        Creator creator = Actions.creator(Creator.class);
+        Creator creator = Actions.from(Creator.class);
         Action action = creator.test3(42, "foobar");
 
         assertEquals(Action.create("TEST3", 42, "foobar"), action);
@@ -52,7 +50,7 @@ public class ActionsTest {
 
     @Test(expected = IllegalStateException.class)
     public void testFailsWhenDoNotHaveAnnotation() {
-        Creator2 creator = Actions.creator(Creator2.class);
+        Creator2 creator = Actions.from(Creator2.class);
     }
 
     @ActionCreator
@@ -62,7 +60,7 @@ public class ActionsTest {
 
     @Test(expected = IllegalStateException.class)
     public void testFailsWhenDoNotHaveMethodAnnotation() {
-        Creator3 creator = Actions.creator(Creator3.class);
+        Creator3 creator = Actions.from(Creator3.class);
     }
 
     @ActionCreator
@@ -80,7 +78,7 @@ public class ActionsTest {
 
     @Test
     public void testInstatntiateAutoClass() {
-        Creator4 creator = Actions.creator(Creator4.class);
+        Creator4 creator = Actions.from(Creator4.class);
         assertEquals(Creator4_AutoImpl.class, creator.getClass());
     }
 }

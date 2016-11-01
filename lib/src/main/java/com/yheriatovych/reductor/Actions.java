@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Actions {
     private static ConcurrentHashMap<Class<?>, Object> classCache = new ConcurrentHashMap<>();
 
-    public static <T> T creator(Class<T> actionCreator) {
+    public static <T> T from(Class<T> actionCreator) {
         Object creator = classCache.get(actionCreator);
         if (creator == null) {
             creator = createCreator(actionCreator);
