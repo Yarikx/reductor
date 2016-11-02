@@ -1,7 +1,7 @@
 language: android
 
 jdk:
-  - openjdk8
+  - oraclejdk8
 
 android:
   components:
@@ -12,8 +12,8 @@ android:
     - extra-android-m2repository
 
 script:
-  - jdk_switcher use openjdk6 && export JAVA6_HOME=$JAVA_HOME
-  - jdk_switcher use openjdk8 && export JAVA8_HOME=$JAVA_HOME
+  - jdk_switcher use openjdk7 && export JAVA6_HOME=$JAVA_HOME
+  - jdk_switcher use oraclejdk8 && export JAVA8_HOME=$JAVA_HOME
   - ./gradlew clean check
 
 after_success:
