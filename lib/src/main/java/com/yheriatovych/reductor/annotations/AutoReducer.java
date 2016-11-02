@@ -12,9 +12,6 @@ import java.lang.annotation.Target;
  * <p>
  * Generated class will have the same class name but with "Impl" suffix
  * <p>
- * Note: Generated class will also have {@code ActionCreator} nested class with static methods
- * to create corresponding actions
- * <p>
  * Example:
  * <pre><code>
  * &#64;AutoReducer
