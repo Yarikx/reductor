@@ -10,6 +10,18 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Actions {
     private static ConcurrentHashMap<Class<?>, Object> classCache = new ConcurrentHashMap<>();
 
+    /**
+     * Create instance of interface with action creator functions.
+     * <p>
+     * When reductor processor is available, will instantiate generated implementation.
+     * If generated class isn't available, fallback to dynamic proxy implementation.
+     * <p>
+     * Created instances are cached, so it's cheap to call this method many times for the same interface.
+     *
+     * @param actionCreator interface class
+     * @param <T>           type of provided interface
+     * @return instance of type T
+     */
     public static <T> T from(Class<T> actionCreator) {
         Object creator = classCache.get(actionCreator);
         if (creator == null) {
@@ -38,7 +50,7 @@ public class Actions {
     }
 
     private static Object createDynamicProxy(Class<?> actionCreator) {
-        if(actionCreator.getAnnotation(ActionCreator.class) == null) {
+        if (actionCreator.getAnnotation(ActionCreator.class) == null) {
             throw new IllegalStateException(String.format(
                     "%s should be interface annotated with @%s", actionCreator, ActionCreator.class.getSimpleName()));
         }
@@ -57,7 +69,7 @@ public class Actions {
         return Proxy.newProxyInstance(actionCreator.getClassLoader(), new Class<?>[]{actionCreator},
                 (instance, method, args) -> {
                     String action = actionsMap.get(method);
-                    if(args == null){
+                    if (args == null) {
                         args = new Object[0];
                     }
                     return new Action(action, args);
