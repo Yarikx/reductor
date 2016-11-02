@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.example.reducers;
+package com.yheriatovych.reductor.example.reductor.notelist;
 
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
@@ -10,21 +10,22 @@ import java.util.List;
 
 @AutoReducer
 public abstract class NotesListReducer implements Reducer<List<Note>> {
-    public static final String ADD_ACTION = "ADD_ITEM";
-    public static final String TOGGLE = "TOGGLE";
-    public static final String REMOVE_ITEM = "REMOVE_ITEM";
 
     @AutoReducer.InitialState
     List<Note> initialState() {
         return TreePVector.empty();
     }
 
-    @Action(ADD_ACTION)
+    @Action(value = NotesActions.ADD_ACTION,
+            from = NotesActions.class,
+            generateActionCreator = false)
     public List<Note> add(List<Note> state, int id, String content) {
         return TreePVector.from(state).plus(new Note(id, content, false));
     }
 
-    @Action(TOGGLE)
+    @Action(value = NotesActions.TOGGLE,
+            from = NotesActions.class,
+            generateActionCreator = false)
     public List<Note> toggle(List<Note> notes, int noteId) {
         for (int i = 0; i < notes.size(); i++) {
             Note note = notes.get(i);
@@ -34,7 +35,9 @@ public abstract class NotesListReducer implements Reducer<List<Note>> {
         return notes;
     }
 
-    @Action(REMOVE_ITEM)
+    @Action(value = NotesActions.REMOVE_ITEM,
+            from = NotesActions.class,
+            generateActionCreator = false)
     public List<Note> remove(List<Note> notes, int id) {
         for (int i = 0, notesSize = notes.size(); i < notesSize; i++) {
             Note note = notes.get(i);

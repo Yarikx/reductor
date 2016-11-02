@@ -12,9 +12,6 @@ import java.lang.annotation.Target;
  * <p>
  * Generated class will have the same class name but with "Impl" suffix
  * <p>
- * Note: Generated class will also have {@code ActionCreator} nested class with static methods
- * to create corresponding actions
- * <p>
  * Example:
  * <pre><code>
  * &#64;AutoReducer
@@ -55,6 +52,24 @@ public @interface AutoReducer {
          * @return String type which will be {@link com.yheriatovych.reductor.Action#type}
          */
         String value();
+
+        /**
+         * if true corresponding static action created will be generated
+         *
+         * @return true if action creator should be generated.
+         * @deprecated left here for compatibility, in new versions will be removed.
+         * Use {@link #from()} to validate correspondence with action creator.
+         */
+        boolean generateActionCreator() default true;
+
+        /**
+         * Action creator interface, where corresponding action creator can be found.
+         * This information is used to validate arguments types and order to validate correspondence.
+         *
+         * @return class object of interface with action creators
+         * @see ActionCreator
+         */
+        Class<?> from() default Void.class;
     }
 
     /**

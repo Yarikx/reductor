@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.combinedstate;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.javapoet.TypeName;

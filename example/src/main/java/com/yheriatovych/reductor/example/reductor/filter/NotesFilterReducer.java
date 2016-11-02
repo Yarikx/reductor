@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.example.reducers;
+package com.yheriatovych.reductor.example.reductor.filter;
 
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
@@ -12,8 +12,10 @@ public abstract class NotesFilterReducer implements Reducer<NotesFilter> {
         return NotesFilter.ALL;
     }
 
-    @Action("SET_FILTER")
-    public NotesFilter setFilter(NotesFilter state, NotesFilter value) {
+    @Action(value = FilterActions.SET_FILTER,
+            generateActionCreator = false,
+            from = FilterActions.class)
+    NotesFilter setFilter(NotesFilter state, NotesFilter value) {
         return value;
     }
 

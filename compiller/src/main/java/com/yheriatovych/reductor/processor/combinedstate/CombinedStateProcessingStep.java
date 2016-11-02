@@ -1,38 +1,49 @@
-package com.yheriatovych.reductor.processor;
+package com.yheriatovych.reductor.processor.combinedstate;
 
-import com.google.auto.service.AutoService;
+import com.google.auto.common.BasicAnnotationProcessor;
+import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.CombinedState;
-import com.yheriatovych.reductor.processor.model.CombinedStateElement;
-import com.yheriatovych.reductor.processor.model.StateProperty;
+import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.Utils;
+import com.yheriatovych.reductor.processor.ValidationException;
 
-import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
-import java.util.*;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
-import static com.yheriatovych.reductor.processor.Utils.join;
-import static com.yheriatovych.reductor.processor.Utils.map;
-import static com.yheriatovych.reductor.processor.Utils.reduce;
+import static com.yheriatovych.reductor.processor.Utils.*;
 
-@AutoService(Processor.class)
-public class CombinedStateProcessor extends BaseProcessor {
+public class CombinedStateProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
-    public static final String REDUCER_SUFFIX = "Reducer";
+    private static final String REDUCER_SUFFIX = "Reducer";
+    private final Env env;
+
+    public CombinedStateProcessingStep(Env env) {
+        this.env = env;
+    }
+
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(CombinedState.class);
-        for (Element element : elements) {
+    public Set<? extends Class<? extends Annotation>> annotations() {
+        return Collections.singleton(CombinedState.class);
+    }
+
+    @Override
+    public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+        for (Element element : elementsByAnnotation.values()) {
             TypeElement combinedStateTypeElement = (TypeElement) element;
 
             try {
                 CombinedStateElement combinedStateElement = CombinedStateElement.parseCombinedElement(combinedStateTypeElement);
-                if(combinedStateElement == null) continue;
+                if (combinedStateElement == null) continue;
 
                 ClassName stateClassName = emmitCombinedStateImplementation(combinedStateElement);
                 emmitCombinedReducer(env, combinedStateElement, stateClassName);
@@ -43,7 +54,7 @@ public class CombinedStateProcessor extends BaseProcessor {
                 e.printStackTrace();
             }
         }
-        return true;
+        return Collections.emptySet();
     }
 
     private ClassName emmitCombinedStateImplementation(CombinedStateElement combinedStateElement) throws IOException {
@@ -135,11 +146,11 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .addParameter(reducerActionType, actionParam)
                 .addCode(emitDestructuringBlock(properties, env)).addCode("\n")
                 .addCode(dispatchingBlockBuilder).addCode("\n")
-                .addCode(CombinedStateProcessor.emitReturnBlock(stateClassName, properties))
+                .addCode(CombinedStateProcessingStep.emitReturnBlock(stateClassName, properties))
                 .build();
 
         ClassName builderClassName = ClassName.get(combinedReducerClassName.packageName(), combinedReducerClassName.simpleName(), "Builder");
-        TypeSpec reducerBuilderTypeSpec = CombinedStateProcessor.createReducerBuilder(combinedStateElement, combinedReducerClassName, builderClassName);
+        TypeSpec reducerBuilderTypeSpec = CombinedStateProcessingStep.createReducerBuilder(combinedStateElement, combinedReducerClassName, builderClassName);
 
 
         MethodSpec builderFactoryMethod = MethodSpec.methodBuilder("builder")
@@ -194,7 +205,7 @@ public class CombinedStateProcessor extends BaseProcessor {
                 .beginControlFlow("if (state != null" + equalsCondition + ")")
                 .addStatement("return state")
                 .nextControlFlow("else")
-                .addStatement("return new $T("+args + ")", stateClassName)
+                .addStatement("return new $T(" + args + ")", stateClassName)
                 .endControlFlow()
                 .build();
     }
@@ -243,12 +254,5 @@ public class CombinedStateProcessor extends BaseProcessor {
         builder.addMethod(buildMethodBuilder.build());
 
         return builder.build();
-    }
-
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<>(Collections.singletonList(
-                CombinedState.class.getCanonicalName()
-        ));
     }
 }

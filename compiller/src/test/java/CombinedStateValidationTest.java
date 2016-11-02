@@ -1,5 +1,5 @@
 import com.google.testing.compile.JavaFileObjects;
-import com.yheriatovych.reductor.processor.CombinedStateProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -48,7 +48,8 @@ public class CombinedStateValidationTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -66,7 +67,7 @@ public class CombinedStateValidationTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("void is not allowed as return type for property method")
                 .in(source)
@@ -85,7 +86,7 @@ public class CombinedStateValidationTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("Only interfaces and @AutoValue classes are supported as @CombinedState")
                 .in(source)
@@ -104,7 +105,7 @@ public class CombinedStateValidationTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("state property accessor foo(java.lang.String) should not have any parameters")
                 .in(source)

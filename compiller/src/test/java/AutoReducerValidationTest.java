@@ -1,5 +1,5 @@
 import com.google.testing.compile.JavaFileObjects;
-import com.yheriatovych.reductor.processor.AutoReducerProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -21,7 +21,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("You can apply AutoReducer only to classes")
                 .in(source).onLine(7);
@@ -42,7 +42,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("AutoReducer annotated reducers should not be inner classes. Probably 'static' modifier missing")
                 .in(source).onLine(8);
@@ -63,7 +63,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings();
     }
 
@@ -79,7 +79,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("test.FoobarReducer should implement Reducer interface")
                 .in(source).onLine(6);
@@ -102,7 +102,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("Method handleAction(java.lang.String,int) should return type assignable to state type java.lang.String")
                 .in(source).onLine(9);
@@ -125,7 +125,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("Method handleAction() should have at least 1 arguments: state of type java.lang.String")
                 .in(source).onLine(9);
@@ -148,7 +148,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("First parameter action of method handleAction(int) should have the same type as state (java.lang.String)")
                 .in(source).onLine(9);
@@ -170,7 +170,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("No accessible constructors available for class test.FoobarReducer")
                 .in(source)
@@ -194,7 +194,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("handleAction(java.lang.String) has 'private' modifier and is not accessible from child classes")
                 .in(source).onLine(9);
@@ -217,7 +217,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutError();
     }
 
@@ -238,7 +238,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutError();
     }
 
@@ -260,7 +260,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("Method init() should be may be annotated " +
                         "with either @AutoReducer.InitialState or @AutoReducer.Action but not both")
@@ -290,7 +290,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("Methods init1() and init2() are both annotated with @AutoReducer.InitialState." +
                         " Only one @AutoReducer.InitialState method is allowed")
@@ -315,7 +315,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("init() has 'private' modifier and is not accessible from child classes")
                 .in(source)
@@ -339,7 +339,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("Method init() should return type assignable to state type java.lang.Integer")
                 .in(source)
@@ -363,7 +363,7 @@ public class AutoReducerValidationTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("Method init(int) should not have any parameters")
                 .in(source)

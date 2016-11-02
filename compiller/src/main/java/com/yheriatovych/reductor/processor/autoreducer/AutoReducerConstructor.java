@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.autoreducer;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;

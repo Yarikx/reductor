@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.autoreducer;
 
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;

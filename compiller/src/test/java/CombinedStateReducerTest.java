@@ -1,6 +1,6 @@
 import com.google.auto.value.processor.AutoValueProcessor;
 import com.google.testing.compile.JavaFileObjects;
-import com.yheriatovych.reductor.processor.CombinedStateProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -59,7 +59,8 @@ public class CombinedStateReducerTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -155,7 +156,8 @@ public class CombinedStateReducerTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -250,7 +252,8 @@ public class CombinedStateReducerTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -353,6 +356,27 @@ public class CombinedStateReducerTest {
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
+    }
+
+    @Test
+    public void testAutoValueNoReducerGeneration() {
+        JavaFileObject source = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
+                "\n" +
+                "import com.google.auto.value.AutoValue;\n" +
+                "import com.yheriatovych.reductor.annotations.CombinedState;\n" +
+                "import java.util.Date;\n" +
+                "\n" +
+                "@CombinedState\n" +
+                "@AutoValue\n" +
+                "public abstract class Foobar {\n" +
+                "    abstract String foo();\n" +
+                "    abstract Date bar();\n" +
+                "}");
+
+        assertAbout(javaSource()).that(source)
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
+                .compilesWithoutWarnings();
     }
 
     @Test
@@ -501,7 +525,8 @@ public class CombinedStateReducerTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);

@@ -1,5 +1,6 @@
 import com.google.testing.compile.JavaFileObjects;
-import com.yheriatovych.reductor.processor.AutoReducerProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -49,7 +50,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -96,7 +97,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -143,7 +144,7 @@ public class AutoReducerGeneratorTest {
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -177,17 +178,15 @@ public class AutoReducerGeneratorTest {
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -217,17 +216,15 @@ public class AutoReducerGeneratorTest {
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -258,23 +255,22 @@ public class AutoReducerGeneratorTest {
                 "import java.lang.String;\n" +
                 "\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
-                "  public FoobarReducer(int a) {\n" +
-                "      super(a);\n" +
+                "  public FoobarReducerImpl(int a) {\n" +
+                "    super(a);\n" +
                 "  }\n" +
                 "\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
                 "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
-                " ");
+                "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -305,23 +301,22 @@ public class AutoReducerGeneratorTest {
                 "import java.lang.String;\n" +
                 "\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
-                "  public FoobarReducer(int a) {\n" +
-                "      super(a);\n" +
+                "  public FoobarReducerImpl(int a) {\n" +
+                "    super(a);\n" +
                 "  }\n" +
                 "\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
                 "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
-                " ");
+                "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -356,17 +351,15 @@ public class AutoReducerGeneratorTest {
                 "    }\n" +
                 "\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -401,17 +394,15 @@ public class AutoReducerGeneratorTest {
                 "    }\n" +
                 "\n" +
                 "    switch (action.type) {\n" +
-                "      default: return state;\n" +
+                "      default:\n" +
+                "        return state;\n" +
                 "    }\n" +
-                "  }\n" +
-                "\n" +
-                "  public static class ActionCreator {\n" +
                 "  }\n" +
                 "}");
 
         assertAbout(javaSource()).that(source)
                 .withCompilerOptions("-Xlint:-processing")
-                .processedWith(new AutoReducerProcessor())
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);

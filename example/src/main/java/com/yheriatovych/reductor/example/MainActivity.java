@@ -9,26 +9,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import com.yheriatovych.reductor.Actions;
 import com.yheriatovych.reductor.Cancelable;
 import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.Note;
 import com.yheriatovych.reductor.example.model.NotesFilter;
-import com.yheriatovych.reductor.example.reducers.NotesFilterReducerImpl;
-import com.yheriatovych.reductor.example.reducers.NotesListReducerImpl;
-import com.yheriatovych.reductor.example.reducers.utils.UndoableReducer;
+import com.yheriatovych.reductor.example.reductor.filter.FilterActions;
+import com.yheriatovych.reductor.example.reductor.notelist.NotesActions;
+import com.yheriatovych.reductor.example.reductor.utils.UndoableReducer;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
 
-    Store<AppState> store;
+    private Store<AppState> store;
     private AtomicInteger idGenerator = new AtomicInteger();
     private Cancelable mCancelable;
+    private NotesActions notesActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        notesActions = Actions.from(NotesActions.class);
         store = ((ReductorApp) getApplicationContext()).store;
         setContentView(R.layout.activity_main);
 
@@ -39,11 +42,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final TodoAdapter adapter = new TodoAdapter(store.getState().notes(),
-                note -> store.dispatch(NotesListReducerImpl.ActionCreator.toggle(note.id)));
+                note -> store.dispatch(notesActions.toggle(note.id)));
 
         new ItemTouchHelper(new NoteTouchCallback(position -> {
             Note note = store.getState().notes().get(position);
-            store.dispatch(NotesListReducerImpl.ActionCreator.remove(note.id));
+            store.dispatch(notesActions.remove(note.id));
         })).attachToRecyclerView(recyclerView);
 
 
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.add).setOnClickListener(view -> {
             String note = editText.getText().toString();
             int id = idGenerator.getAndIncrement();
-            store.dispatch(NotesListReducerImpl.ActionCreator.add(id, note));
+            store.dispatch(notesActions.add(id, note));
             editText.setText(null);
         });
     }
@@ -70,8 +73,9 @@ public class MainActivity extends AppCompatActivity {
         spinner.setSelection(0);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                store.dispatch(NotesFilterReducerImpl.ActionCreator.setFilter(NotesFilter.values()[i]));
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                NotesFilter filter = NotesFilter.values()[position];
+                store.dispatch(Actions.from(FilterActions.class).setFilter(filter));
             }
 
             @Override

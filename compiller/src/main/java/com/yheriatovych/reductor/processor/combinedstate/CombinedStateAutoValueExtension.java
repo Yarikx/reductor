@@ -1,10 +1,11 @@
-package com.yheriatovych.reductor.processor;
+package com.yheriatovych.reductor.processor.combinedstate;
 
 import com.google.auto.service.AutoService;
 import com.google.auto.value.extension.AutoValueExtension;
 import com.squareup.javapoet.ClassName;
 import com.yheriatovych.reductor.annotations.CombinedState;
-import com.yheriatovych.reductor.processor.model.CombinedStateElement;
+import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.ValidationException;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
@@ -30,7 +31,7 @@ public class CombinedStateAutoValueExtension extends AutoValueExtension {
             Env env = new Env(processingEnvironment.getTypeUtils(), processingEnvironment.getElementUtils(), processingEnvironment.getMessager(), processingEnvironment.getFiler());
             try {
                 CombinedStateElement combinedStateElement = CombinedStateElement.parseAutoValueCombinedElement(typeElement, context.properties());
-                CombinedStateProcessor.emmitCombinedReducer(env, combinedStateElement, ClassName.get(context.packageName(), "AutoValue_" + context.autoValueClass().getSimpleName()));
+                CombinedStateProcessingStep.emmitCombinedReducer(env, combinedStateElement, ClassName.get(context.packageName(), "AutoValue_" + context.autoValueClass().getSimpleName()));
             } catch (ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
             } catch (Exception e) {

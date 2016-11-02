@@ -3,6 +3,7 @@ package com.yheriatovych.reductor.processor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -24,7 +25,7 @@ public class Env {
         printMessage(Diagnostic.Kind.ERROR, element, message, args);
     }
 
-    private void printMessage(Diagnostic.Kind level, Element element, String message, Object args) {
+    private void printMessage(Diagnostic.Kind level, Element element, String message, Object... args) {
         messager.printMessage(level, String.format(message, args), element);
     }
 
@@ -40,4 +41,12 @@ public class Env {
         return elements.getPackageOf(element).getQualifiedName().toString();
     }
 
+    public TypeMirror asType(Class<?> clazz) {
+        return elements.getTypeElement(clazz.getCanonicalName())
+                .asType();
+    }
+
+    public Elements getElements() {
+        return elements;
+    }
 }

@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.processor.model;
+package com.yheriatovych.reductor.processor.autoreducer;
 
 import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
@@ -7,6 +7,7 @@ import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.Utils;
 import com.yheriatovych.reductor.processor.ValidationException;
+import com.yheriatovych.reductor.processor.actioncreator.ActionCreatorElement;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
@@ -15,6 +16,7 @@ import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class StringReducerElement {
     public final DeclaredType stateType;
@@ -39,7 +41,7 @@ public class StringReducerElement {
         return env.getPackageName(originalElement);
     }
 
-    public static StringReducerElement parseStringReducerElement(Element element, Env env) throws ValidationException {
+    public static StringReducerElement parseStringReducerElement(Element element, Map<String, ActionCreatorElement> knownActionCreators, Env env) throws ValidationException {
         if (element.getKind() != ElementKind.CLASS) {
             throw new ValidationException(element, "You can apply %s only to classes", AutoReducer.class.getSimpleName());
         }
@@ -70,7 +72,7 @@ public class StringReducerElement {
                 }
                 initMethod = AutoReducerInit.parse(env, executableElement, stateType);
             } else {
-                ReduceAction reduceAction = ReduceAction.parseReduceAction(env, stateType, executableElement);
+                ReduceAction reduceAction = ReduceAction.parseReduceAction(env, stateType, executableElement, knownActionCreators);
                 if (reduceAction != null) {
                     actions.add(reduceAction);
                 }

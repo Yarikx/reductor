@@ -11,11 +11,11 @@ import java.util.List;
 
 public class Utils {
 
-    interface Func1<T, R> {
+    public interface Func1<T, R> {
         R call(T value);
     }
 
-    interface Func2<T1, T2, R> {
+    public interface Func2<T1, T2, R> {
         R call(T1 value1, T2 value2);
     }
 

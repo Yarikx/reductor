@@ -1,4 +1,4 @@
-package com.yheriatovych.reductor.example.reducers.utils;
+package com.yheriatovych.reductor.example.reductor.utils;
 
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.Reducer;

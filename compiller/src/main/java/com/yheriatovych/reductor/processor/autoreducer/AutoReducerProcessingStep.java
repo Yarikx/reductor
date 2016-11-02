@@ -1,49 +1,54 @@
-package com.yheriatovych.reductor.processor;
+package com.yheriatovych.reductor.processor.autoreducer;
 
-import com.google.auto.service.AutoService;
+import com.google.auto.common.BasicAnnotationProcessor;
+import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.AutoReducer;
-import com.yheriatovych.reductor.processor.model.ActionHandlerArg;
-import com.yheriatovych.reductor.processor.model.AutoReducerConstructor;
-import com.yheriatovych.reductor.processor.model.ReduceAction;
-import com.yheriatovych.reductor.processor.model.StringReducerElement;
+import com.yheriatovych.reductor.processor.ElementNotReadyException;
+import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.actioncreator.ActionCreatorElement;
 
-import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.*;
 
-@AutoService(Processor.class)
-public class AutoReducerProcessor extends BaseProcessor {
+public class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
 
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<>(Collections.singletonList(
-                AutoReducer.class.getCanonicalName()
-        ));
+    private final Env env;
+    private final Map<String, ActionCreatorElement> knownActionCreators;
+
+    public AutoReducerProcessingStep(Env env, Map<String, ActionCreatorElement> knownActionCreators) {
+        this.env = env;
+        this.knownActionCreators = knownActionCreators;
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Set<? extends Element> stringReducers = roundEnv.getElementsAnnotatedWith(AutoReducer.class);
-        for (Element stringReducer : stringReducers) {
+    public Set<? extends Class<? extends Annotation>> annotations() {
+        return Collections.singleton(AutoReducer.class);
+    }
+
+    @Override
+    public Set<Element> process(SetMultimap<Class<? extends Annotation>, Element> elementsByAnnotation) {
+        Set<Element> delayed = new HashSet<>();
+        for (Element stringReducer : elementsByAnnotation.values()) {
             try {
-                StringReducerElement reducerElement = StringReducerElement.parseStringReducerElement(stringReducer, env);
+                StringReducerElement reducerElement = StringReducerElement.parseStringReducerElement(stringReducer, knownActionCreators, env);
                 emitGeneratedClass(reducerElement, reducerElement.getPackageName(env), reducerElement.originalElement);
             } catch (com.yheriatovych.reductor.processor.ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
+            } catch (ElementNotReadyException e){
+                delayed.add(stringReducer);
             } catch (Exception e) {
                 e.printStackTrace();
                 env.printError(stringReducer, "Internal processor error:\n %s", e.getMessage());
             }
         }
-
-        return true;
+        return delayed;
     }
 
     private void emitGeneratedClass(StringReducerElement reducerElement, String packageName, TypeElement originalTypeElement) throws IOException {
@@ -70,12 +75,8 @@ public class AutoReducerProcessor extends BaseProcessor {
         CodeBlock.Builder reduceBodyBuilder = CodeBlock.builder()
                 .beginControlFlow("switch (action.type)");
 
-
-        TypeSpec.Builder actionCreatorBuilder = TypeSpec.classBuilder("ActionCreator")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-
         for (ReduceAction action : reducerElement.actions) {
-            final List<ActionHandlerArg> args = action.args;
+            final List<VariableElement> args = action.args;
             reduceBodyBuilder
                     .add("case $S:", action.action)
                     .indent()
@@ -89,8 +90,8 @@ public class AutoReducerProcessor extends BaseProcessor {
                         .add("return $N(state", action.getMethodName());
 
                 for (int i = 0; i < args.size(); i++) {
-                    final ActionHandlerArg arg = args.get(i);
-                    reduceBodyBuilder.add(", ($T) action.getValue($L)", arg.argType, i);
+                    final VariableElement arg = args.get(i);
+                    reduceBodyBuilder.add(", ($T) action.getValue($L)", arg.asType(), i);
                 }
                 reduceBodyBuilder.add(");\n");
             }
@@ -106,15 +107,12 @@ public class AutoReducerProcessor extends BaseProcessor {
             } else {
                 actionCreatorMethodBuilder
                         .addCode("return $T.create($S", Action.class, action.action);
-                for (int i = 0; i < args.size(); i++) {
-                    ActionHandlerArg arg = args.get(i);
-                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.argType), arg.argName);
-                    actionCreatorMethodBuilder.addCode(", $N", arg.argName);
+                for (VariableElement arg : args) {
+                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.asType()), arg.getSimpleName().toString());
+                    actionCreatorMethodBuilder.addCode(", $N", arg.getSimpleName().toString());
                 }
                 actionCreatorMethodBuilder.addCode(");\n");
             }
-
-            actionCreatorBuilder.addMethod(actionCreatorMethodBuilder.build());
         }
 
         typeSpecBuilder
@@ -127,8 +125,12 @@ public class AutoReducerProcessor extends BaseProcessor {
                                 .unindent()
                                 .endControlFlow()
                                 .build())
-                        .build())
-                .addType(actionCreatorBuilder.build());
+                        .build());
+
+        TypeSpec actionCreator = emitActionCreator(reducerElement);
+        if (actionCreator != null) {
+            typeSpecBuilder.addType(actionCreator);
+        }
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpecBuilder.build())
                 .build();
@@ -156,5 +158,39 @@ public class AutoReducerProcessor extends BaseProcessor {
         }
 
         return methodSpecs;
+    }
+
+    private TypeSpec emitActionCreator(StringReducerElement reducerElement) {
+        TypeSpec.Builder actionCreatorBuilder = TypeSpec.classBuilder("ActionCreator")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+
+        boolean hasActions = false;
+        for (ReduceAction action : reducerElement.actions) {
+            if (!action.generateActionCreator) continue;
+            hasActions = true;
+            final List<VariableElement> args = action.args;
+
+            MethodSpec.Builder actionCreatorMethodBuilder = MethodSpec.methodBuilder(action.getMethodName())
+                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                    .returns(Action.class);
+
+            if (args.size() == 0) {
+                actionCreatorMethodBuilder
+                        .addStatement("return $T.create($S)", Action.class, action.action);
+            } else {
+                actionCreatorMethodBuilder
+                        .addCode("return $T.create($S", Action.class, action.action);
+                for (VariableElement arg : args) {
+                    actionCreatorMethodBuilder.addParameter(TypeName.get(arg.asType()), arg.getSimpleName().toString());
+                    actionCreatorMethodBuilder.addCode(", $N", arg.getSimpleName());
+                }
+                actionCreatorMethodBuilder.addCode(");\n");
+            }
+            actionCreatorBuilder.addMethod(actionCreatorMethodBuilder.build());
+
+        }
+        return hasActions
+                ? actionCreatorBuilder.build()
+                : null;
     }
 }

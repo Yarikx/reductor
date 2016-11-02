@@ -1,5 +1,5 @@
 import com.google.testing.compile.JavaFileObjects;
-import com.yheriatovych.reductor.processor.CombinedStateProcessor;
+import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
 import org.junit.Test;
 
 import javax.tools.JavaFileObject;
@@ -48,7 +48,8 @@ public class CombinedStateImplTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -86,7 +87,8 @@ public class CombinedStateImplTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
@@ -124,7 +126,8 @@ public class CombinedStateImplTest {
                 "}");
 
         assertAbout(javaSource()).that(source)
-                .processedWith(new CombinedStateProcessor())
+                .withCompilerOptions("-Xlint:-processing")
+                .processedWith(new ReductorAnnotationProcessor())
                 .compilesWithoutWarnings()
                 .and()
                 .generatesSources(generatedPojo);
