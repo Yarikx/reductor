@@ -1,9 +1,34 @@
 # Reductor Releases #
 
+### Version 0.10.0 - November 3, 2016
+
+#### New feature: Action creators
+
+This feature allow to define action creators as interface separately from reducer.
+This allows:
+
+ - Separate action definition and reducer handler.
+ - Get rid of direct usage of some of generated code (action creators generated in `AutoReducer` reducers).
+ - Per-action validation for `AutoReducer` reducers to have the same values as in corresponding action creator. 
+ - Actions can be "shared" between multiple reducers.
+ - One reducer can handle actions from multiple Action creators.
+ 
+To create instance of Action creator `Actions.from(class)` can be used. 
+Example: [interface](https://github.com/Yarikx/reductor/blob/master/example/src/main/java/com/yheriatovych/reductor/example/reductor/notelist/NotesActions.java),
+   [usage](https://github.com/Yarikx/reductor/blob/master/example/src/main/java/com/yheriatovych/reductor/example/MainActivity.java#L34).
+   
+"Old" action creators in `AutoReducer` is deprecated but still supported (will be removed in next version).
+
+#### Other changes
+ - Action class now has multiple values (`Object[] values` instead of `Object value`).
+ - New `Store` method `forEach`: similar to `subscribe` but propagate initial value immediately. 
+ - New module `reductor-rxjava2` to observe `Store` as RxJava2 `Observable` or `Flowable`.
+
 ### Version 0.9.3 - October 11, 2016
   - Fix reducer code generation for `@CombinedState` class with no properties 
 
 ### Version 0.9.2 - October 11, 2016
+
 #### New Features
   - Big update on `@CombinedState`. 
   Now `@AutoValue` value classes are supported as combined state!
