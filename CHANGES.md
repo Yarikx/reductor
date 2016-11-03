@@ -4,16 +4,16 @@
 
 #### New feature: Action creators
 
-This feature allow to define action creators as interface separately from reducer.
+This feature allows defining action creators as interface separately from reducer.
 This allows:
 
  - Separate action definition and reducer handler.
- - Get rid of direct usage of some of generated code (action creators generated in `AutoReducer` reducers).
+ - Get rid of direct usage of some of the generated code (action creators generated in `AutoReducer` reducers).
  - Per-action validation for `AutoReducer` reducers to have the same values as in corresponding action creator. 
  - Actions can be "shared" between multiple reducers.
  - One reducer can handle actions from multiple Action creators.
  
-To create instance of Action creator `Actions.from(class)` can be used. 
+To create an instance of Action creator `Actions.from(class)` can be used. 
 Example: [interface](https://github.com/Yarikx/reductor/blob/master/example/src/main/java/com/yheriatovych/reductor/example/reductor/notelist/NotesActions.java),
    [usage](https://github.com/Yarikx/reductor/blob/master/example/src/main/java/com/yheriatovych/reductor/example/MainActivity.java#L34).
    
@@ -23,6 +23,7 @@ Example: [interface](https://github.com/Yarikx/reductor/blob/master/example/src/
  - Action class now has multiple values (`Object[] values` instead of `Object value`).
  - New `Store` method `forEach`: similar to `subscribe` but propagate initial value immediately. 
  - New module `reductor-rxjava2` to observe `Store` as RxJava2 `Observable` or `Flowable`.
+
 
 ### Version 0.9.3 - October 11, 2016
   - Fix reducer code generation for `@CombinedState` class with no properties 
