@@ -53,52 +53,63 @@ if you want to use features as [@CombinedState](#combine-reducers) and [@AutoRed
 ```java
 //state will be just integer
 //define actions
-public static final String ACTION_INCREMENT = "ACTION_INCREMENT";
-public static final String ACTION_ADD = "ACTION_ADD";
+@ActionCreator
+    interface CounterActions {
+        String INCREMENT = "INCREMENT";
+        String ADD = "ADD";
+                
+        @ActionCreator.Action(INCREMENT)
+        Action increment();
+        
+        @ActionCreator.Action(ADD)
+        Action add(int value);
+    }
   
 //Define reducer                                                                 
-public class CounterReducer implements Reducer<Integer> {        
-    @Override                                                    
-    public Integer reduce(Integer state, Action action) {        
-        switch (action.type){                                    
-            case ACTION_INCREMENT:                               
-                return state + 1;
-            case ACTION_ADD:
-                return state + (int) action.value;  
-            default:                                             
-                return state;                                    
-        }                                                        
-    }                                                            
-}                                
+@AutoReducer
+abstract class CounterReducer implements Reducer<Integer> {
+    @AutoReducer.InitialState
+    int initialState() {
+        return 0;
+    }
 
-//(Optional) Create action creators
-public class CounterActionCreator {         
-    public static Action increment() {             
-        return new Action(ACTION_INCREMENT);
-    }                                       
-                                            
-    public static Action add(int n) {             
-        return new Action(ACTION_DECREMENT, n);
-    }                                       
-}  
+    @AutoReducer.Action(
+            value = CounterActions.INCREMENT,
+            from = CounterActions.class)
+    int increment(int state) {
+        return state + 1;
+    }
 
+    @AutoReducer.Action(
+            value = CounterActions.ADD,
+            from = CounterActions.class)
+    int add(int state, int value) {
+        return state + value;
+    }
+            
+    public static CounterReducer create() {
+        return new CounterReducerImpl();
+    }
+}
 
 //Now you can create store and dispatch some actions
 public static void main(String[] args) {
     //Now you can create store and dispatch some actions
-    Store<Integer> counterStore = Store.create(new CounterReducer(), 0);
-    
+    Store<Integer> counterStore = Store.create(CounterReducer.create());
+
     //you can access state anytime with Store.getState()
     System.out.println(counterStore.getState());             //print 0  
+    
+    CounterActions actions = Actions.from(CounterActions.class);
 
     //you can subscribe to state changes 
     counterStore.subscribe(state -> System.out.println(state));
 
-    counterStore.dispatch(CounterActionCreator.increment()); //print 1  
+    counterStore.dispatch(actions.increment()); //print 1  
 
-    counterStore.dispatch(CounterActionCreator.increment()); //print 2  
+    counterStore.dispatch(actions.increment()); //print 2  
 
-    counterStore.dispatch(CounterActionCreator.add(5));      //print 7  
+    counterStore.dispatch(actions.add(5));      //print 7
 }
 ```
 
@@ -193,7 +204,7 @@ public static void main(String[] args) {
 }
 ```
 
-Note that `@CombinedState` annotated class needs to be interface with only accessor methods.
+Note that `@CombinedState` annotated class needs to be interface or `AutoValue` abstract class.
 
 ### AutoReducer 
 
