@@ -88,7 +88,7 @@ abstract class CounterReducer implements Reducer<Integer> {
     }
             
     public static CounterReducer create() {
-        return new CounterReducerImpl();
+        return new CounterReducerImpl(); //Note: usage of generated class
     }
 }
 
@@ -100,6 +100,7 @@ public static void main(String[] args) {
     //you can access state anytime with Store.getState()
     System.out.println(counterStore.getState());             //print 0  
     
+    //no need to implement CounterActions, we can do it for you
     CounterActions actions = Actions.from(CounterActions.class);
 
     //you can subscribe to state changes 
