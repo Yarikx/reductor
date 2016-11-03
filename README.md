@@ -54,16 +54,16 @@ if you want to use features as [@CombinedState](#combine-reducers) and [@AutoRed
 //state will be just integer
 //define actions
 @ActionCreator
-    interface CounterActions {
-        String INCREMENT = "INCREMENT";
-        String ADD = "ADD";
-                
-        @ActionCreator.Action(INCREMENT)
-        Action increment();
-        
-        @ActionCreator.Action(ADD)
-        Action add(int value);
-    }
+interface CounterActions {
+    String INCREMENT = "INCREMENT";
+    String ADD = "ADD";
+            
+    @ActionCreator.Action(INCREMENT)
+    Action increment();
+    
+    @ActionCreator.Action(ADD)
+    Action add(int value);
+}
   
 //Define reducer                                                                 
 @AutoReducer
