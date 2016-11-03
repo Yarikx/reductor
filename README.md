@@ -277,24 +277,49 @@ abstract class ItemsReducer implements Reducer<List<String>> {
 }
 ```
 
-Reductor will also generate static `ActionCreator` class with typesafe action creation functions
-```java
-//Static class in generated ItemsReducerImpl
-public static class ActionCreator {
-  public static Action add(String value) {
-    return new Action("ADD_ITEM", value);
-  }
-  public static Action remove(String value) {
-    return new Action("REMOVE_ITEM", value);
-  }
-  public static Action removeByIndex(int index) {
-    return new Action("REMOVE_BY_INDEX", index);
-  }
-}
+`@AutoReducer.Action` annotation supports declaring action creator.
+That will check at compile time if there is such action creator with the same parameters. 
+Example: [interface](https://github.com/Yarikx/reductor/blob/master/example/src/main/java/com/yheriatovych/reductor/example/reductor/notelist/NotesActions.java),
+   [usage](https://github.com/Yarikx/reductor/blob/master/example/src/main/java/com/yheriatovych/reductor/example/MainActivity.java#L34).
 
-//Usage
-Action action = ItemsReducerImpl.ActionCreator.add("foobar");
+### Defining action creators
+
+In Reductor, an action is represented with class `Action`. 
+It contains two fields: 
+ - type: defines action id or name.
+ - values: arrays of arbitrary objects that can be added as payload.
+ 
+You can create this Actions ad-hoc, just before dispatching.
+However usually it's more natural and readable way to encapsulate it into "Action creator" function, like:
+```java
+Action addItemToCart(int itemId, String name, int price) {
+    return Action.create("CART_ADD_ITEM", itemId, name, price);
+}
 ```
+
+But that's not fun to write code for just bundling arguments inside.
+That's why Reductor lets you define all your action creators as just interface functions.
+
+```java
+@ActionCreator
+interface CartActions{
+    @ActionCreator.Action("CART_ADD_ITEM")
+    Action addItem(int itemId, String name, int price);
+
+    @ActionCreator.Action("CART_REMOVE_ITEM")
+    Action removeItem(int itemId);
+}
+```
+
+Reductor will generate implementation. To get the instance just call `Actions.from(class)`:
+
+```java
+CartActions cartActions = Actions.from(CartActions.class);
+store.dispatch(cartActions.addItem(42, "Phone", 350));
+```
+
+The information about actions structure is also used to check if `@AutoReducer` 
+reducer actions have the same structure and name.
 
 ## Roadmap
 
