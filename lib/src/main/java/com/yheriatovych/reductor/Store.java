@@ -88,7 +88,7 @@ public class Store<State> {
      *               but custom {@link Middleware} can be used to support other types of actions
      */
     public void dispatch(final Object action) {
-        dispatcher.call(action);
+        dispatcher.dispatch(action);
     }
 
     /**

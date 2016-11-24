@@ -37,7 +37,7 @@ public class MiddlewareTest {
         when(middleware.create(any(), any())).thenReturn(dispatcher);
         Store store = Store.create(reducer, initialState, middleware);
         store.dispatch(action);
-        verify(dispatcher).call(action);
+        verify(dispatcher).dispatch(action);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class MiddlewareTest {
     @Test
     public void testChangeStateWhenMiddlewareCallNext() {
         Store<TestState> store = Store.create(reducer, initialState,
-                (Middleware<TestState>) (store1, nextDispatcher) -> nextDispatcher::call);
+                (Middleware<TestState>) (store1, nextDispatcher) -> nextDispatcher::dispatch);
         store.subscribe(listener);
         Action action = new Action("test");
 
@@ -91,7 +91,7 @@ public class MiddlewareTest {
     private Middleware<TestState> create(Runnable runnable) {
         return (store, nextDispatcher) -> action -> {
             runnable.run();
-            nextDispatcher.call(action);
+            nextDispatcher.dispatch(action);
         };
     }
 

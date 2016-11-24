@@ -8,9 +8,9 @@ package com.yheriatovych.reductor;
  * <p>
  * Implementation of Middleware may:
  * <ul>
- * <li> Call {@code nextDispatcher.call(action)} to proceed with dispatch chain
- * <li> Call {@code nextDispatcher.call(action)} with potentially different action to proceed with dispatch chain
- * <li> Not call {@code nextDispatcher.call(action)} to discard action
+ * <li> Call {@code nextDispatcher.dispatch(action)} to proceed with dispatch chain
+ * <li> Call {@code nextDispatcher.dispatch(action)} with potentially different action to proceed with dispatch chain
+ * <li> Not dispatch {@code nextDispatcher.dispatch(action)} to discard action
  * <li> Use store to obtain state via {@link Store#getState()}
  * <li> Dispatch one or more events to Store via {@link Store#dispatch(Object)} to dispatch through full middleware chain
  * </ul>
@@ -32,6 +32,6 @@ public interface Middleware<State> {
      * dispatcher may invoke {@code nextDispatcher} passed from {@link #create(Store, Dispatcher)}
      */
     interface Dispatcher {
-        void call(Object action);
+        void dispatch(Object action);
     }
 }
