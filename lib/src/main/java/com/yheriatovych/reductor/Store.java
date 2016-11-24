@@ -14,7 +14,7 @@ public class Store<State> {
     public static final String INIT_ACTION = "@@reductor/INIT";
 
     private final Reducer<State> reducer;
-    private final Middleware.NextDispatcher dispatcher;
+    private final Middleware.Dispatcher dispatcher;
     private final List<StateChangeListener<State>> listeners = new CopyOnWriteArrayList<>();
     private volatile State state;
 
@@ -22,13 +22,12 @@ public class Store<State> {
         this.reducer = reducer;
         this.state = initialState;
 
-        Middleware.NextDispatcher nextDispatcher = this::dispatchAction;
+        Middleware.Dispatcher dispatcher = this::dispatchAction;
         for (int i = middlewares.length - 1; i >= 0; i--) {
             Middleware<State> middleware = middlewares[i];
-            final Middleware.NextDispatcher finalNextDispatcher = nextDispatcher;
-            nextDispatcher = action -> middleware.dispatch(Store.this, action, finalNextDispatcher);
+            dispatcher = middleware.create(Store.this, dispatcher);
         }
-        this.dispatcher = nextDispatcher;
+        this.dispatcher = dispatcher;
         dispatchAction(Action.create(INIT_ACTION));
     }
 

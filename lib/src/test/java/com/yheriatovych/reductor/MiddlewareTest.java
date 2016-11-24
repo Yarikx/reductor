@@ -32,15 +32,17 @@ public class MiddlewareTest {
     @Test
     public void testPropagateActionToMiddleware() {
         Action action = new Action("test");
+        Middleware.Dispatcher dispatcher = mock(Middleware.Dispatcher.class);
         Middleware<TestState> middleware = mock(Middleware.class);
+        when(middleware.create(any(), any())).thenReturn(dispatcher);
         Store store = Store.create(reducer, initialState, middleware);
         store.dispatch(action);
-        verify(middleware).dispatch(eq(store), eq(action), any());
+        verify(dispatcher).call(action);
     }
 
     @Test
     public void testDoNotChangeStateWhenMiddlewareDoNothing() {
-        Store<TestState> store = Store.create(reducer, initialState, (Middleware<TestState>) (store1, action, nextDispatcher) -> {
+        Store<TestState> store = Store.create(reducer, initialState, (Middleware<TestState>) (store1, nextDispatcher) -> action -> {
             //NOOP
         });
         store.subscribe(listener);
@@ -53,8 +55,7 @@ public class MiddlewareTest {
     @Test
     public void testChangeStateWhenMiddlewareCallNext() {
         Store<TestState> store = Store.create(reducer, initialState,
-                (Middleware<TestState>) (store1, action, nextDispatcher) ->
-                        nextDispatcher.call(action));
+                (Middleware<TestState>) (store1, nextDispatcher) -> nextDispatcher::call);
         store.subscribe(listener);
         Action action = new Action("test");
 
@@ -64,29 +65,34 @@ public class MiddlewareTest {
     }
 
     @Test
-    public void testCallMiddlewaresInOrder() {
-        Middleware<TestState> original = new Middleware<TestState>() {
-            @Override
-            public void dispatch(Store<TestState> store1, Object action, NextDispatcher nextDispatcher) {
-                nextDispatcher.call(action);
-            }
-        };
+    public void testDispatchActionsInOrder() {
 
-        Middleware<TestState> m1 = spy(original);
-        Middleware<TestState> m2 = spy(original);
-        Middleware<TestState> m3 = spy(original);
+        Runnable action1 = mock(Runnable.class);
+        Runnable action2 = mock(Runnable.class);
+        Runnable action3 = mock(Runnable.class);
+
+        Middleware<TestState> m1 = create(action1);
+        Middleware<TestState> m2 = create(action2);
+        Middleware<TestState> m3 = create(action3);
 
         Store<TestState> store = Store.create(reducer, initialState,
                 m1, m2, m3);
         store.subscribe(listener);
         Action action = new Action("test");
-        InOrder inOrder = inOrder(m1, m2, m3);
+        InOrder inOrder = inOrder(action1, action2, action3);
 
         store.dispatch(action);
 
-        inOrder.verify(m1).dispatch(eq(store), eq(action), any());
-        inOrder.verify(m2).dispatch(eq(store), eq(action), any());
-        inOrder.verify(m3).dispatch(eq(store), eq(action), any());
+        inOrder.verify(action1).run();
+        inOrder.verify(action2).run();
+        inOrder.verify(action3).run();
+    }
+
+    private Middleware<TestState> create(Runnable runnable) {
+        return (store, nextDispatcher) -> action -> {
+            runnable.run();
+            nextDispatcher.call(action);
+        };
     }
 
 }
