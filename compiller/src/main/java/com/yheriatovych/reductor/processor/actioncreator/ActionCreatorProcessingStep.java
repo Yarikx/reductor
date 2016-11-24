@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import static com.yheriatovych.reductor.processor.Utils.createGeneratedAnnotation;
+
 public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
     private final Env env;
@@ -45,6 +47,7 @@ public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.Pro
     private void emitActionCreator(ActionCreatorElement creatorElement, Env env) throws IOException {
         ClassName className = ClassName.bestGuess(creatorElement.getName(env) + "_AutoImpl");
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(className)
+                .addAnnotation(createGeneratedAnnotation(null))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addSuperinterface(TypeName.get(creatorElement.getType()));
 
@@ -62,7 +65,7 @@ public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.Pro
             }
 
             typeBuilder.addMethod(methodBuilder
-                    .addStatement("return $T.create(\"$L\"$N)", Action.class, action.actionType, args.toString())
+                    .addStatement("return $T.create($S$N)", Action.class, action.actionType, args.toString())
                     .build());
         }
 

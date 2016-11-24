@@ -1,12 +1,14 @@
 package com.yheriatovych.reductor.processor;
 
 import com.google.auto.common.MoreTypes;
+import com.squareup.javapoet.AnnotationSpec;
 import com.yheriatovych.reductor.Reducer;
 
+import javax.annotation.Generated;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Utils {
@@ -56,5 +58,15 @@ public class Utils {
         }
         return result;
     }
+
+    public static AnnotationSpec createGeneratedAnnotation(String comment) {
+        AnnotationSpec.Builder builder = AnnotationSpec.builder(Generated.class);
+        builder.addMember("value", "$S", ReductorAnnotationProcessor.class.getCanonicalName());
+        if (comment != null) {
+            builder.addMember("comments", "$S", comment);
+        }
+        return builder.build();
+    }
+
 
 }

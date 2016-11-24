@@ -14,10 +14,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.yheriatovych.reductor.processor.Utils.*;
 
@@ -110,6 +107,8 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         List<StateProperty> properties = combinedStateElement.properties;
 
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(combinedReducerClassName)
+                .addAnnotation(createGeneratedAnnotation(
+                        "Implementation of reducer which delegates actions to sub-reducers for each of sub-states"))
                 .addSuperinterface(ParameterizedTypeName.get(
                         ClassName.get(Reducer.class),
                         combinedReducerReturnTypeName))

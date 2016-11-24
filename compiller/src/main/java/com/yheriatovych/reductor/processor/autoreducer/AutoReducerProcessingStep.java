@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import static com.yheriatovych.reductor.processor.Utils.createGeneratedAnnotation;
+
 public class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
 
     private final Env env;
@@ -54,6 +56,8 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
     private void emitGeneratedClass(StringReducerElement reducerElement, String packageName, TypeElement originalTypeElement) throws IOException {
         String name = reducerElement.getSimpleName() + "Impl";
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
+                .addAnnotation(createGeneratedAnnotation(
+                        "Reducer implementation which destructures and dispatches actions to defined action handlers"))
                 .addModifiers(Modifier.PUBLIC)
                 .superclass(TypeName.get(originalTypeElement.asType()));
 
