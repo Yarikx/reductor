@@ -14,7 +14,10 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import static com.yheriatovych.reductor.processor.Utils.*;
 
@@ -80,6 +83,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
 
 
         TypeSpec typeSpec = TypeSpec.classBuilder(combinedStateElement.stateTypeElement.getSimpleName().toString() + "Impl")
+                .addAnnotation(createGeneratedAnnotation())
                 .addSuperinterface(TypeName.get(combinedStateElement.stateTypeElement.asType()))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addMethod(constructorBuilder.build())
@@ -88,6 +92,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                 .build();
 
         JavaFile javaFile = JavaFile.builder(env.getPackageName(combinedStateElement.stateTypeElement), typeSpec)
+                .skipJavaLangImports(true)
                 .build();
         javaFile.writeTo(env.getFiler());
         return ClassName.get(javaFile.packageName, typeSpec.name);
@@ -108,7 +113,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
 
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(combinedReducerClassName)
                 .addAnnotation(createGeneratedAnnotation(
-                        "Implementation of reducer which delegates actions to sub-reducers for each of sub-states"))
+                ))
                 .addSuperinterface(ParameterizedTypeName.get(
                         ClassName.get(Reducer.class),
                         combinedReducerReturnTypeName))
@@ -168,6 +173,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         TypeSpec typeSpec = typeSpecBuilder.build();
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
+                .skipJavaLangImports(true)
                 .build();
         javaFile.writeTo(env.getFiler());
     }

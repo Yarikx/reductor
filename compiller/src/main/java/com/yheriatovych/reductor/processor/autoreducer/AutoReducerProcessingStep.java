@@ -57,7 +57,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
         String name = reducerElement.getSimpleName() + "Impl";
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
                 .addAnnotation(createGeneratedAnnotation(
-                        "Reducer implementation which destructures and dispatches actions to defined action handlers"))
+                ))
                 .addModifiers(Modifier.PUBLIC)
                 .superclass(TypeName.get(originalTypeElement.asType()));
 
@@ -137,6 +137,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
         }
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpecBuilder.build())
+                .skipJavaLangImports(true)
                 .build();
         javaFile.writeTo(env.getFiler());
     }

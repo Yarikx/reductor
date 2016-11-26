@@ -47,7 +47,7 @@ public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.Pro
     private void emitActionCreator(ActionCreatorElement creatorElement, Env env) throws IOException {
         ClassName className = ClassName.bestGuess(creatorElement.getName(env) + "_AutoImpl");
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(className)
-                .addAnnotation(createGeneratedAnnotation(null))
+                .addAnnotation(createGeneratedAnnotation())
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addSuperinterface(TypeName.get(creatorElement.getType()));
 
@@ -70,6 +70,7 @@ public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.Pro
         }
 
         JavaFile.builder(creatorElement.getPackageName(env), typeBuilder.build())
+                .skipJavaLangImports(true)
                 .build()
                 .writeTo(env.getFiler());
     }

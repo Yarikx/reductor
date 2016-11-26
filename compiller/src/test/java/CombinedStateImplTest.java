@@ -23,9 +23,9 @@ public class CombinedStateImplTest {
 
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarImpl", "package test;\n" +
                 "\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarImpl implements Foobar {\n" +
                 "  private final int foo;\n" +
                 "\n" +
@@ -71,8 +71,9 @@ public class CombinedStateImplTest {
 
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarImpl", "package test;\n" +
                 "\n" +
-                "import java.lang.Override;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarImpl implements Foobar {\n" +
                 "  private final int foo;\n" +
                 "\n" +
@@ -109,9 +110,10 @@ public class CombinedStateImplTest {
                 "}");
 
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarImpl", "package test;\n" +
+                "\n\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
-                "import java.lang.Override;\n" +
-                "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarImpl implements Foobar {\n" +
                 "  private final int foo;\n" +
                 "\n" +
