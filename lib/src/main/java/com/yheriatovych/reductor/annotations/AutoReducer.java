@@ -54,13 +54,13 @@ public @interface AutoReducer {
         String value();
 
         /**
-         * if true corresponding static action created will be generated
+         * If true corresponding action creator interface will be generated
+         *
+         *
          *
          * @return true if action creator should be generated.
-         * @deprecated left here for compatibility, in new versions will be removed.
-         * Use {@link #from()} to validate correspondence with action creator.
          */
-        boolean generateActionCreator() default true;
+        boolean generateActionCreator() default false;
 
         /**
          * Action creator interface, where corresponding action creator can be found.

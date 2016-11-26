@@ -13,7 +13,7 @@ public abstract class NotesFilterReducer implements Reducer<NotesFilter> {
     }
 
     @Action(value = FilterActions.SET_FILTER,
-            generateActionCreator = false,
+            generateActionCreator = true,
             from = FilterActions.class)
     NotesFilter setFilter(NotesFilter state, NotesFilter value) {
         return value;

@@ -4,6 +4,7 @@ import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
 import com.yheriatovych.reductor.Action;
+import com.yheriatovych.reductor.annotations.ActionCreator;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.ElementNotReadyException;
 import com.yheriatovych.reductor.processor.Env;
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-public class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep{
+public class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
     private final Env env;
     private final Map<String, ActionCreatorElement> knownActionCreators;
@@ -38,10 +39,12 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
         for (Element stringReducer : elementsByAnnotation.values()) {
             try {
                 StringReducerElement reducerElement = StringReducerElement.parseStringReducerElement(stringReducer, knownActionCreators, env);
-                emitGeneratedClass(reducerElement, reducerElement.getPackageName(env), reducerElement.originalElement);
+                String packageName = reducerElement.getPackageName(env);
+                emitGeneratedClass(reducerElement, packageName, reducerElement.originalElement);
+                emitActionCreator(reducerElement, packageName);
             } catch (com.yheriatovych.reductor.processor.ValidationException ve) {
                 env.printError(ve.getElement(), ve.getMessage());
-            } catch (ElementNotReadyException e){
+            } catch (ElementNotReadyException e) {
                 delayed.add(stringReducer);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -126,12 +129,6 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
                                 .endControlFlow()
                                 .build())
                         .build());
-
-        TypeSpec actionCreator = emitActionCreator(reducerElement);
-        if (actionCreator != null) {
-            typeSpecBuilder.addType(actionCreator);
-        }
-
         JavaFile javaFile = JavaFile.builder(packageName, typeSpecBuilder.build())
                 .build();
         javaFile.writeTo(env.getFiler());
@@ -160,9 +157,10 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
         return methodSpecs;
     }
 
-    private TypeSpec emitActionCreator(StringReducerElement reducerElement) {
-        TypeSpec.Builder actionCreatorBuilder = TypeSpec.classBuilder("ActionCreator")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+    private void emitActionCreator(StringReducerElement reducerElement, String packageName) throws IOException {
+        TypeSpec.Builder actionCreatorBuilder = TypeSpec.interfaceBuilder(reducerElement.getSimpleName() + "ActionCreator")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(ActionCreator.class);
 
         boolean hasActions = false;
         for (ReduceAction action : reducerElement.actions) {
@@ -170,27 +168,31 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
             hasActions = true;
             final List<VariableElement> args = action.args;
 
+            String fieldName = action.action.replaceAll(" +", "_").toUpperCase();
+            actionCreatorBuilder.addField(FieldSpec.builder(String.class, fieldName)
+                    .addModifiers(Modifier.FINAL, Modifier.STATIC, Modifier.PUBLIC)
+                    .initializer("\"$L\"", action.action)
+                    .build());
+
             MethodSpec.Builder actionCreatorMethodBuilder = MethodSpec.methodBuilder(action.getMethodName())
-                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                    .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                    .addAnnotation(AnnotationSpec.builder(ActionCreator.Action.class)
+                            .addMember("value", "$N", fieldName)
+                            .build())
                     .returns(Action.class);
 
-            if (args.size() == 0) {
-                actionCreatorMethodBuilder
-                        .addStatement("return $T.create($S)", Action.class, action.action);
-            } else {
-                actionCreatorMethodBuilder
-                        .addCode("return $T.create($S", Action.class, action.action);
+            if (!args.isEmpty()) {
                 for (VariableElement arg : args) {
                     actionCreatorMethodBuilder.addParameter(TypeName.get(arg.asType()), arg.getSimpleName().toString());
-                    actionCreatorMethodBuilder.addCode(", $N", arg.getSimpleName());
                 }
-                actionCreatorMethodBuilder.addCode(");\n");
             }
             actionCreatorBuilder.addMethod(actionCreatorMethodBuilder.build());
 
         }
-        return hasActions
-                ? actionCreatorBuilder.build()
-                : null;
+        if (hasActions) {
+            JavaFile.builder(packageName, actionCreatorBuilder.build())
+                    .build()
+                    .writeTo(env.getFiler());
+        }
     }
 }
