@@ -17,15 +17,13 @@ public abstract class NotesListReducer implements Reducer<List<Note>> {
     }
 
     @Action(value = NotesActions.ADD_ACTION,
-            from = NotesActions.class,
-            generateActionCreator = true)
+            from = NotesActions.class)
     public List<Note> add(List<Note> state, int id, String content) {
         return TreePVector.from(state).plus(new Note(id, content, false));
     }
 
     @Action(value = NotesActions.TOGGLE,
-            from = NotesActions.class,
-            generateActionCreator = true)
+            from = NotesActions.class)
     public List<Note> toggle(List<Note> notes, int noteId) {
         for (int i = 0; i < notes.size(); i++) {
             Note note = notes.get(i);
@@ -36,8 +34,7 @@ public abstract class NotesListReducer implements Reducer<List<Note>> {
     }
 
     @Action(value = NotesActions.REMOVE_ITEM,
-            from = NotesActions.class,
-            generateActionCreator = true)
+            from = NotesActions.class)
     public List<Note> remove(List<Note> notes, int id) {
         for (int i = 0, notesSize = notes.size(); i < notesSize; i++) {
             Note note = notes.get(i);
