@@ -1,3 +1,5 @@
+package com.yheriatovych.reductor.processor;
+
 import com.google.testing.compile.JavaFileObjects;
 import com.yheriatovych.reductor.processor.ReductorAnnotationProcessor;
 import org.junit.Test;
