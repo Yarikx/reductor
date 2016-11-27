@@ -27,9 +27,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
@@ -74,9 +74,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
@@ -121,9 +121,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
@@ -167,9 +167,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  public FoobarReducerImpl(int foo, String bar) {\n" +
                 "    super(foo, bar);\n" +
@@ -209,9 +209,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
@@ -251,9 +251,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  public FoobarReducerImpl(int a) {\n" +
                 "    super(a);\n" +
@@ -297,9 +297,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  public FoobarReducerImpl(int a) {\n" +
                 "    super(a);\n" +
@@ -340,9 +340,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +
@@ -383,9 +383,9 @@ public class AutoReducerGeneratorTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.FoobarReducerImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public class FoobarReducerImpl extends FoobarReducer {\n" +
                 "  @Override\n" +
                 "  public String reduce(String state, Action action) {\n" +

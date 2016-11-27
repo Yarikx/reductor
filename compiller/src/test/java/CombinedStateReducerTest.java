@@ -23,8 +23,9 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
                 "import com.yheriatovych.reductor.Reducer;\n" +
-                "import java.lang.Override;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarReducer implements Reducer<Foobar> {\n" +
                 "  private FoobarReducer() {\n" +
                 "  }\n" +
@@ -83,11 +84,10 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
                 "import com.yheriatovych.reductor.Reducer;\n" +
-                "import java.lang.IllegalStateException;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
                 "import java.util.Date;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarReducer implements Reducer<Foobar> {\n" +
                 "  private final Reducer<String> fooReducer;\n" +
                 "\n" +
@@ -179,11 +179,9 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
                 "import com.yheriatovych.reductor.Reducer;\n" +
-                "import java.lang.Boolean;\n" +
-                "import java.lang.IllegalStateException;\n" +
-                "import java.lang.Integer;\n" +
-                "import java.lang.Override;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarReducer implements Reducer<Foobar> {\n" +
                 "  private final Reducer<Integer> fooReducer;\n" +
                 "\n" +
@@ -278,11 +276,10 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
                 "import com.yheriatovych.reductor.Reducer;\n" +
-                "import java.lang.IllegalStateException;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
                 "import java.util.Date;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarReducer implements Reducer<Foobar> {\n" +
                 "  private final Reducer<String> fooReducer;\n" +
                 "\n" +
@@ -398,14 +395,9 @@ public class CombinedStateReducerTest {
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
                 "import com.yheriatovych.reductor.Reducer;\n" +
-                "import java.lang.Boolean;\n" +
-                "import java.lang.Character;\n" +
-                "import java.lang.Double;\n" +
-                "import java.lang.IllegalStateException;\n" +
-                "import java.lang.Integer;\n" +
-                "import java.lang.Object;\n" +
-                "import java.lang.Override;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarReducer implements Reducer<Foobar> {\n" +
                 "  private final Reducer<Integer> intValueReducer;\n" +
                 "\n" +
