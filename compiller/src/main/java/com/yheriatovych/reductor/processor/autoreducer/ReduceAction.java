@@ -93,10 +93,10 @@ public class ReduceAction {
         }
 
         ActionCreatorElement creatorElement = knownActionCreators.get(env.getElements().getBinaryName((TypeElement) actionCreatorElement).toString());
-        if(creatorElement == null) {
+        if (creatorElement == null) {
             throw new ElementNotReadyException();
         }
-        if(!creatorElement.hasAction(actionName, args)){
+        if (!creatorElement.hasAction(actionName, args)) {
             throw new ValidationException(element, "Cannot find action creator for action \"%s\" and args %s in interface %s", actionName, toString(args), creatorElement.getName(env));
         }
     }

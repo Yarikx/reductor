@@ -57,7 +57,6 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
     private void emitGeneratedClass(StringReducerElement reducerElement, String packageName, TypeElement originalTypeElement) throws IOException {
         String name = reducerElement.getSimpleName() + "Impl";
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
-                .addModifiers(Modifier.PUBLIC)
                 .superclass(TypeName.get(originalTypeElement.asType()));
 
         TypeName stateTypeName = TypeName.get(reducerElement.stateType);
@@ -158,7 +157,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
     }
 
     private void emitActionCreator(StringReducerElement reducerElement, String packageName) throws IOException {
-        TypeSpec.Builder actionCreatorBuilder = TypeSpec.interfaceBuilder(reducerElement.getSimpleName() + "ActionCreator")
+        TypeSpec.Builder actionCreatorBuilder = TypeSpec.interfaceBuilder(reducerElement.getSimpleName() + "Actions")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(ActionCreator.class);
 

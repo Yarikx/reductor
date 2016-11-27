@@ -46,7 +46,6 @@ public class StringReducerElement {
             throw new ValidationException(element, "You can apply %s only to classes", AutoReducer.class.getSimpleName());
         }
 
-
         TypeElement typeElement = (TypeElement) element;
         if (MoreTypes.asDeclared(typeElement.asType()).getEnclosingType().getKind() != TypeKind.NONE) {
             throw new ValidationException(element, "%s annotated reducers should not be inner classes. Probably 'static' modifier missing", AutoReducer.class.getSimpleName());
