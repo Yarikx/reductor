@@ -54,15 +54,6 @@ public @interface AutoReducer {
         String value();
 
         /**
-         * if true corresponding static action created will be generated
-         *
-         * @return true if action creator should be generated.
-         * @deprecated left here for compatibility, in new versions will be removed.
-         * Use {@link #from()} to validate correspondence with action creator.
-         */
-        boolean generateActionCreator() default true;
-
-        /**
          * Action creator interface, where corresponding action creator can be found.
          * This information is used to validate arguments types and order to validate correspondence.
          *
@@ -70,6 +61,17 @@ public @interface AutoReducer {
          * @see ActionCreator
          */
         Class<?> from() default Void.class;
+
+        /**
+         * If true corresponding action creator interface will be generated
+         * <p>
+         * Generated action creator interface will have class name the same as reducer with 'Actions' suffix.
+         * Note that for most of cases explicitly defined Action creators are preferred.
+         *
+         * @return true if action creator should be generated.
+         * @see ActionCreator
+         */
+        boolean generateActionCreator() default false;
     }
 
     /**
