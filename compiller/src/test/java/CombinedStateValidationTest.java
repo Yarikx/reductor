@@ -23,9 +23,9 @@ public class CombinedStateValidationTest {
 
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.Foobar", "package test;\n" +
                 "\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class FoobarImpl implements Foobar {\n" +
                 "  private final int foo;\n" +
                 "\n" +

@@ -83,6 +83,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
 
 
         TypeSpec typeSpec = TypeSpec.classBuilder(combinedStateElement.stateTypeElement.getSimpleName().toString() + "Impl")
+                .addAnnotation(createGeneratedAnnotation())
                 .addSuperinterface(TypeName.get(combinedStateElement.stateTypeElement.asType()))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addMethod(constructorBuilder.build())
@@ -91,6 +92,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                 .build();
 
         JavaFile javaFile = JavaFile.builder(env.getPackageName(combinedStateElement.stateTypeElement), typeSpec)
+                .skipJavaLangImports(true)
                 .build();
         javaFile.writeTo(env.getFiler());
         return ClassName.get(javaFile.packageName, typeSpec.name);
@@ -110,6 +112,8 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         List<StateProperty> properties = combinedStateElement.properties;
 
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(combinedReducerClassName)
+                .addAnnotation(createGeneratedAnnotation(
+                ))
                 .addSuperinterface(ParameterizedTypeName.get(
                         ClassName.get(Reducer.class),
                         combinedReducerReturnTypeName))
@@ -169,6 +173,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         TypeSpec typeSpec = typeSpecBuilder.build();
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
+                .skipJavaLangImports(true)
                 .build();
         javaFile.writeTo(env.getFiler());
     }

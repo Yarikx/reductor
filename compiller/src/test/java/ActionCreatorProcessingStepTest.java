@@ -24,8 +24,9 @@ public class ActionCreatorProcessingStepTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.Foobar_AutoImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class Foobar_AutoImpl implements Foobar {\n" +
                 "  @Override\n" +
                 "  public Action foobar() {\n" +
@@ -57,8 +58,9 @@ public class ActionCreatorProcessingStepTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.Foobar_AutoImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class Foobar_AutoImpl implements Foobar {\n" +
                 "  @Override\n" +
                 "  public Action foobar(int v) {\n" +
@@ -90,9 +92,9 @@ public class ActionCreatorProcessingStepTest {
         JavaFileObject generatedPojo = JavaFileObjects.forSourceString("test.Foobar_AutoImpl", "package test;\n" +
                 "\n" +
                 "import com.yheriatovych.reductor.Action;\n" +
-                "import java.lang.Override;\n" +
-                "import java.lang.String;\n" +
+                "import javax.annotation.Generated;\n" +
                 "\n" +
+                "@Generated(\"com.yheriatovych.reductor.processor.ReductorAnnotationProcessor\")\n" +
                 "public final class Foobar_AutoImpl implements Foobar {\n" +
                 "  @Override\n" +
                 "  public Action foobar(int v, String v2) {\n" +
