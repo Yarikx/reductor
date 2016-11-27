@@ -163,6 +163,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
     private void emitActionCreator(StringReducerElement reducerElement, String packageName) throws IOException {
         TypeSpec.Builder actionCreatorBuilder = TypeSpec.interfaceBuilder(reducerElement.getSimpleName() + "Actions")
                 .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(createGeneratedAnnotation())
                 .addAnnotation(ActionCreator.class);
 
         boolean hasActions = false;
@@ -194,6 +195,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
         }
         if (hasActions) {
             JavaFile.builder(packageName, actionCreatorBuilder.build())
+                    .skipJavaLangImports(true)
                     .build()
                     .writeTo(env.getFiler());
         }
