@@ -1,5 +1,32 @@
 # Reductor Releases #
 
+### Version 0.11.0 - November 27, 2016
+
+#### Breaking changes
+
+##### Middleware can be initialized with Store
+
+Now `Middleware` is split into two functional interfaces. 
+So if old middleware signature was `(store, action, nextDisaptcher) => ()`,
+the new one will be `(store, nextDispatcher) => (action) => ()`. 
+This middleware structure is much closer to original Redux middleware.
+
+##### New generated Action Creators (experimental)
+
+If `@AutoReducer.Action(generateActionCreators = true)`, 
+reductor will generate [ActionCreator](https://github.com/Yarikx/reductor#defining-action-creators) interface.
+The interface will have the same name as reducer with 'Actions' suffix. 
+Old generated static nested `ActionCreator` classes in reducer implementations are no longer supported.
+
+As you may use generated action creators directly, explicitly defining action creator interface is recommended.
+However generated action creators can be used to prototype your reducer faster, 
+and then generated interface can be copied to the source code.
+
+#### Other
+
+Added `Generated` annotation to all emitted code.
+
+
 ### Version 0.10.0 - November 3, 2016
 
 #### New feature: Action creators
