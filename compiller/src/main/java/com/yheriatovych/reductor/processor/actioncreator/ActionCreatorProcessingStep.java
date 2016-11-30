@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import static com.yheriatovych.reductor.processor.Utils.createGeneratedAnnotation;
+import static com.yheriatovych.reductor.processor.Utils.createGeneratedFileComment;
 
 public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
@@ -47,7 +47,6 @@ public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.Pro
     private void emitActionCreator(ActionCreatorElement creatorElement, Env env) throws IOException {
         ClassName className = ClassName.bestGuess(creatorElement.getName(env) + "_AutoImpl");
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(className)
-                .addAnnotation(createGeneratedAnnotation())
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addSuperinterface(TypeName.get(creatorElement.getType()));
 
@@ -71,6 +70,7 @@ public class ActionCreatorProcessingStep implements BasicAnnotationProcessor.Pro
 
         JavaFile.builder(creatorElement.getPackageName(env), typeBuilder.build())
                 .skipJavaLangImports(true)
+                .addFileComment(createGeneratedFileComment())
                 .build()
                 .writeTo(env.getFiler());
     }

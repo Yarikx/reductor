@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-import static com.yheriatovych.reductor.processor.Utils.createGeneratedAnnotation;
+import static com.yheriatovych.reductor.processor.Utils.createGeneratedFileComment;
 
 public class AutoReducerProcessingStep implements BasicAnnotationProcessor.ProcessingStep {
 
@@ -59,7 +59,6 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
     private void emitGeneratedClass(StringReducerElement reducerElement, String packageName, TypeElement originalTypeElement) throws IOException {
         String name = reducerElement.getSimpleName() + "Impl";
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
-                .addAnnotation(createGeneratedAnnotation())
                 .superclass(TypeName.get(originalTypeElement.asType()));
 
         TypeName stateTypeName = TypeName.get(reducerElement.stateType);
@@ -133,6 +132,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
                         .build());
         JavaFile javaFile = JavaFile.builder(packageName, typeSpecBuilder.build())
                 .skipJavaLangImports(true)
+                .addFileComment(createGeneratedFileComment())
                 .build();
         javaFile.writeTo(env.getFiler());
     }
@@ -163,7 +163,6 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
     private void emitActionCreator(StringReducerElement reducerElement, String packageName) throws IOException {
         TypeSpec.Builder actionCreatorBuilder = TypeSpec.interfaceBuilder(reducerElement.getSimpleName() + "Actions")
                 .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(createGeneratedAnnotation())
                 .addAnnotation(ActionCreator.class);
 
         boolean hasActions = false;
@@ -196,6 +195,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
         if (hasActions) {
             JavaFile.builder(packageName, actionCreatorBuilder.build())
                     .skipJavaLangImports(true)
+                    .addFileComment(createGeneratedFileComment())
                     .build()
                     .writeTo(env.getFiler());
         }

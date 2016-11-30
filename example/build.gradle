@@ -39,8 +39,6 @@ dependencies {
     compile project(':lib')
     compile project(':reductor-rxjava')
 
-    provided 'javax.annotation:jsr250-api:1.0'
-
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:recyclerview-v7:25.0.1'
