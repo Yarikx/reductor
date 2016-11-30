@@ -1,5 +1,9 @@
 # Reductor Releases #
 
+### Version 0.11.1 - November 30, 2016
+
+Replaced `@Generated` annotation with just a comment
+
 ### Version 0.11.0 - November 27, 2016
 
 #### Breaking changes
