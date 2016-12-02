@@ -2,6 +2,7 @@ package com.yheriatovych.reductor;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * State container which dispatches actions with provided reducer
@@ -10,11 +11,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @param <State> type of state to be stored and manipulated
  */
-public class Store<State> {
+public class Store<State> implements Dispatcher, Cursor<State> {
     public static final String INIT_ACTION = "@@reductor/INIT";
 
     private final Reducer<State> reducer;
-    private final Middleware.Dispatcher dispatcher;
+    private final Dispatcher dispatcher;
     private final List<StateChangeListener<State>> listeners = new CopyOnWriteArrayList<>();
     private volatile State state;
 
@@ -22,7 +23,7 @@ public class Store<State> {
         this.reducer = reducer;
         this.state = initialState;
 
-        Middleware.Dispatcher dispatcher = this::dispatchAction;
+        Dispatcher dispatcher = this::dispatchAction;
         for (int i = middlewares.length - 1; i >= 0; i--) {
             Middleware<State> middleware = middlewares[i];
             dispatcher = middleware.create(Store.this, dispatcher);
@@ -106,8 +107,9 @@ public class Store<State> {
 
     /**
      * Notify listener for every state in Store.
-     *
+     * <p>
      * Note: equivalent to {@link #subscribe(StateChangeListener)} but current state will be propagated too
+     *
      * @param listener callback which will be notified
      * @return instance of {@link Cancelable} to be used to cancel subscription (remove listener)
      */
@@ -123,5 +125,50 @@ public class Store<State> {
      */
     public interface StateChangeListener<S> {
         void onStateChanged(S state);
+    }
+
+    @Override
+    public <R> Cursor<R> map(Function<State, R> mapper) {
+        return new StoreCursor<>(mapper, this);
+    }
+
+    interface Function<T, R> {
+        R apply(T value);
+    }
+
+    private static boolean eq(Object a, Object b) {
+        return (a == b) || (a != null && a.equals(b));
+    }
+
+    private static class StoreCursor<State, SubState> implements Cursor<SubState> {
+        private final Function<State, SubState> mapper;
+        private final Cursor<State> source;
+
+        private StoreCursor(Function<State, SubState> mapper, Cursor<State> source) {
+            this.mapper = mapper;
+            this.source = source;
+        }
+
+        @Override
+        public SubState getState() {
+            return mapper.apply(source.getState());
+        }
+
+        @Override
+        public Cancelable subscribe(StateChangeListener<SubState> listener) {
+            AtomicReference<SubState> atomicReference = new AtomicReference<>();
+            return source.subscribe(state -> {
+                SubState subState = mapper.apply(state);
+                SubState previous = atomicReference.getAndSet(subState);
+                if (!eq(previous, subState)) {
+                    listener.onStateChanged(subState);
+                }
+            });
+        }
+
+        @Override
+        public <SubSubState> Cursor<SubSubState> map(Function<SubState, SubSubState> func) {
+            return new StoreCursor<>(func, this);
+        }
     }
 }
