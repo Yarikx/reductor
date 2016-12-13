@@ -76,7 +76,7 @@ public class Store<State> implements Dispatcher, Cursor<State> {
     }
 
     /**
-     * @return state, this Store currently holds
+     * {@inheritDoc}
      */
     public State getState() {
         return state;
@@ -93,12 +93,7 @@ public class Store<State> implements Dispatcher, Cursor<State> {
     }
 
     /**
-     * Subscribe for state changes
-     * <p>
-     * Note: current state will not be dispatched immediately after subscribe
-     *
-     * @param listener callback which will be notified each time state changes
-     * @return instance of {@link Cancelable} to be used to cancel subscription (remove listener)
+     * {@inheritDoc}
      */
     public Cancelable subscribe(final StateChangeListener<State> listener) {
         listeners.add(listener);
@@ -118,22 +113,9 @@ public class Store<State> implements Dispatcher, Cursor<State> {
         return subscribe(listener);
     }
 
-    /**
-     * Listener which will be notified each time state changes.
-     * <p>
-     * Look {@link #subscribe(StateChangeListener)}
-     */
-    public interface StateChangeListener<S> {
-        void onStateChanged(S state);
-    }
-
     @Override
     public <R> Cursor<R> map(Function<State, R> mapper) {
         return new StoreCursor<>(mapper, this);
-    }
-
-    interface Function<T, R> {
-        R apply(T value);
     }
 
     private static boolean eq(Object a, Object b) {

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Actions {
+    private Actions() {
+    }
     private static ConcurrentHashMap<Class<?>, Object> classCache = new ConcurrentHashMap<>();
 
     /**

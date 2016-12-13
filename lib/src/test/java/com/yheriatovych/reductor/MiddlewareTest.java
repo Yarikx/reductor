@@ -19,7 +19,7 @@ public class MiddlewareTest {
     @Mock
     Reducer<TestState> reducer;
     @Mock
-    Store.StateChangeListener<TestState> listener;
+    StateChangeListener<TestState> listener;
 
     @Before
     public void setUp() {

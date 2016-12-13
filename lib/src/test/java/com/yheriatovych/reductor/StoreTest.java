@@ -70,7 +70,7 @@ public class StoreTest {
                 .thenReturn(newState1)
                 .thenReturn(newState2);
 
-        Store.StateChangeListener<TestState> listener = Mockito.mock(Store.StateChangeListener.class);
+        StateChangeListener<TestState> listener = Mockito.mock(StateChangeListener.class);
         store.subscribe(listener);
 
         store.dispatch(action);
@@ -92,7 +92,7 @@ public class StoreTest {
                 .thenReturn(newState1)
                 .thenReturn(newState2);
 
-        Store.StateChangeListener<TestState> listener = Mockito.mock(Store.StateChangeListener.class);
+        StateChangeListener<TestState> listener = Mockito.mock(StateChangeListener.class);
         store.forEach(listener);
 
         store.dispatch(action);
@@ -115,7 +115,7 @@ public class StoreTest {
                 .thenReturn(newState1)
                 .thenReturn(newState2);
 
-        Store.StateChangeListener<TestState> listener = Mockito.mock(Store.StateChangeListener.class);
+        StateChangeListener<TestState> listener = Mockito.mock(StateChangeListener.class);
         Cancelable cancelable = store.subscribe(listener);
 
         store.dispatch(action);
@@ -130,6 +130,11 @@ public class StoreTest {
     @Test(expected = IllegalArgumentException.class)
     public void testThrowExceptionIfActionIsNotSupported() {
         store.dispatch("action");
+    }
+
+    @Test
+    public void testFilterUniqueValuesOnMap() {
+        throw new IllegalStateException("Not tested yet");
     }
 
 }
