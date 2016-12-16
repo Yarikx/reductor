@@ -93,7 +93,7 @@ public class StoreTest {
                 .thenReturn(newState2);
 
         StateChangeListener<TestState> listener = Mockito.mock(StateChangeListener.class);
-        store.forEach(listener);
+        Cursors.forEach(store, listener);
 
         store.dispatch(action);
         store.dispatch(action);

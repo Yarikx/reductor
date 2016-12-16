@@ -39,6 +39,8 @@ dependencies {
     compile project(':lib')
     compile project(':reductor-rxjava')
 
+    compile 'io.reactivex:rxjava:1.2.1'
+
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:recyclerview-v7:25.0.1'

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.*;
 import com.yheriatovych.reductor.Actions;
 import com.yheriatovych.reductor.Cancelable;
+import com.yheriatovych.reductor.Cursors;
 import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.Note;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
 
-        mCancelable = store.forEach(state -> {
+        mCancelable = Cursors.forEach(store, state -> {
             adapter.setNotes(state.getFilteredNotes());
             spinner.setSelection(state.filter().ordinal());
         });

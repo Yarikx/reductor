@@ -1,12 +1,6 @@
 package com.yheriatovych.reductor.example;
 
-import com.yheriatovych.reductor.example.model.AppState;
-import com.yheriatovych.reductor.example.model.Note;
-import com.yheriatovych.reductor.example.model.NotesFilter;
-import org.pcollections.ConsPStack;
 import org.pcollections.PStack;
-
-import java.util.List;
 
 public interface Utils {
     interface Predicate<T> {
