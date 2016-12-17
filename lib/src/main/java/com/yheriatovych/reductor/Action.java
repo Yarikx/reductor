@@ -42,11 +42,12 @@ public class Action {
 
     /**
      * Returns action value at given position
-     * @param position value position
-     * @return Object value
+     * @param index value position
+     * @return value at position
      */
-    public Object getValue(int position) {
-        return values[position];
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(int index) {
+        return (T) values[index];
     }
 
     @Override

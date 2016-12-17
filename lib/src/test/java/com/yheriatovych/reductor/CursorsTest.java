@@ -71,8 +71,8 @@ public class CursorsTest {
             }
             if(action.type.equals("UPDATE")) {
                 ComplexState nextState = new ComplexState();
-                nextState.foo = (int) action.getValue(0);
-                nextState.bar = (int) action.getValue(1);
+                nextState.foo = action.getValue(0);
+                nextState.bar = action.getValue(1);
                 return nextState;
             }
             return state;
