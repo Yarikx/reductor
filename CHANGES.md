@@ -1,5 +1,57 @@
 # Reductor Releases #
 
+### Version 0.12.0 - December 17, 2016
+
+#### New feature: Dispatcher and Cursor
+
+Introduced two interfaces, both implemented by `Store`:
+
+```java
+public interface Dispatcher {
+    void dispatch(Object action);
+}
+```
+
+```java
+public interface Cursor<State> {
+    State getState();
+    Cancelable subscribe(StateChangeListener<State> listener);
+}
+```
+
+* `Cursor` responsible for retrieving the state and observing updates.
+* `Dispatcher` responsible for dispatching actions.
+
+That allows you to expose `Store` functionality as interfaces to your components.
+
+##### State mapping
+
+Having `Cursor` interface, it is possible now to have `map` operation similar to `rx.Observable.map(func)`.
+For that purpose new helper class `Cursors` with `map` function was introduced. 
+Usage example: 
+
+```java
+Store<AppState> store = ...;
+Cursor<User> userCursor = Cursors.map(store, state -> state.getUser());
+//use mapped cursor in component 
+UserPresenter presenter = new UserPresenter(userCursor);
+```
+
+Mapped cursors allow your components to depend only on specific substate they need, instead of depending on the whole state, 
+ knowing on how to get to particular substate. 
+
+Current implementation of `map` will only propagate unique values, so it's more efficient to pass mapped `Cursor`
+to upper levels of application.
+
+#### Other (breaking) changes
+
+* `store.forEach(listener)` was moved as static function to `Cursors.forEach(cursor, listeners)`;
+* `action.getValue(index)` now returns generic parameter instead of Object.
+
+##### 
+
+#### Breaking changes
+
 ### Version 0.11.1 - November 30, 2016
 
 Replaced `@Generated` annotation with just a comment
