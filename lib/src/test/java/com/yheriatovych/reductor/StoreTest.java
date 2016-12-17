@@ -70,7 +70,7 @@ public class StoreTest {
                 .thenReturn(newState1)
                 .thenReturn(newState2);
 
-        Store.StateChangeListener<TestState> listener = Mockito.mock(Store.StateChangeListener.class);
+        StateChangeListener<TestState> listener = Mockito.mock(StateChangeListener.class);
         store.subscribe(listener);
 
         store.dispatch(action);
@@ -82,30 +82,6 @@ public class StoreTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-
-    @Test
-    public void testForEachPropagateInitialValue() throws Exception {
-        Action action = new Action("TEST");
-        TestState newState1 = new TestState();
-        TestState newState2 = new TestState();
-        when(reducer.reduce(any(), eq(action)))
-                .thenReturn(newState1)
-                .thenReturn(newState2);
-
-        Store.StateChangeListener<TestState> listener = Mockito.mock(Store.StateChangeListener.class);
-        store.forEach(listener);
-
-        store.dispatch(action);
-        store.dispatch(action);
-
-        InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).onStateChanged(initialState);
-        inOrder.verify(listener).onStateChanged(newState1);
-        inOrder.verify(listener).onStateChanged(newState2);
-        inOrder.verifyNoMoreInteractions();
-    }
-
-
     @Test
     public void testDoNotPropagateResultToListenerAfterCancel() {
         Action action = new Action("TEST");
@@ -115,7 +91,7 @@ public class StoreTest {
                 .thenReturn(newState1)
                 .thenReturn(newState2);
 
-        Store.StateChangeListener<TestState> listener = Mockito.mock(Store.StateChangeListener.class);
+        StateChangeListener<TestState> listener = Mockito.mock(StateChangeListener.class);
         Cancelable cancelable = store.subscribe(listener);
 
         store.dispatch(action);

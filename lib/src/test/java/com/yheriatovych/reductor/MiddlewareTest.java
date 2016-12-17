@@ -19,7 +19,7 @@ public class MiddlewareTest {
     @Mock
     Reducer<TestState> reducer;
     @Mock
-    Store.StateChangeListener<TestState> listener;
+    StateChangeListener<TestState> listener;
 
     @Before
     public void setUp() {
@@ -32,7 +32,7 @@ public class MiddlewareTest {
     @Test
     public void testPropagateActionToMiddleware() {
         Action action = new Action("test");
-        Middleware.Dispatcher dispatcher = mock(Middleware.Dispatcher.class);
+        Dispatcher dispatcher = mock(Dispatcher.class);
         Middleware<TestState> middleware = mock(Middleware.class);
         when(middleware.create(any(), any())).thenReturn(dispatcher);
         Store store = Store.create(reducer, initialState, middleware);

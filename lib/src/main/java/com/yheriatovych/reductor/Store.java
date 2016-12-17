@@ -10,11 +10,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @param <State> type of state to be stored and manipulated
  */
-public class Store<State> {
+public class Store<State> implements Dispatcher, Cursor<State> {
     public static final String INIT_ACTION = "@@reductor/INIT";
 
     private final Reducer<State> reducer;
-    private final Middleware.Dispatcher dispatcher;
+    private final Dispatcher dispatcher;
     private final List<StateChangeListener<State>> listeners = new CopyOnWriteArrayList<>();
     private volatile State state;
 
@@ -22,7 +22,7 @@ public class Store<State> {
         this.reducer = reducer;
         this.state = initialState;
 
-        Middleware.Dispatcher dispatcher = this::dispatchAction;
+        Dispatcher dispatcher = this::dispatchAction;
         for (int i = middlewares.length - 1; i >= 0; i--) {
             Middleware<State> middleware = middlewares[i];
             dispatcher = middleware.create(Store.this, dispatcher);
@@ -75,13 +75,6 @@ public class Store<State> {
     }
 
     /**
-     * @return state, this Store currently holds
-     */
-    public State getState() {
-        return state;
-    }
-
-    /**
      * Dispatch action through {@link Reducer} and store the next state
      *
      * @param action action to be dispatched, usually instance of {@link Action}
@@ -92,36 +85,17 @@ public class Store<State> {
     }
 
     /**
-     * Subscribe for state changes
-     * <p>
-     * Note: current state will not be dispatched immediately after subscribe
-     *
-     * @param listener callback which will be notified each time state changes
-     * @return instance of {@link Cancelable} to be used to cancel subscription (remove listener)
+     * {@inheritDoc}
+     */
+    public State getState() {
+        return state;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public Cancelable subscribe(final StateChangeListener<State> listener) {
         listeners.add(listener);
         return () -> listeners.remove(listener);
-    }
-
-    /**
-     * Notify listener for every state in Store.
-     *
-     * Note: equivalent to {@link #subscribe(StateChangeListener)} but current state will be propagated too
-     * @param listener callback which will be notified
-     * @return instance of {@link Cancelable} to be used to cancel subscription (remove listener)
-     */
-    public Cancelable forEach(final StateChangeListener<State> listener) {
-        listener.onStateChanged(getState());
-        return subscribe(listener);
-    }
-
-    /**
-     * Listener which will be notified each time state changes.
-     * <p>
-     * Look {@link #subscribe(StateChangeListener)}
-     */
-    public interface StateChangeListener<S> {
-        void onStateChanged(S state);
     }
 }

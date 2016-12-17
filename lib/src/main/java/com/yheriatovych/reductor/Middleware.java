@@ -38,17 +38,9 @@ public interface Middleware<State> {
      * to proceed with dispatch chain
      *
      * @param store          original store object
-     * @param nextDispatcher callback to be called by middleware to proceed with dispatch chain
+     * @param nextDispatcher dispatcher to be called next to proceed with an action
      * @return Dispatcher functional interface which will be called for each action dispatched to Store
      */
     Dispatcher create(Store<State> store, Dispatcher nextDispatcher);
 
-    /**
-     * Middleware part which is invoked for each action dispatched to Store.
-     * To proceed with the action and deliver it to the Store,
-     * dispatcher may invoke {@code nextDispatcher} passed from {@link #create(Store, Dispatcher)}
-     */
-    interface Dispatcher {
-        void dispatch(Object action);
-    }
 }
