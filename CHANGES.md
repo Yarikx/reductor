@@ -1,5 +1,12 @@
 # Reductor Releases #
 
+### Version 0.13.0 - January 2, 2017
+
+#### New Module: ReductorObservable
+
+Added [ReductorObservable](https://github.com/Yarikx/reductor/tree/master/reductor-observable) module that mimics [redux-observable](https://github.com/redux-observable/redux-observable).
+This allows to dispatch async actions and do side-effects in composable way using RxJava.
+
 ### Version 0.12.0 - December 17, 2016
 
 #### New feature: Dispatcher and Cursor

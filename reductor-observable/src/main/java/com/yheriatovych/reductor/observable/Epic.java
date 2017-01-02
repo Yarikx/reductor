@@ -12,10 +12,10 @@ import rx.Observable;
  * <p>
  * Ping-Pong example:
  * <pre><code>
- * Epic<String> pingPong = (actions, store) ->
+ * Epic&lt;String&gt; pingPong = (actions, store) -&gt;
  *         actions.filter(Epics.ofType("PING"))
  *                 .delay(1, TimeUnit.SECONDS)
- *                 .map(action -> Action.create("PONG"));
+ *                 .map(action -&gt; Action.create("PONG"));
  * </code></pre>
  *
  * @param <T> state type of {@link Store}

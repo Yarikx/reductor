@@ -10,8 +10,6 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -78,13 +76,6 @@ public class EpicMiddlewareTest {
         assertTrue("Epic should be unsubscribed", epicMiddleware.isUnsubscribed());
 
         assertFalse("epic observable is unsubscibed after middleware.unsubscribe", epicObservable.hasObservers());
-    }
-
-    public void pingpong() {
-        Epic<String> pingPong = (actions, store) ->
-                actions.filter(Epics.ofType("PING"))
-                        .delay(1, TimeUnit.SECONDS)
-                        .map(action -> Action.create("PONG"));
     }
 
 }
