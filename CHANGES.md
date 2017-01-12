@@ -1,5 +1,11 @@
 # Reductor Releases #
 
+### Version 0.13.1 - January 12, 2017
+
+- Rebuilt libraries with latest version of Retrolambda (2.4.0).
+No need to add retrolambda-related proguard rules anymore. [#16](https://github.com/Yarikx/reductor/issues/16)
+- For processor, made dependency to auto-value compile only.
+
 ### Version 0.13.0 - January 2, 2017
 
 #### New Module: ReductorObservable
