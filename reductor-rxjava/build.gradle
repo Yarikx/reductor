@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply from: '../gradle/publishing.gradle'
 
 dependencies {
-    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
+    retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:${retrolambdaVersion}"
     compile project(':lib')
     compile 'io.reactivex:rxjava:1.2.1'
 }
