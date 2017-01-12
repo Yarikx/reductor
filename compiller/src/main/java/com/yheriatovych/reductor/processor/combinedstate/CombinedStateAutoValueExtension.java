@@ -42,6 +42,4 @@ public class CombinedStateAutoValueExtension extends AutoValueExtension {
 
         return false;
     }
-
-
 }
