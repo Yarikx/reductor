@@ -42,7 +42,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
             TypeElement combinedStateTypeElement = (TypeElement) element;
 
             try {
-                CombinedStateElement combinedStateElement = CombinedStateElement.parseCombinedElement(combinedStateTypeElement);
+                CombinedStateElement combinedStateElement = CombinedStateElement.parseCombinedElement(combinedStateTypeElement, env);
                 if (combinedStateElement == null) continue;
 
                 ClassName stateClassName = emmitCombinedStateImplementation(combinedStateElement);

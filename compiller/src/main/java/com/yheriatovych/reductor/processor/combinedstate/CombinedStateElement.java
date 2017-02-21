@@ -1,14 +1,14 @@
 package com.yheriatovych.reductor.processor.combinedstate;
 
-import com.google.auto.value.AutoValue;
+import com.google.auto.common.MoreElements;
 import com.squareup.javapoet.TypeName;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.CombinedState;
+import com.yheriatovych.reductor.processor.Env;
 import com.yheriatovych.reductor.processor.ValidationException;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +23,12 @@ public class CombinedStateElement {
         properties = getters;
     }
 
-    public static CombinedStateElement parseCombinedElement(TypeElement typeElement) throws ValidationException {
+    public static CombinedStateElement parseCombinedElement(TypeElement typeElement, Env env) throws ValidationException {
 
         if (!typeElement.getKind().isInterface()) {
             //We allow to implement @CombinedState either with interface or with @AutoValue class
-            if (typeElement.getAnnotation(AutoValue.class) != null) {
+
+            if (hasAutoValueAnnotation(typeElement, env)) {
                 //Do nothing here. CombinedStateAutoValueExtension will handle this
                 return null;
             } else {
@@ -44,6 +45,18 @@ public class CombinedStateElement {
         }
 
         return new CombinedStateElement(typeElement, properties);
+    }
+
+    private static boolean hasAutoValueAnnotation(TypeElement typeElement, Env env) {
+        Name autoValueName = env.getElements().getName("com.google.auto.value.AutoValue");
+        for (AnnotationMirror annotationMirror : typeElement.getAnnotationMirrors()) {
+            DeclaredType annotationType = annotationMirror.getAnnotationType();
+            Name qualifiedName = MoreElements.asType(annotationType.asElement()).getQualifiedName();
+            if (qualifiedName.equals(autoValueName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public TypeName getCombinedReducerActionType() {
