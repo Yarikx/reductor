@@ -28,5 +28,5 @@ public interface Epic<T> {
      * @param store   a Store object that Epic can use to query the state
      * @return an Observable of actions that will be dispatched back to Store
      */
-    Observable<Object> run(Observable<Action> actions, Store<T> store);
+    Observable<Action> run(Observable<Action> actions, Store<T> store);
 }

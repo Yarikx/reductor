@@ -31,7 +31,7 @@ public class EpicMiddlewareTest {
     }
 
     @Spy TestReducer reducer = new TestReducer();
-    PublishSubject<Object> epicObservable = PublishSubject.create();
+    PublishSubject<Action> epicObservable = PublishSubject.create();
     @Mock Epic<TestState> epic;
     @Captor ArgumentCaptor<Observable<Action>> actionsCaptor;
     Store<TestState> store;
