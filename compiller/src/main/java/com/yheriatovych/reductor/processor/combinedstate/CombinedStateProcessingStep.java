@@ -3,6 +3,7 @@ package com.yheriatovych.reductor.processor.combinedstate;
 import com.google.auto.common.BasicAnnotationProcessor;
 import com.google.common.collect.SetMultimap;
 import com.squareup.javapoet.*;
+import com.yheriatovych.reductor.Pair;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.CombinedState;
 import com.yheriatovych.reductor.processor.Env;
@@ -98,17 +99,28 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         return ClassName.get(javaFile.packageName, typeSpec.name);
     }
 
-    public static void emmitCombinedReducer(final Env env, CombinedStateElement combinedStateElement, ClassName stateClassName) throws IOException {
-        String stateParam = "state";
-        String actionParam = "action";
+    public static void emmitCombinedReducer(
+            final Env env,
+            CombinedStateElement combinedStateElement,
+            ClassName stateClassName
+    ) throws IOException {
+        final String stateParam = "state";
+        final String actionParam = "action";
 
         TypeName reducerActionType = combinedStateElement.getCombinedReducerActionType();
 
         String packageName = env.getPackageName(combinedStateElement.stateTypeElement);
-        String combinedStateClassName = combinedStateElement.stateTypeElement.getSimpleName().toString();
-        ClassName combinedReducerClassName = ClassName.get(packageName, combinedStateClassName + REDUCER_SUFFIX);
+        String combinedStateClassName = combinedStateElement
+                .stateTypeElement
+                .getSimpleName()
+                .toString();
+        ClassName combinedReducerClassName = ClassName.get(
+                packageName, combinedStateClassName + REDUCER_SUFFIX
+        );
 
-        TypeName combinedReducerReturnTypeName = TypeName.get(combinedStateElement.stateTypeElement.asType());
+        final TypeName combinedReducerReturnTypeName = TypeName.get(
+                combinedStateElement.stateTypeElement.asType()
+        );
         List<StateProperty> properties = combinedStateElement.properties;
 
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(combinedReducerClassName)
@@ -124,21 +136,28 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         for (StateProperty property : properties) {
             String reducerFieldName = property.name + REDUCER_SUFFIX;
             TypeName subReducerType = property.getReducerInterfaceTypeName();
-            FieldSpec subReducerField = FieldSpec.builder(subReducerType, reducerFieldName, Modifier.PRIVATE, Modifier.FINAL)
-                    .build();
+            FieldSpec subReducerField = FieldSpec.builder(
+                    subReducerType, reducerFieldName, Modifier.PRIVATE, Modifier.FINAL
+            ).build();
             reducerFields.add(subReducerField);
 
             constructorBuilder.addParameter(subReducerType, reducerFieldName)
                     .addStatement("this.$N = $N", reducerFieldName, reducerFieldName);
         }
 
-        CodeBlock dispatchingBlockBuilder = reduce(properties, CodeBlock.builder(), new Utils.Func2<CodeBlock.Builder, StateProperty, CodeBlock.Builder>() {
+        CodeBlock dispatchingBlockBuilder = reduce(properties, new Pair<>(CodeBlock.builder(), stateParam),
+                new Utils.Func2<Pair<CodeBlock.Builder, String>, StateProperty, Pair<CodeBlock.Builder, String>>() {
             @Override
-            public CodeBlock.Builder call(CodeBlock.Builder builder, StateProperty property) {
+            public Pair<CodeBlock.Builder, String> call(Pair<CodeBlock.Builder, String> pair, StateProperty property) {
                 String reducerFieldName = property.name + REDUCER_SUFFIX;
-                return builder.addStatement("$T $NNext = $N.reduce($N, action)", property.boxedStateType(env), property.name, reducerFieldName, property.name);
+                String returnFieldName = property.name + "Next";
+                return new Pair<>(
+                        pair.first.addStatement("$T $N = $N.reduce($N, action)",
+                                combinedReducerReturnTypeName, returnFieldName, reducerFieldName, pair.second),
+                        returnFieldName
+                );
             }
-        }).build();
+        }).first.build();
 
         MethodSpec reduceMethodSpec = MethodSpec.methodBuilder("reduce")
                 .addModifiers(Modifier.PUBLIC)
