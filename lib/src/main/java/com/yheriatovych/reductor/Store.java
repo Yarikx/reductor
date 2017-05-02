@@ -26,7 +26,7 @@ public class Store<State> implements Dispatcher, Cursor<State> {
         for (int i = middlewares.length - 1; i >= 0; i--) {
             Middleware<State> middleware = middlewares[i];
             dispatcher = middleware.create(Store.this, dispatcher);
-        }
+    }
         this.dispatcher = dispatcher;
         dispatchAction(Action.create(INIT_ACTION));
     }
@@ -35,8 +35,14 @@ public class Store<State> implements Dispatcher, Cursor<State> {
         if (actionObject instanceof Action) {
             final Action action = (Action) actionObject;
             synchronized (this) {
-                state = reducer.reduce(state, action);
+                Pair<State, Commands> pair = reducer.reduce(state, action);
+                state = pair.first;
+                Commands cmd = pair.second;
+                if (cmd != null) {
+                    cmd.run(Store.this);
+                }
             }
+            // TODO change to rxStore
             for (StateChangeListener<State> listener : listeners) {
                 listener.onStateChanged(state);
             }
