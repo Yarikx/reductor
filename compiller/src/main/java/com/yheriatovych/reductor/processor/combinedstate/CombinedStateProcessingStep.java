@@ -16,6 +16,8 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -108,12 +110,6 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         final String stateParam = "state";
         final String actionParam = "action";
 
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [1]" + combinedStateElement.getCombinedReducerActionType());
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [2]" + combinedStateElement.stateTypeElement);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [3]" + combinedStateElement.properties.get(0).name);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [4]" + combinedStateElement.properties.get(1).name);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [5]" + stateClassName);
-
         TypeName reducerActionType = combinedStateElement.getCombinedReducerActionType();
 
         String packageName = env.getPackageName(combinedStateElement.stateTypeElement);
@@ -153,14 +149,14 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                     .addStatement("this.$N = $N", reducerFieldName, reducerFieldName);
         }
 
+        // Pair<AppState, Commands>
         MethodTypeInfo mdInfo = StateProperty.getReducerInterfaceReturnTypeInfo();
-        final String reduceReturnTypeName = mdInfo.isReturnTypeGeneric()
-                ? String.format("%s<%s, %s>",
-                mdInfo.getReturnTypeName(), combinedStateElement.stateTypeElement.getSimpleName(),
-                mdInfo.getGenericsInReturnType().get(1))
-                : mdInfo.getReturnTypeName();
+        final TypeName reducerReturnTypeName = ParameterizedTypeName.get(
+                ClassName.get((Class<?>) ((ParameterizedType)mdInfo.getGenericReturnType()).getRawType()),
+                TypeName.get(combinedStateElement.stateTypeElement.asType()),
+                TypeName.get(mdInfo.getGenericsInReturnType()[1])
+        );
 
-        System.out.println("NNNNNNNNNNNNOOOOOOOO " + reduceReturnTypeName);
         CodeBlock dispatchingBlockBuilder = reduce(properties, Pair.create(CodeBlock.builder(), stateParam),
                 new Utils.Func2<Pair<CodeBlock.Builder, String>, StateProperty, Pair<CodeBlock.Builder, String>>() {
             @Override
@@ -169,20 +165,24 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                 String returnFieldName = property.name + "Next";
                 return Pair.create(
                         pair.first.addStatement("$T $N = $N.reduce($N, action)",
-                                reduceReturnTypeName, returnFieldName, reducerFieldName, pair.second),
-                        returnFieldName
+                                reducerReturnTypeName, returnFieldName, reducerFieldName, pair.second),
+                        returnFieldName + ".first"
                 );
             }
         }).first.build();
 
+        // only 'Pair'
+        Type reducerReturnTypeWithoutGeneric = mdInfo.getReturnType();
         MethodSpec reduceMethodSpec = MethodSpec.methodBuilder("reduce")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
-                .returns(combinedReducerReturnTypeName)
+                .returns(reducerReturnTypeName)
                 .addParameter(combinedReducerReturnTypeName, stateParam)
                 .addParameter(reducerActionType, actionParam)
                 .addCode(dispatchingBlockBuilder).addCode("\n")
-                .addCode(CombinedStateProcessingStep.emitReturnBlock(stateClassName, properties))
+                .addCode(CombinedStateProcessingStep.emitReturnBlock(
+                        reducerReturnTypeWithoutGeneric, properties
+                ))
                 .build();
 
         ClassName builderClassName = ClassName.get(combinedReducerClassName.packageName(), combinedReducerClassName.simpleName(), "Builder");
@@ -211,25 +211,17 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         javaFile.writeTo(env.getFiler());
     }
 
-    private static CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {
-        StringBuilder equalsCondition = new StringBuilder();
+    private static CodeBlock emitReturnBlock(Type returnType, List<StateProperty> properties) {
+        StringBuilder runCommands = new StringBuilder();
         for (StateProperty property : properties) {
-            equalsCondition.append(String.format("\n && %s == %sNext", property.name, property.name));
+            runCommands.append(property.name + "Next.second.run(store);\n");
         }
-        String args = join(", ", map(properties, new Utils.Func1<StateProperty, String>() {
-            @Override
-            public String call(StateProperty property) {
-                return property.name + "Next";
-            }
-        }));
+
         return CodeBlock.builder()
-                .add("//If all values are the same there is no need to create an object\n")
-                .beginControlFlow("if (state != null" + equalsCondition + ")")
-                .addStatement("return state")
-                .nextControlFlow("else")
-                .addStatement("return new $T(" + args + ")", stateClassName)
-                .endControlFlow()
-                .build();
+                .addStatement("return $T.create($N, store -> {\n" + runCommands + "})",
+                        returnType,
+                        properties.get(properties.size()-1).name + "Next.first"
+                ).build();
     }
 
     private static TypeSpec createReducerBuilder(CombinedStateElement combinedStateElement, ClassName combinedReducerClassName, ClassName builderClassName) {

@@ -1,5 +1,7 @@
 package com.yheriatovych.reductor.processor;
 
+import com.squareup.javapoet.TypeName;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -22,23 +24,14 @@ public class MethodTypeInfo {
         return isGenericType(md.getGenericReturnType());
     }
 
-    public String getReturnTypeName() {
-        return md.getReturnType().getSimpleName();
-    }
+    public Type getGenericReturnType() { return md.getGenericReturnType(); }
+    public Type getReturnType() { return md.getReturnType(); }
+    public TypeName getReturnTypeName() { return TypeName.get(md.getGenericReturnType()); }
 
-    public List<String> getGenericsInReturnType() {
+    public Type[] getGenericsInReturnType() {
         if (!isReturnTypeGeneric()) return null;
 
-        List<Type> gTypes = Arrays.asList(
-                ((ParameterizedType)md.getGenericReturnType()).getActualTypeArguments()
-        );
-
-        return Utils.map(gTypes, new Utils.Func1<Type, String>() {
-            @Override
-            public String call(Type value) {
-                return extractTypeName(value.toString());
-            }
-        });
+        return ((ParameterizedType)md.getGenericReturnType()).getActualTypeArguments();
     }
 
     public static String extractTypeName(String fullClzName) {

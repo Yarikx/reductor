@@ -10,8 +10,6 @@ import com.yheriatovych.reductor.processor.MethodTypeInfo;
 import com.yheriatovych.reductor.processor.ValidationException;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
