@@ -11,12 +11,12 @@ import io.reactivex.disposables.Disposable;
 
 public class EpicCommands<T> implements Commands<T>, Disposable {
 
-    private List<Observable> tasks;
+    private List<Observable<Object>> tasks;
     private Disposable disposable;
 
-    private EpicCommands(List<Observable> tasks) {this.tasks = tasks; }
+    private EpicCommands(List<Observable<Object>> tasks) {this.tasks = tasks; }
 
-    public static <T> EpicCommands<T> create(List<Observable> list) {
+    public static <T> EpicCommands<T> create(List<Observable<Object>> list) {
         return new EpicCommands<>(list);
     }
 
@@ -24,6 +24,7 @@ public class EpicCommands<T> implements Commands<T>, Disposable {
     public void run(Store<T> store) {
         if (tasks == null) return;
 
+        // TODO check this
         disposable = Observable.fromIterable(tasks).flatMap(obs -> obs).subscribe(action -> {
             if (action instanceof Action) {
                 store.dispatch(action);

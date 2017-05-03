@@ -7,6 +7,7 @@ import com.yheriatovych.reductor.Pair;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.CombinedState;
 import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.MethodTypeInfo;
 import com.yheriatovych.reductor.processor.Utils;
 import com.yheriatovych.reductor.processor.ValidationException;
 
@@ -107,6 +108,12 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         final String stateParam = "state";
         final String actionParam = "action";
 
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [1]" + combinedStateElement.getCombinedReducerActionType());
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [2]" + combinedStateElement.stateTypeElement);
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [3]" + combinedStateElement.properties.get(0).name);
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [4]" + combinedStateElement.properties.get(1).name);
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: [5]" + stateClassName);
+
         TypeName reducerActionType = combinedStateElement.getCombinedReducerActionType();
 
         String packageName = env.getPackageName(combinedStateElement.stateTypeElement);
@@ -121,6 +128,7 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
         final TypeName combinedReducerReturnTypeName = TypeName.get(
                 combinedStateElement.stateTypeElement.asType()
         );
+
         List<StateProperty> properties = combinedStateElement.properties;
 
         TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(combinedReducerClassName)
@@ -145,15 +153,23 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                     .addStatement("this.$N = $N", reducerFieldName, reducerFieldName);
         }
 
-        CodeBlock dispatchingBlockBuilder = reduce(properties, new Pair<>(CodeBlock.builder(), stateParam),
+        MethodTypeInfo mdInfo = StateProperty.getReducerInterfaceReturnTypeInfo();
+        final String reduceReturnTypeName = mdInfo.isReturnTypeGeneric()
+                ? String.format("%s<%s, %s>",
+                mdInfo.getReturnTypeName(), combinedStateElement.stateTypeElement.getSimpleName(),
+                mdInfo.getGenericsInReturnType().get(1))
+                : mdInfo.getReturnTypeName();
+
+        System.out.println("NNNNNNNNNNNNOOOOOOOO " + reduceReturnTypeName);
+        CodeBlock dispatchingBlockBuilder = reduce(properties, Pair.create(CodeBlock.builder(), stateParam),
                 new Utils.Func2<Pair<CodeBlock.Builder, String>, StateProperty, Pair<CodeBlock.Builder, String>>() {
             @Override
             public Pair<CodeBlock.Builder, String> call(Pair<CodeBlock.Builder, String> pair, StateProperty property) {
                 String reducerFieldName = property.name + REDUCER_SUFFIX;
                 String returnFieldName = property.name + "Next";
-                return new Pair<>(
+                return Pair.create(
                         pair.first.addStatement("$T $N = $N.reduce($N, action)",
-                                combinedReducerReturnTypeName, returnFieldName, reducerFieldName, pair.second),
+                                reduceReturnTypeName, returnFieldName, reducerFieldName, pair.second),
                         returnFieldName
                 );
             }
@@ -165,7 +181,6 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                 .returns(combinedReducerReturnTypeName)
                 .addParameter(combinedReducerReturnTypeName, stateParam)
                 .addParameter(reducerActionType, actionParam)
-                .addCode(emitDestructuringBlock(properties, env)).addCode("\n")
                 .addCode(dispatchingBlockBuilder).addCode("\n")
                 .addCode(CombinedStateProcessingStep.emitReturnBlock(stateClassName, properties))
                 .build();
@@ -194,22 +209,6 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                 .addFileComment(createGeneratedFileComment())
                 .build();
         javaFile.writeTo(env.getFiler());
-    }
-
-    private static CodeBlock emitDestructuringBlock(List<StateProperty> properties, Env env) {
-        CodeBlock.Builder destructuringBlock = CodeBlock.builder();
-        for (StateProperty property : properties) {
-            destructuringBlock.addStatement("$T $N = null", property.boxedStateType(env), property.name);
-        }
-
-        destructuringBlock.add("\n");
-
-        destructuringBlock.beginControlFlow("if (state != null)");
-        for (StateProperty property : properties) {
-            destructuringBlock.addStatement("$N = state.$N()", property.name, property.name);
-        }
-        destructuringBlock.endControlFlow();
-        return destructuringBlock.build();
     }
 
     private static CodeBlock emitReturnBlock(ClassName stateClassName, List<StateProperty> properties) {

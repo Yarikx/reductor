@@ -1,6 +1,8 @@
 package com.yheriatovych.reductor.example.reductor.utils;
 
 import com.yheriatovych.reductor.Action;
+import com.yheriatovych.reductor.Commands;
+import com.yheriatovych.reductor.Pair;
 import com.yheriatovych.reductor.Reducer;
 
 
@@ -21,9 +23,9 @@ public class SetStateReducer<T> implements Reducer<T> {
     }
 
     @Override
-    public T reduce(T state, Action action) {
+    public Pair<T, Commands> reduce(T state, Action action) {
         if (action.type.equals(SET_GLOBAL_STATE)) {
-            return (T) action.values;
+            return Pair.create((T) action.values, null);
         }
         return source.reduce(state, action);
     }

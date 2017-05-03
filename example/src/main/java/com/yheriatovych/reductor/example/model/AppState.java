@@ -20,6 +20,21 @@ public abstract class AppState {
         return new AutoValue_AppState.GsonTypeAdapter(gson);
     }
 
+    public static Builder builder() {
+        return new AutoValue_AppState.Builder();
+    }
+
+    public static Builder builder(AppState source) {
+        return new AutoValue_AppState.Builder(source);
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder setNotes(List<Note> value);
+        public abstract Builder setFilter(NotesFilter value);
+        public abstract AppState build();
+    }
+
     public List<Note> getFilteredNotes() {
         List<Note> notes = this.notes();
         NotesFilter filter = this.filter();
