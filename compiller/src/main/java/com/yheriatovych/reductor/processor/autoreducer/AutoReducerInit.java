@@ -25,7 +25,8 @@ public class AutoReducerInit {
                     " with either @AutoReducer.InitialState or @AutoReducer.Action but not both", executableElement);
         }
 
-        ValidationUtils.validateReturnsState(env, stateType, executableElement);
+        // disable check return type. TODO adjust check return code
+        // ValidationUtils.validateReturnsState(env, stateType, executableElement);
         ValidationUtils.validateIsNotPrivate(executableElement);
 
         int paramsCount = executableElement.getParameters().size();

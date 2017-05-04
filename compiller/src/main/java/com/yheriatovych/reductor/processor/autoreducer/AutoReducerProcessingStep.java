@@ -8,14 +8,19 @@ import com.yheriatovych.reductor.annotations.ActionCreator;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.processor.ElementNotReadyException;
 import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.MethodTypeInfo;
 import com.yheriatovych.reductor.processor.actioncreator.ActionCreatorElement;
+import com.yheriatovych.reductor.processor.combinedstate.StateProperty;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.util.Elements;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 import static com.yheriatovych.reductor.processor.Utils.createGeneratedFileComment;
@@ -62,19 +67,18 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
                 .superclass(TypeName.get(originalTypeElement.asType()));
 
         TypeName stateTypeName = TypeName.get(reducerElement.stateType);
+        MethodTypeInfo mdInfo = StateProperty.getReducerInterfaceReturnTypeInfo();
+        final TypeName reducerReturnTypeName = ParameterizedTypeName.get(
+                ClassName.get((Class<?>) ((ParameterizedType)mdInfo.getGenericReturnType()).getRawType()),
+                stateTypeName,
+                TypeName.get(mdInfo.getGenericsInReturnType()[1])
+        );
         MethodSpec.Builder reduceMethodBuilder = MethodSpec.methodBuilder("reduce")
                 .addModifiers(Modifier.PUBLIC)
-                .returns(stateTypeName)
+                .returns(reducerReturnTypeName)
                 .addAnnotation(Override.class)
                 .addParameter(stateTypeName, "state")
                 .addParameter(Action.class, "action");
-
-        if (reducerElement.initMethod != null) {
-            reduceMethodBuilder.beginControlFlow("if (state == null)")
-                    .addStatement("state = $N()", reducerElement.initMethod.getName())
-                    .endControlFlow()
-                    .addCode("\n");
-        }
 
         CodeBlock.Builder reduceBodyBuilder = CodeBlock.builder()
                 .beginControlFlow("switch (action.type)");
@@ -125,7 +129,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
                         .addCode(reduceBodyBuilder
                                 .add("default:\n")
                                 .indent()
-                                .addStatement("return state")
+                                .addStatement("return $T.create(state, null)", mdInfo.getReturnType())
                                 .unindent()
                                 .endControlFlow()
                                 .build())

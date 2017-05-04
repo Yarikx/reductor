@@ -70,7 +70,7 @@ public class StateProperty {
         return ParameterizedTypeName.get(ClassName.get(Reducer.class), stateType);
     }
 
-    static MethodTypeInfo getReducerInterfaceReturnTypeInfo() {
+    public static MethodTypeInfo getReducerInterfaceReturnTypeInfo() {
         Method[] ms = Reducer.class.getDeclaredMethods();
         if (ms.length <= 0) return null;
 

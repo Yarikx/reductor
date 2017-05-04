@@ -10,11 +10,6 @@ import com.yheriatovych.reductor.example.model.NotesFilter;
 
 @AutoReducer
 public abstract class NotesFilterReducer implements Reducer<AppState> {
-    @AutoReducer.InitialState
-    NotesFilter initialState() {
-        return NotesFilter.ALL;
-    }
-
     @Action(value = FilterActions.SET_FILTER,
             from = FilterActions.class)
     Pair<AppState, Commands> setFilter(AppState state, NotesFilter value) {
