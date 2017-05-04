@@ -67,12 +67,16 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
                 .superclass(TypeName.get(originalTypeElement.asType()));
 
         TypeName stateTypeName = TypeName.get(reducerElement.stateType);
-        MethodTypeInfo mdInfo = StateProperty.getReducerInterfaceReturnTypeInfo();
+        MethodTypeInfo mdInfo = StateProperty.getReduceMethodInfo();
+
+        // type `Pair<AppState, Commands>`
         final TypeName reducerReturnTypeName = ParameterizedTypeName.get(
-                ClassName.get((Class<?>) ((ParameterizedType)mdInfo.getGenericReturnType()).getRawType()),
+                ClassName.get((Class<?>) ((ParameterizedType)mdInfo.getGenericReturnType())
+                        .getRawType()),
                 stateTypeName,
                 TypeName.get(mdInfo.getGenericsInReturnType()[1])
         );
+
         MethodSpec.Builder reduceMethodBuilder = MethodSpec.methodBuilder("reduce")
                 .addModifiers(Modifier.PUBLIC)
                 .returns(reducerReturnTypeName)
@@ -129,6 +133,7 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
                         .addCode(reduceBodyBuilder
                                 .add("default:\n")
                                 .indent()
+                                // return Pair.create(state, null)
                                 .addStatement("return $T.create(state, null)", mdInfo.getReturnType())
                                 .unindent()
                                 .endControlFlow()

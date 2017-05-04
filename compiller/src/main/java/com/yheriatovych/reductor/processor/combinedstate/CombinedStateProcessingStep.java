@@ -155,23 +155,28 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
                     .addStatement("this.$N = $N", reducerFieldName, reducerFieldName);
         }
 
+        MethodTypeInfo mdInfo = StateProperty.getReduceMethodInfo();
+
         // Pair<AppState, Commands>
-        MethodTypeInfo mdInfo = StateProperty.getReducerInterfaceReturnTypeInfo();
         final TypeName reducerReturnTypeName = ParameterizedTypeName.get(
                 ClassName.get((Class<?>) ((ParameterizedType)mdInfo.getGenericReturnType()).getRawType()),
                 TypeName.get(combinedStateElement.stateTypeElement.asType()),
                 TypeName.get(mdInfo.getGenericsInReturnType()[1])
         );
 
-        CodeBlock dispatchingBlockBuilder = reduce(properties, Pair.create(CodeBlock.builder(), stateParam),
+        CodeBlock dispatchingBlockBuilder = reduce(
+                properties,
+                Pair.create(CodeBlock.builder(), stateParam),
                 new Utils.Func2<Pair<CodeBlock.Builder, String>, StateProperty, Pair<CodeBlock.Builder, String>>() {
             @Override
             public Pair<CodeBlock.Builder, String> call(Pair<CodeBlock.Builder, String> pair, StateProperty property) {
                 String reducerFieldName = property.name + REDUCER_SUFFIX;
                 String returnFieldName = property.name + "Next";
                 return Pair.create(
-                        pair.first.addStatement("$T $N = $N.reduce($N, action)",
-                                reducerReturnTypeName, returnFieldName, reducerFieldName, pair.second),
+                        pair.first.addStatement(
+                                "$T $N = $N.reduce($N, action)",
+                                reducerReturnTypeName, returnFieldName, reducerFieldName, pair.second
+                        ),
                         returnFieldName + ".first"
                 );
             }
