@@ -234,7 +234,11 @@ public class CombinedStateProcessingStep implements BasicAnnotationProcessor.Pro
     private static CodeBlock emitReturnBlock(Type returnType, List<StateProperty> properties) {
         CodeBlock.Builder runCommands = CodeBlock.builder();
         for (StateProperty property : properties) {
-            runCommands.addStatement(property.name + "Next.second.run(store)");
+            String propertyName = property.name + "Next";
+            runCommands
+                    .beginControlFlow("if ($N.second != null)", propertyName)
+                    .addStatement("$N.second.run(store)", propertyName)
+                    .endControlFlow();
         }
 
         TypeSpec commands = TypeSpec.anonymousClassBuilder("")

@@ -24,8 +24,13 @@ public abstract class AppState {
         return new AutoValue_AppState.Builder();
     }
 
-    public static Builder builder(AppState source) {
-        return new AutoValue_AppState.Builder(source);
+    public abstract Builder toBuilder();
+    public AppState withNotes(List<Note> value) {
+        return toBuilder().setNotes(value).build();
+    }
+
+    public AppState withFilter(NotesFilter value) {
+        return toBuilder().setFilter(value).build();
     }
 
     @AutoValue.Builder

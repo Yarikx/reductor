@@ -14,7 +14,7 @@ public abstract class NotesFilterReducer implements Reducer<AppState> {
             from = FilterActions.class)
     Pair<AppState, Commands> setFilter(AppState state, NotesFilter value) {
         return Pair.create(
-                AppState.builder(state).setFilter(value).build(),
+                state.withFilter(value),
                 null
         );
     }

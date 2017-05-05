@@ -18,9 +18,9 @@ public abstract class NotesListReducer implements Reducer<AppState> {
             from = NotesActions.class)
     public Pair<AppState, Commands> add(AppState state, int id, String content) {
         return Pair.create(
-                AppState.builder(state).setNotes(
+                state.withNotes(
                     TreePVector.from(state.notes()).plus(new Note(id, content, false))
-                ).build(),
+                ),
                 null
         );
     }
@@ -33,9 +33,9 @@ public abstract class NotesListReducer implements Reducer<AppState> {
             Note note = notes.get(i);
             if (note.id == noteId)
                 return Pair.create(
-                        AppState.builder(state).setNotes(
+                        state.withNotes(
                                 TreePVector.from(notes).with(i, new Note(noteId, note.note, !note.checked))
-                        ).build(),
+                        ),
                         null
                 );
 
@@ -51,9 +51,9 @@ public abstract class NotesListReducer implements Reducer<AppState> {
             Note note = notes.get(i);
             if (note.id == id) {
                 return Pair.create(
-                        AppState.builder(state).setNotes(
+                        state.withNotes(
                                 TreePVector.from(notes).minus(i)
-                        ).build(),
+                        ),
                         null
                 );
             }
