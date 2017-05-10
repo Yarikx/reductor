@@ -13,10 +13,7 @@ public abstract class NotesFilterReducer implements Reducer<AppState> {
     @Action(value = FilterActions.SET_FILTER,
             from = FilterActions.class)
     Pair<AppState, Commands> setFilter(AppState state, NotesFilter value) {
-        return Pair.create(
-                state.withFilter(value),
-                null
-        );
+        return Pair.create(state.withFilter(value));
     }
 
     public static NotesFilterReducer create() {

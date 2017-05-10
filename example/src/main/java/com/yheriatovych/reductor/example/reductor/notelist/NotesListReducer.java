@@ -17,12 +17,9 @@ public abstract class NotesListReducer implements Reducer<AppState> {
     @Action(value = NotesActions.ADD_ACTION,
             from = NotesActions.class)
     public Pair<AppState, Commands> add(AppState state, int id, String content) {
-        return Pair.create(
-                state.withNotes(
-                    TreePVector.from(state.notes()).plus(new Note(id, content, false))
-                ),
-                null
-        );
+        return Pair.create(state.withNotes(
+                TreePVector.from(state.notes()).plus(new Note(id, content, false))
+        ));
     }
 
     @Action(value = NotesActions.TOGGLE,
@@ -32,15 +29,12 @@ public abstract class NotesListReducer implements Reducer<AppState> {
         for (int i = 0; i < notes.size(); i++) {
             Note note = notes.get(i);
             if (note.id == noteId)
-                return Pair.create(
-                        state.withNotes(
-                                TreePVector.from(notes).with(i, new Note(noteId, note.note, !note.checked))
-                        ),
-                        null
-                );
+                return Pair.create(state.withNotes(
+                        TreePVector.from(notes).with(i, new Note(noteId, note.note, !note.checked))
+                ));
 
         }
-        return Pair.create(state, null);
+        return Pair.create(state);
     }
 
     @Action(value = NotesActions.REMOVE_ITEM,
@@ -50,15 +44,12 @@ public abstract class NotesListReducer implements Reducer<AppState> {
         for (int i = 0, notesSize = notes.size(); i < notesSize; i++) {
             Note note = notes.get(i);
             if (note.id == id) {
-                return Pair.create(
-                        state.withNotes(
-                                TreePVector.from(notes).minus(i)
-                        ),
-                        null
-                );
+                return Pair.create(state.withNotes(
+                        TreePVector.from(notes).minus(i)
+                ));
             }
         }
-        return Pair.create(state, null);
+        return Pair.create(state);
     }
 
     public static NotesListReducer create() {

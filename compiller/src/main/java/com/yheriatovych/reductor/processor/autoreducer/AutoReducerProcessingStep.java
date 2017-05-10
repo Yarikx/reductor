@@ -133,8 +133,8 @@ public class AutoReducerProcessingStep implements BasicAnnotationProcessor.Proce
                         .addCode(reduceBodyBuilder
                                 .add("default:\n")
                                 .indent()
-                                // return Pair.create(state, null)
-                                .addStatement("return $T.create(state, null)", mdInfo.getReturnType())
+                                // return Pair.create(state)
+                                .addStatement("return $T.create(state)", mdInfo.getReturnType())
                                 .unindent()
                                 .endControlFlow()
                                 .build())

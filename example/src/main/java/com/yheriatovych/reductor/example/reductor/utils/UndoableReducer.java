@@ -28,8 +28,8 @@ public class UndoableReducer<State> implements Reducer<State> {
     public Pair<State, Commands> reduce(State state, Action action) {
         if (action.type.equals("POP")) {
             return stack.isEmpty()
-                    ? Pair.create(state, null)
-                    : Pair.create(stack.pop(), null);
+                    ? Pair.create(state)
+                    : Pair.create(stack.pop());
         } else if (!action.type.equals(Store.INIT_ACTION)) {
             stack.push(state);
         }

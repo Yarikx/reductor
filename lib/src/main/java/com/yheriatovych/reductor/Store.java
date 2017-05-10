@@ -42,7 +42,6 @@ public class Store<State> implements Dispatcher, Cursor<State> {
                     cmd.run(Store.this);
                 }
             }
-            // TODO change to rxStore
             for (StateChangeListener<State> listener : listeners) {
                 listener.onStateChanged(state);
             }

@@ -4,6 +4,7 @@ import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.Commands;
 import com.yheriatovych.reductor.Store;
 
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -18,6 +19,10 @@ public class EpicCommands<T> implements Commands<T>, Disposable {
 
     public static <T> EpicCommands<T> create(List<Observable<Object>> list) {
         return new EpicCommands<>(list);
+    }
+
+    public static <T> EpicCommands<T> create(Observable<Object> task) {
+        return create(Arrays.asList(task));
     }
 
     @Override

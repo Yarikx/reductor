@@ -2,7 +2,6 @@ package com.yheriatovych.reductor.rxjava2;
 
 import com.yheriatovych.reductor.Cancelable;
 import com.yheriatovych.reductor.Cursor;
-import com.yheriatovych.reductor.Store;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;

@@ -25,7 +25,7 @@ public class SetStateReducer<T> implements Reducer<T> {
     @Override
     public Pair<T, Commands> reduce(T state, Action action) {
         if (action.type.equals(SET_GLOBAL_STATE)) {
-            return Pair.create((T) action.values, null);
+            return Pair.create((T) action.values);
         }
         return source.reduce(state, action);
     }
