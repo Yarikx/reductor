@@ -7,18 +7,15 @@ import com.colorhaake.traveler.model.AppState;
 import com.colorhaake.traveler.network.NetworkApi;
 import com.colorhaake.traveler.plain_object.HomeData;
 import com.colorhaake.traveler.plain_object.Response;
+import com.yheriatovych.reductor.Actions;
 import com.yheriatovych.reductor.Commands;
 import com.yheriatovych.reductor.Pair;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.observable.EpicCommands;
 
-import java.util.Arrays;
-
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.rx.ObservableFactory;
-
-import static com.colorhaake.traveler.reducer.home.HomeAsyncActions.homeActions;
 
 /**
  * Created by josephcheng on 2017/3/25.
@@ -26,6 +23,8 @@ import static com.colorhaake.traveler.reducer.home.HomeAsyncActions.homeActions;
 
 @AutoReducer
 public abstract class HomeReducer implements Reducer<AppState> {
+
+    private HomeActions homeActions = Actions.from(HomeActions.class);
 
     @AutoReducer.Action(
             value = HomeActions.VIEW_READY,

@@ -22,6 +22,7 @@ public class Store<State> implements Dispatcher, Cursor<State> {
         this.reducer = reducer;
         this.state = initialState;
 
+        // TODO remove middleware
         Dispatcher dispatcher = this::dispatchAction;
         for (int i = middlewares.length - 1; i >= 0; i--) {
             Middleware<State> middleware = middlewares[i];
