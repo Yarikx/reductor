@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/.." />
+            <option value="$PROJECT_DIR$/../app" />
+            <option value="$PROJECT_DIR$/../compiller" />
+            <option value="$PROJECT_DIR$/../example" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/header-footer-recyclerview" />
+            <option value="$PROJECT_DIR$/../lib" />
+            <option value="$PROJECT_DIR$/../reductor-observable" />
+            <option value="$PROJECT_DIR$/../reductor-rxjava" />
+            <option value="$PROJECT_DIR$/../reductor-rxjava2" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

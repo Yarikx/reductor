@@ -1,0 +1,66 @@
+[
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/design_snackbar_out.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/res/anim/design_snackbar_out.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/design_bottom_sheet_slide_in.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/res/anim/design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_popup_enter.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_popup_enter.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/design_fab_in.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/res/anim/design_fab_in.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/design_bottom_sheet_slide_out.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/res/anim/design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_slide_in_bottom.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_slide_out_bottom.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/design_snackbar_in.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/res/anim/design_snackbar_in.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_slide_out_top.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/design_fab_out.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/res/anim/design_fab_out.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_fade_in.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_popup_exit.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_fade_out.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_fade_out.xml"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/anim/abc_slide_in_top.xml",
+        "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/anim/abc_slide_in_top.xml"
+    }
+]

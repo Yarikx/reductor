@@ -1,0 +1,4 @@
+#Tue May 09 19:00:29 CST 2017
+base.0=/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/transforms/dex/debug/folders/1000/5/slice_5
+renamed.0=classes.dex
+file.0=/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/transforms/dex/debug/folders/1000/5/slice_5/classes.dex

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/mipmap-mdpi/ic_launcher_round.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/mipmap-mdpi/ic_launcher.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/mipmap-mdpi/ic_launcher.png"
+    }
+]

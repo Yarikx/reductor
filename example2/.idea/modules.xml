@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../app/app.iml" filepath="$PROJECT_DIR$/../app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../compiller/compiller.iml" filepath="$PROJECT_DIR$/../compiller/compiller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../example/example.iml" filepath="$PROJECT_DIR$/../example/example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example2.iml" filepath="$PROJECT_DIR$/example2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/header-footer-recyclerview/header-footer-recyclerview.iml" filepath="$PROJECT_DIR$/header-footer-recyclerview/header-footer-recyclerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lib/lib.iml" filepath="$PROJECT_DIR$/../lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../reductor.iml" filepath="$PROJECT_DIR$/../reductor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../reductor-observable/reductor-observable.iml" filepath="$PROJECT_DIR$/../reductor-observable/reductor-observable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../reductor-rxjava/reductor-rxjava.iml" filepath="$PROJECT_DIR$/../reductor-rxjava/reductor-rxjava.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../reductor-rxjava2/reductor-rxjava2.iml" filepath="$PROJECT_DIR$/../reductor-rxjava2/reductor-rxjava2.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="banner-1.4.9">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/8f5e15fefdd5aae66303817d4b23d92dbfa6468b/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/8f5e15fefdd5aae66303817d4b23d92dbfa6468b/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.youth.banner/banner/1.4.9/f29c52e344b0ea9f9aeffd48ca1c3cb6ea4d41fc/banner-1.4.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

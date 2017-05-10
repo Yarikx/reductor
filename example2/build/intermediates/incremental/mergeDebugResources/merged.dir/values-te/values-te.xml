@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string msgid="8585111718777012708" name="common_google_play_services_enable_button">"ప్రారంభించు"</string>
+    <string msgid="7045129128108380659" name="common_google_play_services_enable_text">"మీరు Google Play సేవలను ప్రారంభిస్తే మినహా <ns1:g id="APP_NAME">%1$s</ns1:g> పని చేయదు."</string>
+    <string msgid="3147157405986503375" name="common_google_play_services_enable_title">"Google Play సేవలను ప్రారంభించండి"</string>
+    <string msgid="9115728400623041681" name="common_google_play_services_install_button">"ఇన్‌స్టాల్ చేయి"</string>
+    <string msgid="8179894293032530091" name="common_google_play_services_install_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> Google Play సేవలు లేకుండా అమలు కాదు, ఆ సేవలు మీ పరికరంలో లేవు."</string>
+    <string msgid="7442193194585196676" name="common_google_play_services_install_title">"Google Play సేవలను పొందండి"</string>
+    <string msgid="180394615667698242" name="common_google_play_services_notification_ticker">"Google Play సేవల లోపం"</string>
+    <string msgid="2518680582564677258" name="common_google_play_services_unknown_issue">"<ns1:g id="APP_NAME">%1$s</ns1:g> Google Play సేవలతో సమస్య కలిగి ఉంది. దయచేసి మళ్లీ ప్రయత్నించండి."</string>
+    <string msgid="5501187292256987189" name="common_google_play_services_unsupported_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> Google Play సేవలు లేకుండా అమలు కాదు, ఈ సేవలకు మీ పరికరంలో మద్దతు లేదు."</string>
+    <string msgid="8172070149091615356" name="common_google_play_services_update_button">"నవీకరించు"</string>
+    <string msgid="7773943415006962566" name="common_google_play_services_update_text">"మీరు Google Play సేవలను నవీకరిస్తే మినహా <ns1:g id="APP_NAME">%1$s</ns1:g> అమలు కాదు."</string>
+    <string msgid="8706675115216073244" name="common_google_play_services_update_title">"Google Play సేవలను నవీకరించండి"</string>
+    <string msgid="7894275749778928941" name="common_google_play_services_updating_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> Google Play సేవలు లేకుండా అమలు కాదు, ఆ సేవలు ప్రస్తుతం నవీకరించబడుతున్నాయి."</string>
+    <string msgid="2804989272736383918" name="common_google_play_services_wear_update_text">"కొత్త Google Play సేవల సంస్కరణ అవసరం. అది కొద్ది సేపట్లో దానంతట అదే నవీకరించబడుతుంది."</string>
+    <string msgid="5201977337835724196" name="common_open_on_phone">"ఫోన్‌లో తెరువు"</string>
+    <string msgid="3441753203274453993" name="common_signin_button_text">"సైన్ ఇన్ చేయి"</string>
+    <string msgid="669893613918351210" name="common_signin_button_text_long">"Googleతో సైన్ ఇన్ చేయి"</string>
+</resources>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="rhino-1.7.6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mozilla/rhino/1.7.6/a2ce88a3ce55249cd2f0c7d12ce7ef49c14a11d1/rhino-1.7.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mozilla/rhino/1.7.6/999ce1fd1139c17fdc3b7a16b1fd8348b1842f96/rhino-1.7.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

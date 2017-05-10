@@ -1,0 +1,192 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:2:1-27:12
+	package
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:3:5-38
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+application
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:5:5-23:19
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/zhengyuanzhou/.android/build-cache/7fa0d760f6a78e295420e8ff1b651b51e88712e8/output/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:design:25.3.0] /Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:transition:25.3.0] /Users/zhengyuanzhou/.android/build-cache/6348be7daf807fdc8889c4032c64bab64ed4eb2c/output/AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/zhengyuanzhou/.android/build-cache/abe9603d180f5acc741a2618ef23a84677fd16cb/output/AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/zhengyuanzhou/.android/build-cache/7dc647a210174d5e4410a8832681267b818b50f2/output/AndroidManifest.xml:26:5-20
+MERGED from [com.facebook.stetho:stetho:1.4.2] /Users/zhengyuanzhou/.android/build-cache/1e86b6cf76780f93e8fb8711764cdaa4fc21d7b8/output/AndroidManifest.xml:11:5-20
+MERGED from [com.facebook.stetho:stetho-js-rhino:1.4.2] /Users/zhengyuanzhou/.android/build-cache/540729a27e35718ecb99f69d68c89d77f6723c0d/output/AndroidManifest.xml:11:5-20
+MERGED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:18:5-28:19
+MERGED from [com.google.android.gms:play-services-location:10.2.0] /Users/zhengyuanzhou/.android/build-cache/736c462c146137f2f9cfb8d37272a6ad08698124/output/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-base:10.2.0] /Users/zhengyuanzhou/.android/build-cache/09d3ff207d76f64838d57a935e94ff568630a8d1/output/AndroidManifest.xml:18:5-20:19
+MERGED from [com.google.android.gms:play-services-tasks:10.2.0] /Users/zhengyuanzhou/.android/build-cache/680e847d1a6dd0ffd786194c0009c177a64668a2/output/AndroidManifest.xml:4:5-19
+MERGED from [com.google.android.gms:play-services-basement:10.2.0] /Users/zhengyuanzhou/.android/build-cache/ea9718aff1126676bf0a74826445820dbb4cde7d/output/AndroidManifest.xml:19:5-21:19
+MERGED from [com.android.support:support-v4:25.3.0] /Users/zhengyuanzhou/.android/build-cache/eb35746b35180e5ecc66c3b1c2212865629c3264/output/AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-fragment:25.3.0] /Users/zhengyuanzhou/.android/build-cache/9e1fa8caf3aa3da42b554f12d08af5245a574963/output/AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-media-compat:25.3.0] /Users/zhengyuanzhou/.android/build-cache/91e70599d786ace7229588c64b10602386477ddb/output/AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-utils:25.3.0] /Users/zhengyuanzhou/.android/build-cache/2617aa0f5fbe3499377793e1b6246004f89f7e68/output/AndroidManifest.xml:29:5-20
+MERGED from [com.hannesdorfmann:adapterdelegates3:3.0.1] /Users/zhengyuanzhou/.android/build-cache/ca3f76c0ae8cd7d9debe5ce14e1b116e8bd08cbb/output/AndroidManifest.xml:11:5-20
+MERGED from [com.android.support:cardview-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/19b25647b3331a24c4b7c192e8a3ade45c782f69/output/AndroidManifest.xml:26:5-20
+MERGED from [reductor-with-example:header-footer-recyclerview:unspecified] /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/header-footer-recyclerview/build/intermediates/bundles/default/AndroidManifest.xml:11:5-15:19
+MERGED from [com.android.support:support-core-ui:25.3.0] /Users/zhengyuanzhou/.android/build-cache/f673bcdc7cc561f9ebc1c77fa7fe56df30f2b662/output/AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-compat:25.3.0] /Users/zhengyuanzhou/.android/build-cache/b8126da4843d87a582669c2b78a1af8c4777b47e/output/AndroidManifest.xml:29:5-20
+	android:label
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:9:9-41
+	android:supportsRtl
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:11:9-35
+	android:roundIcon
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:10:9-54
+	android:allowBackup
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:7:9-35
+	android:icon
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:8:9-43
+	android:theme
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:12:9-40
+	android:name
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:6:9-36
+activity#com.colorhaake.traveler.view.main.MainActivity
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:13:9-22:20
+	android:label
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:15:13-45
+	android:theme
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:16:13-56
+	android:name
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:14:13-51
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:17:13-21:29
+action#android.intent.action.MAIN
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:18:17-69
+	android:name
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:18:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:20:17-77
+	android:name
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:20:27-74
+uses-permission#android.permission.INTERNET
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:25:5-67
+	android:name
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:25:22-64
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:26:5-80
+MERGED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:12:5-81
+	android:name
+		ADDED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml:26:22-78
+uses-sdk
+INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/zhengyuanzhou/.android/build-cache/7fa0d760f6a78e295420e8ff1b651b51e88712e8/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:design:25.3.0] /Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:transition:25.3.0] /Users/zhengyuanzhou/.android/build-cache/6348be7daf807fdc8889c4032c64bab64ed4eb2c/output/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:multidex:1.0.1] /Users/zhengyuanzhou/.android/build-cache/8d9c1887e8dc354cd6b64cb08c759e90342a6dd8/output/AndroidManifest.xml:18:5-42
+MERGED from [com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0] /Users/zhengyuanzhou/.android/build-cache/c578d7dd1e3659f072a4d268ba62997e56e05b4c/output/AndroidManifest.xml:6:5-44
+MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/zhengyuanzhou/.android/build-cache/abe9603d180f5acc741a2618ef23a84677fd16cb/output/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/zhengyuanzhou/.android/build-cache/7dc647a210174d5e4410a8832681267b818b50f2/output/AndroidManifest.xml:20:5-43
+MERGED from [com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0] /Users/zhengyuanzhou/.android/build-cache/f42b6289440d5e106d25c70a166255440e1d19a0/output/AndroidManifest.xml:6:5-44
+MERGED from [com.jakewharton.rxbinding2:rxbinding:2.0.0] /Users/zhengyuanzhou/.android/build-cache/0fd5c65cd42527c881664b49a4c9f4391e448fb7/output/AndroidManifest.xml:6:5-44
+MERGED from [com.facebook.fresco:fresco:1.1.0] /Users/zhengyuanzhou/.android/build-cache/73b3106eca39046a3b25ed6b91110d7bc53be045/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:drawee:1.1.0] /Users/zhengyuanzhou/.android/build-cache/e42df0b6d44ce434dd6ff42f406382a8817e7a41/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline:1.1.0] /Users/zhengyuanzhou/.android/build-cache/99b29fc8ca041d8922bc226a555f2533243e6f40/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-base:1.1.0] /Users/zhengyuanzhou/.android/build-cache/0abfd2a36207f4cdd1d6602e60b4ab5b177b0e94/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fbcore:1.1.0] /Users/zhengyuanzhou/.android/build-cache/d152bf35f2dce417c604aac509cd675fcf0332cb/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.stetho:stetho:1.4.2] /Users/zhengyuanzhou/.android/build-cache/1e86b6cf76780f93e8fb8711764cdaa4fc21d7b8/output/AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.stetho:stetho-js-rhino:1.4.2] /Users/zhengyuanzhou/.android/build-cache/540729a27e35718ecb99f69d68c89d77f6723c0d/output/AndroidManifest.xml:7:5-9:41
+MERGED from [io.nlopez.smartlocation:rx:3.3.1] /Users/zhengyuanzhou/.android/build-cache/61257bda88ab0f2155c31fe3a85d025b10964d2f/output/AndroidManifest.xml:8:5-10:41
+MERGED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:8:5-10:41
+MERGED from [com.google.android.gms:play-services-location:10.2.0] /Users/zhengyuanzhou/.android/build-cache/736c462c146137f2f9cfb8d37272a6ad08698124/output/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-base:10.2.0] /Users/zhengyuanzhou/.android/build-cache/09d3ff207d76f64838d57a935e94ff568630a8d1/output/AndroidManifest.xml:17:5-43
+MERGED from [com.google.android.gms:play-services-tasks:10.2.0] /Users/zhengyuanzhou/.android/build-cache/680e847d1a6dd0ffd786194c0009c177a64668a2/output/AndroidManifest.xml:3:5-43
+MERGED from [com.google.android.gms:play-services-basement:10.2.0] /Users/zhengyuanzhou/.android/build-cache/ea9718aff1126676bf0a74826445820dbb4cde7d/output/AndroidManifest.xml:17:5-43
+MERGED from [com.android.support:support-v4:25.3.0] /Users/zhengyuanzhou/.android/build-cache/eb35746b35180e5ecc66c3b1c2212865629c3264/output/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-fragment:25.3.0] /Users/zhengyuanzhou/.android/build-cache/9e1fa8caf3aa3da42b554f12d08af5245a574963/output/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-media-compat:25.3.0] /Users/zhengyuanzhou/.android/build-cache/91e70599d786ace7229588c64b10602386477ddb/output/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-utils:25.3.0] /Users/zhengyuanzhou/.android/build-cache/2617aa0f5fbe3499377793e1b6246004f89f7e68/output/AndroidManifest.xml:21:5-23:61
+MERGED from [io.reactivex.rxjava2:rxandroid:2.0.1] /Users/zhengyuanzhou/.android/build-cache/85bf8ccd6575e48dd57e0929c71d60b8bd69c88d/output/AndroidManifest.xml:19:5-43
+MERGED from [com.hannesdorfmann:adapterdelegates3:3.0.1] /Users/zhengyuanzhou/.android/build-cache/ca3f76c0ae8cd7d9debe5ce14e1b116e8bd08cbb/output/AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:cardview-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/19b25647b3331a24c4b7c192e8a3ade45c782f69/output/AndroidManifest.xml:20:5-43
+MERGED from [reductor-with-example:header-footer-recyclerview:unspecified] /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/header-footer-recyclerview/build/intermediates/bundles/default/AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:recyclerview-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/68c892839f0d69a9577c3e95da5c0219fe57f995/output/AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-core-ui:25.3.0] /Users/zhengyuanzhou/.android/build-cache/f673bcdc7cc561f9ebc1c77fa7fe56df30f2b662/output/AndroidManifest.xml:21:5-23:58
+MERGED from [com.youth.banner:banner:1.4.9] /Users/zhengyuanzhou/.android/build-cache/426863cf69497b56441ff5c46b385afed56bebd2/output/AndroidManifest.xml:7:5-9:41
+MERGED from [com.jakewharton:butterknife:8.5.1] /Users/zhengyuanzhou/.android/build-cache/e232c6ae4095590205de96f65859233d54afc25a/output/AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:support-compat:25.3.0] /Users/zhengyuanzhou/.android/build-cache/b8126da4843d87a582669c2b78a1af8c4777b47e/output/AndroidManifest.xml:21:5-23:58
+	tools:overrideLibrary
+		ADDED from [com.android.support:design:25.3.0] /Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/AndroidManifest.xml:23:9-59
+	android:targetSdkVersion
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+		INJECTED from /Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/AndroidManifest.xml
+meta-data#android.support.VERSION
+ADDED from [com.android.support:design:25.3.0] /Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:transition:25.3.0] /Users/zhengyuanzhou/.android/build-cache/6348be7daf807fdc8889c4032c64bab64ed4eb2c/output/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/zhengyuanzhou/.android/build-cache/abe9603d180f5acc741a2618ef23a84677fd16cb/output/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/zhengyuanzhou/.android/build-cache/7dc647a210174d5e4410a8832681267b818b50f2/output/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-v4:25.3.0] /Users/zhengyuanzhou/.android/build-cache/eb35746b35180e5ecc66c3b1c2212865629c3264/output/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-fragment:25.3.0] /Users/zhengyuanzhou/.android/build-cache/9e1fa8caf3aa3da42b554f12d08af5245a574963/output/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-media-compat:25.3.0] /Users/zhengyuanzhou/.android/build-cache/91e70599d786ace7229588c64b10602386477ddb/output/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-core-utils:25.3.0] /Users/zhengyuanzhou/.android/build-cache/2617aa0f5fbe3499377793e1b6246004f89f7e68/output/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:cardview-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/19b25647b3331a24c4b7c192e8a3ade45c782f69/output/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:recyclerview-v7:25.3.0] /Users/zhengyuanzhou/.android/build-cache/68c892839f0d69a9577c3e95da5c0219fe57f995/output/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-core-ui:25.3.0] /Users/zhengyuanzhou/.android/build-cache/f673bcdc7cc561f9ebc1c77fa7fe56df30f2b662/output/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-compat:25.3.0] /Users/zhengyuanzhou/.android/build-cache/b8126da4843d87a582669c2b78a1af8c4777b47e/output/AndroidManifest.xml:25:5-27:34
+	android:value
+		ADDED from [com.android.support:design:25.3.0] /Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/AndroidManifest.xml:27:9-31
+	android:name
+		ADDED from [com.android.support:design:25.3.0] /Users/zhengyuanzhou/.android/build-cache/38a7e2bd112669a11f379cdf6965a409c8a4e97a/output/AndroidManifest.xml:26:9-47
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:13:5-79
+	android:name
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:13:22-76
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:14:5-79
+	android:name
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:14:22-76
+uses-permission#com.google.android.providers.gsf.permission.READ_GSERVICES
+ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:15:5-98
+	android:name
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:15:22-95
+uses-permission#com.google.android.gms.permission.ACTIVITY_RECOGNITION
+ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:16:5-94
+	android:name
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:16:22-91
+service#io.nlopez.smartlocation.activity.providers.ActivityGooglePlayServicesProvider$ActivityRecognitionService
+ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:19:9-21:40
+	android:exported
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:21:13-37
+	android:name
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:20:13-132
+service#io.nlopez.smartlocation.geofencing.providers.GeofencingGooglePlayServicesProvider$GeofencingService
+ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:22:9-24:40
+	android:exported
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:24:13-37
+	android:name
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:23:13-127
+service#io.nlopez.smartlocation.geocoding.providers.AndroidGeocodingProvider$AndroidGeocodingService
+ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:25:9-27:40
+	android:exported
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [io.nlopez.smartlocation:library:3.3.1] /Users/zhengyuanzhou/.android/build-cache/d013c406cc38977bb44ab0ea0d4a79d7df2be209/output/AndroidManifest.xml:26:13-120
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:10.2.0] /Users/zhengyuanzhou/.android/build-cache/09d3ff207d76f64838d57a935e94ff568630a8d1/output/AndroidManifest.xml:19:9-172
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:10.2.0] /Users/zhengyuanzhou/.android/build-cache/09d3ff207d76f64838d57a935e94ff568630a8d1/output/AndroidManifest.xml:19:146-170
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:10.2.0] /Users/zhengyuanzhou/.android/build-cache/09d3ff207d76f64838d57a935e94ff568630a8d1/output/AndroidManifest.xml:19:86-145
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:10.2.0] /Users/zhengyuanzhou/.android/build-cache/09d3ff207d76f64838d57a935e94ff568630a8d1/output/AndroidManifest.xml:19:19-85
+meta-data#com.google.android.gms.version
+ADDED from [com.google.android.gms:play-services-basement:10.2.0] /Users/zhengyuanzhou/.android/build-cache/ea9718aff1126676bf0a74826445820dbb4cde7d/output/AndroidManifest.xml:20:9-121
+	android:value
+		ADDED from [com.google.android.gms:play-services-basement:10.2.0] /Users/zhengyuanzhou/.android/build-cache/ea9718aff1126676bf0a74826445820dbb4cde7d/output/AndroidManifest.xml:20:66-119
+	android:name
+		ADDED from [com.google.android.gms:play-services-basement:10.2.0] /Users/zhengyuanzhou/.android/build-cache/ea9718aff1126676bf0a74826445820dbb4cde7d/output/AndroidManifest.xml:20:20-65
