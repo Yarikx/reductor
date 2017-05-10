@@ -2,7 +2,8 @@ package com.yheriatovych.reductor.observable;
 
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.Store;
-import rx.Observable;
+
+import io.reactivex.Observable;
 
 /**
  * Core primitive to process and dispatch actions asynchronously

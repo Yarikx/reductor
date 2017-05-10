@@ -1,21 +1,19 @@
 package com.yheriatovych.reductor.example.reductor.filter;
 
+import com.yheriatovych.reductor.Commands;
+import com.yheriatovych.reductor.Pair;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 import com.yheriatovych.reductor.annotations.AutoReducer.Action;
+import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.NotesFilter;
 
 @AutoReducer
-public abstract class NotesFilterReducer implements Reducer<NotesFilter> {
-    @AutoReducer.InitialState
-    NotesFilter initialState() {
-        return NotesFilter.ALL;
-    }
-
+public abstract class NotesFilterReducer implements Reducer<AppState> {
     @Action(value = FilterActions.SET_FILTER,
             from = FilterActions.class)
-    NotesFilter setFilter(NotesFilter state, NotesFilter value) {
-        return value;
+    Pair<AppState, Commands> setFilter(AppState state, NotesFilter value) {
+        return Pair.create(state.withFilter(value));
     }
 
     public static NotesFilterReducer create() {

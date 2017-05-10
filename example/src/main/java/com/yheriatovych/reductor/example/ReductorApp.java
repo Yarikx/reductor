@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.example.model.AppState;
 import com.yheriatovych.reductor.example.model.AppStateReducer;
+import com.yheriatovych.reductor.example.model.NotesFilter;
 import com.yheriatovych.reductor.example.reductor.filter.NotesFilterReducer;
 import com.yheriatovych.reductor.example.reductor.notelist.NotesListReducer;
 import com.yheriatovych.reductor.example.reductor.utils.SetStateReducer;
@@ -19,6 +20,7 @@ import org.mozilla.javascript.BaseFunction;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
+import org.pcollections.TreePVector;
 
 public class ReductorApp extends Application {
 
@@ -36,8 +38,9 @@ public class ReductorApp extends Application {
                 .filterReducer(NotesFilterReducer.create())
                 .build();
         store = Store.create(
-                new SetStateReducer<>(
-                        new UndoableReducer<>(vanillaReducer)));
+                new SetStateReducer<>(new UndoableReducer<>(vanillaReducer)),
+                AppState.builder().setFilter(NotesFilter.ALL).setNotes(TreePVector.empty()).build()
+        );
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableWebKitInspector(() -> new Stetho.DefaultInspectorModulesBuilder(ReductorApp.this)

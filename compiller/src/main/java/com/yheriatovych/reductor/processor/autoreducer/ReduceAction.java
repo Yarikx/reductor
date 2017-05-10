@@ -40,7 +40,8 @@ public class ReduceAction {
         boolean generateActionCreator = action.generateActionCreator();
         TypeMirror actionCreatorType = getCreator(action, env.getElements(), env, element);
 
-        ValidationUtils.validateReturnsState(env, stateType, element);
+//        TODO adjust check return state
+//        ValidationUtils.validateReturnsState(env, stateType, element);
         ValidationUtils.validateIsNotPrivate(element);
 
         List<? extends VariableElement> parameters = element.getParameters();
@@ -53,10 +54,11 @@ public class ReduceAction {
         for (VariableElement argumentVariable : argumentVariables) {
             args.add(argumentVariable);
         }
-        VariableElement firstParam = parameters.get(0);
-        if (!env.getTypes().isAssignable(stateType, firstParam.asType())) {
-            throw new ValidationException(firstParam, "First parameter %s of method %s should have the same type as state (%s)", firstParam, element, stateType);
-        }
+//        TODO adjust check first parameter
+//        VariableElement firstParam = parameters.get(0);
+//        if (!env.getTypes().isAssignable(stateType, firstParam.asType())) {
+//            throw new ValidationException(firstParam, "First parameter %s of method %s should have the same type as state (%s)", firstParam, element, stateType);
+//        }
 
         if (actionCreatorType != null) {
             validateActionCreator(element, actionNameConstant, actionCreatorType, args, knownActionCreators, env);

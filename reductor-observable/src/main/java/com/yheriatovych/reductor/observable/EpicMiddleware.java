@@ -1,8 +1,9 @@
 package com.yheriatovych.reductor.observable;
 
 import com.yheriatovych.reductor.*;
-import rx.Subscription;
-import rx.subjects.PublishSubject;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Middleware that runs provided {@link Epic} after {@link Store} created
@@ -10,10 +11,10 @@ import rx.subjects.PublishSubject;
  *
  * @param <T> state type of {@link Store}
  */
-public class EpicMiddleware<T> implements Middleware<T>, Subscription {
+public class EpicMiddleware<T> implements Middleware<T>, Disposable {
 
     private final Epic<T> epic;
-    private Subscription subscription;
+    private Disposable disposable;
 
     private EpicMiddleware(Epic<T> rootEpic) {
         this.epic = rootEpic;
@@ -36,7 +37,7 @@ public class EpicMiddleware<T> implements Middleware<T>, Subscription {
     @Override
     public Dispatcher create(Store<T> store, Dispatcher nextDispatcher) {
         PublishSubject<Action> actions = PublishSubject.create();
-        subscription = epic.run(actions, store).subscribe(store::dispatch);
+        disposable = epic.run(actions, store).subscribe(store::dispatch);
         return action -> {
             nextDispatcher.dispatch(action);
             if(action instanceof Action) {
@@ -46,14 +47,14 @@ public class EpicMiddleware<T> implements Middleware<T>, Subscription {
     }
 
     @Override
-    public void unsubscribe() {
-        if (subscription != null) {
-            subscription.unsubscribe();
+    public void dispose() {
+        if (disposable != null) {
+            disposable.dispose();
         }
     }
 
     @Override
-    public boolean isUnsubscribed() {
-        return subscription != null && subscription.isUnsubscribed();
+    public boolean isDisposed() {
+        return disposable != null && disposable.isDisposed();
     }
 }

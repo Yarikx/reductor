@@ -6,7 +6,10 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.processor.Env;
+import com.yheriatovych.reductor.processor.MethodTypeInfo;
 import com.yheriatovych.reductor.processor.ValidationException;
+
+import java.lang.reflect.Method;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -65,5 +68,12 @@ public class StateProperty {
             stateType = stateType.box();
         }
         return ParameterizedTypeName.get(ClassName.get(Reducer.class), stateType);
+    }
+
+    public static MethodTypeInfo getReduceMethodInfo() {
+        Method[] ms = Reducer.class.getDeclaredMethods();
+        if (ms.length <= 0) return null;
+
+        return MethodTypeInfo.of(ms[0]);
     }
 }
