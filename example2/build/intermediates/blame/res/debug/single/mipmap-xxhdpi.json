@@ -1,10 +1,10 @@
 [
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher_round.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher_round.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/mipmap-xxhdpi/ic_launcher.png"
     }
 ]

@@ -1,10 +1,10 @@
 [
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_light.xml",
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_light.xml",
         "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/color-v11/abc_background_cache_hint_selector_material_light.xml"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_dark.xml",
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_dark.xml",
         "source": "/Users/zhengyuanzhou/.android/build-cache/2e7e579519613e37eb2aeb2162c074ce5a17f8f9/output/res/color-v11/abc_background_cache_hint_selector_material_dark.xml"
     }
 ]

@@ -1,30 +1,30 @@
 [
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_search_black_36dp.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/drawable-xxxhdpi/ic_search_black_36dp.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_star_half_black_18dp.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/drawable-xxxhdpi/ic_star_half_black_18dp.png"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_star_border_black_18dp.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/drawable-xxxhdpi/ic_star_border_black_18dp.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_search_black_36dp.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/drawable-xxxhdpi/ic_search_black_36dp.png"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_star_black_18dp.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/drawable-xxxhdpi/ic_star_black_18dp.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_star_border_black_18dp.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/drawable-xxxhdpi/ic_star_border_black_18dp.png"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_videocam_white_36dp.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/drawable-xxxhdpi/ic_videocam_white_36dp.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_star_black_18dp.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/drawable-xxxhdpi/ic_star_black_18dp.png"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_people_black_18dp.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/drawable-xxxhdpi/ic_people_black_18dp.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_location_on_black_18dp.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/drawable-xxxhdpi/ic_location_on_black_18dp.png"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_star_half_black_18dp.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/drawable-xxxhdpi/ic_star_half_black_18dp.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_videocam_white_36dp.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/drawable-xxxhdpi/ic_videocam_white_36dp.png"
     },
     {
-        "merged": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_location_on_black_18dp.png",
-        "source": "/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/src/main/res/drawable-xxxhdpi/ic_location_on_black_18dp.png"
+        "merged": "/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_people_black_18dp.png",
+        "source": "/Users/zhengyuanzhou/GitHub/reductor/example2/src/main/res/drawable-xxxhdpi/ic_people_black_18dp.png"
     }
 ]

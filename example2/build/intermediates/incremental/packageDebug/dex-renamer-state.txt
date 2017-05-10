@@ -1,7 +1,7 @@
-#Tue May 09 18:51:27 CST 2017
-base.0=/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_8234af0fb25a727ab3b3184d6ff00102bfb53b2c
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_243e8149dec0687f11bc01404849ea60a2b4edc6/classes.dex
-base.1=/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_243e8149dec0687f11bc01404849ea60a2b4edc6
-file.0=/Users/zhengyuanzhou/GitHub/reductor-with-example/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_8234af0fb25a727ab3b3184d6ff00102bfb53b2c/classes.dex
+#Wed May 10 12:39:10 CST 2017
+base.0=/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_881051ef2d0ef65e1df85b038fd4b65ee9b687bd
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_05106bef6678d6b1377c18de79b6a86e1f7d038f/classes.dex
+base.1=/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_05106bef6678d6b1377c18de79b6a86e1f7d038f
+file.0=/Users/zhengyuanzhou/GitHub/reductor/example2/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_881051ef2d0ef65e1df85b038fd4b65ee9b687bd/classes.dex
