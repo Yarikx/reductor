@@ -1,5 +1,10 @@
 # Reductor Releases #
 
+### Version 0.13.2 - May 11, 2017
+
+- Fixed lost state update when listener dispatches an action on `Cursors.forEach`.
+- Fixed processor to fail on projects without AutoValue in classpath.
+
 ### Version 0.13.1 - January 12, 2017
 
 - Rebuilt libraries with latest version of Retrolambda (2.4.0).
