@@ -30,7 +30,8 @@ public class Cursors {
      * @return instance of {@link Cancelable} to be used to cancel subscription (remove listener)
      */
     public static <State> Cancelable forEach(Cursor<State> cursor, StateChangeListener<State> listener) {
+        Cancelable cancelable = cursor.subscribe(listener);
         listener.onStateChanged(cursor.getState());
-        return cursor.subscribe(listener);
+        return cancelable;
     }
 }

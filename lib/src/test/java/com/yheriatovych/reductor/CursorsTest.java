@@ -135,7 +135,6 @@ public class CursorsTest {
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).onStateChanged(initialState);
         inOrder.verify(listener).onStateChanged(newState1);
-        inOrder.verify(listener).onStateChanged(newState2);
         inOrder.verifyNoMoreInteractions();
     }
 
@@ -148,7 +147,9 @@ public class CursorsTest {
 
         @Override
         public void onStateChanged(TestState state) {
-            store.dispatch(action);
+            if(state == initialState) {
+                store.dispatch(action);
+            }
         }
     }
 }
