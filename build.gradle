@@ -6,15 +6,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.1'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'me.tatarka:gradle-retrolambda:3.3.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
     }
 }
 
 project.ext {
-    bintrayUser = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : ""
-    bintrayKey = project.hasProperty('BINTRAY_KEY') ? project.property('BINTRAY_KEY') : ""
-    reductorVersion = '0.13.1'
-
     retrolambdaVersion = '2.4.0'
     autoValueVersion = '1.3'
 }
