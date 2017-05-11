@@ -1,6 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'me.tatarka.retrolambda'
-apply from: '../gradle/publishing.gradle'
 
 dependencies {
     retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:${retrolambdaVersion}"

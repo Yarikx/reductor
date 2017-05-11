@@ -1,2 +1,2 @@
-include ':example', ':compiller', ':lib', 'reductor-rxjava', 'reductor-rxjava2', 'reductor-observable'
-
+include ':example', ':example2', ':compiller', ':lib', 'reductor-rxjava', 'reductor-rxjava2', 'reductor-observable', ':app', ':lib', ':reductor-observable', 'header-footer-recyclerview'
+project(':header-footer-recyclerview').projectDir = new File('example2/header-footer-recyclerview')

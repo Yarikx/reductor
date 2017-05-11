@@ -18,5 +18,5 @@ public interface Reducer<State> {
      * @param action minimum representation of change to be performed on state
      * @return a new state
      */
-    State reduce(State state, Action action);
+    Pair<State, Commands> reduce(State state, Action action);
 }
