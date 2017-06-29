@@ -1,5 +1,10 @@
 # Reductor Releases #
 
+### Version 0.14.0 - June 29, 2017
+
+- Behaviour change: Initialize `Store` before initializing `Middleware`s.
+Fixes the issue of having uninitialized store/state on `create` method, making it crash if action is dispatched in `Middleware.create`.
+
 ### Version 0.13.2 - May 11, 2017
 
 - Fixed lost state update when listener dispatches an action on `Cursors.forEach`.

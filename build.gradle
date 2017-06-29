@@ -13,10 +13,10 @@ buildscript {
 project.ext {
     bintrayUser = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : ""
     bintrayKey = project.hasProperty('BINTRAY_KEY') ? project.property('BINTRAY_KEY') : ""
-    reductorVersion = '0.13.2'
+    reductorVersion = '0.14.0'
 
-    retrolambdaVersion = '2.4.0'
-    autoValueVersion = '1.3'
+    retrolambdaVersion = '2.5.1'
+    autoValueVersion = '1.4.1'
 }
 
 
