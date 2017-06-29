@@ -1,5 +1,6 @@
 package com.yheriatovych.reductor;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -86,6 +87,35 @@ public class MiddlewareTest {
         inOrder.verify(action1).run();
         inOrder.verify(action2).run();
         inOrder.verify(action3).run();
+    }
+
+    @Test
+    public void actionPropagatedInMiddlewareCreate() {
+        Middleware<TestState> middleware = (store, nextDispatcher) -> {
+            store.dispatch(Action.create("TEST_ACTION"));
+            return nextDispatcher;
+        };
+
+        Store<TestState> store = Store.create(reducer, initialState, middleware);
+
+        Assert.assertEquals(nextState, store.getState());
+    }
+
+    @Test
+    public void storePassedToMiddlewareHasInitialisedState() {
+        Reducer<TestState> reducer = (testState, action) -> {
+            if(testState == null) {
+                testState = initialState;
+            }
+            return testState;
+        };
+
+        Middleware<TestState> middleware = (store, nextDispatcher) -> {
+            Assert.assertNotNull(store.getState());
+            return nextDispatcher;
+        };
+
+        Store.create(reducer, middleware);
     }
 
     private Middleware<TestState> create(Runnable runnable) {
