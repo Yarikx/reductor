@@ -29,6 +29,12 @@ public class Utils {
                 return MoreTypes.asDeclared(supertype);
             }
         }
+
+        TypeMirror superclass = MoreTypes.asTypeElement(reducerType).getSuperclass();
+        if (!MoreTypes.isTypeOf(Object.class, superclass)) {
+            return getReducerSuperInterface(MoreTypes.asDeclared(superclass));
+        }
+
         return null;
     }
 
