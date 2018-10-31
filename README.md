@@ -45,7 +45,7 @@ dependencies {
 }
 ```
 
-Apt dependency on `reductor-processor` is only necessary 
+the annotationProcessor dependency on `reductor-processor` is only necessary
 if you want to use features as [@CombinedState](#combine-reducers) and [@AutoReducer](#autoreducer)
 
 ## Getting started
