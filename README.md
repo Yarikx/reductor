@@ -40,8 +40,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.yheriatovych:reductor:x.x.x'
-    apt     'com.yheriatovych:reductor-processor:x.x.x'
+    implementation      'com.yheriatovych:reductor:x.x.x'
+    annotationProcessor 'com.yheriatovych:reductor-processor:x.x.x'
 }
 ```
 
